@@ -9,3 +9,6 @@ docs/
 
 # Virtual environments
 .venv
+
+# Worktrees
+.worktrees/
