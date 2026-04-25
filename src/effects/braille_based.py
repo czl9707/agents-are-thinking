@@ -1,5 +1,6 @@
 import math
 import random
+import time
 
 from src.braille_helper import Frame
 from src.effects.base import Effect, WIDTH, HEIGHT
@@ -24,7 +25,29 @@ class BrailleSpin(Effect):
         frame = Frame(WIDTH, HEIGHT)
         for cx in range(0, WIDTH * 2, 4):
             for i in range(self.TRAIL):
-                dx, dy = self.PATH[(self._frame + i) % 8]
+                dx, dy = self.PATH[(self._frame + i) % len(self.PATH)]
+                frame.set(cx + dx, dy)
+        self._frame += 1
+        return frame.render()
+
+
+class BrailleSpin2(Effect):
+    name = "braille-spin"
+    description = "Braille spinner, same char repeated"
+
+    PATH = [
+        (0, 0), (0, 1), (0, 2), (0, 3),
+        (1, 3), (2, 3), (3, 3), (4, 3),
+        (5, 3), (5, 2), (5, 1), (5, 0),
+        (4, 0), (3, 0), (2, 0), (1, 0),
+    ]
+    TRAIL = 4
+
+    def step(self) -> list[str]:
+        frame = Frame(WIDTH, HEIGHT)
+        for cx in range(0, WIDTH * 2 - 4, 4):
+            for i in range(self.TRAIL):
+                dx, dy = self.PATH[(self._frame + i) % len(self.PATH)]
                 frame.set(cx + dx, dy)
         self._frame += 1
         return frame.render()
@@ -138,7 +161,6 @@ class BrailleRain(Effect):
         return frame.render()
 
 
-
 class BrailleZigzag(Effect):
     name = "braille-zigzag"
     description = "Zigzag line sweeping diagonally across the grid"
@@ -159,7 +181,7 @@ class BrailleDissolve(Effect):
 
     def step(self) -> list[str]:
         frame = Frame(WIDTH, HEIGHT)
-        total = 72
+        total = 2 * WIDTH * 4
         cycle = 36
         phase = self._frame % cycle
         half = cycle // 2
@@ -177,3 +199,46 @@ class BrailleDissolve(Effect):
                 frame.set(x, y)
         self._frame += 1
         return frame.render()
+
+class BrailleFire(Effect):
+    name = "braille-fire"
+    description = "Flames rising from bottom with flicker"
+
+    def step(self) -> list[str]:
+        frame = Frame(WIDTH, HEIGHT)
+        for x in range(2 * WIDTH):
+            heat = 0.0
+            for y in range(4):
+                row_from_bottom = 3 - y
+                decay = row_from_bottom * 0.28
+                flicker = math.sin(self._frame * 0.7 + x * 1.3) * 0.2
+                heat = max(0.0, 1.0 - decay + flicker)
+                if random.random() < heat:
+                    frame.set(x, y)
+        self._frame += 1
+        return frame.render()
+
+
+class BrailleNoise(Effect):
+    name = "braille-noise"
+    description = "Organic lava-lamp blobs via noise field"
+
+    @staticmethod
+    def _noise2d(x: float, y: float) -> float:
+        return (math.sin(x * 1.7 + y * 2.3) * 0.5
+                + math.sin(x * 0.9 - y * 1.1) * 0.3
+                + math.sin(x * 2.5 + y * 0.7) * 0.2)
+
+    def step(self) -> list[str]:
+        frame = Frame(WIDTH, HEIGHT)
+        t = self._frame * 0.12
+        for x in range(2 * WIDTH):
+            for y in range(4):
+                nx = x * 0.35 + t
+                ny = y * 0.5 + t * 0.3
+                v = self._noise2d(nx, ny)
+                if v > 0.1:
+                    frame.set(x, y)
+        self._frame += 1
+        return frame.render()
+
