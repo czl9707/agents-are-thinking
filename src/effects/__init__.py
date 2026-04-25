@@ -12,6 +12,8 @@ from src.effects.braille_based import (
     BrailleDissolve,
     BrailleFire,
     BrailleNoise,
+    BrailleHeartbeat,
+    BrailleArrow,
 )
 from src.effects.progress import BlockProgress
 
@@ -29,4 +31,6 @@ EFFECTS: list[type[Effect]] = [
     BrailleFire,
     BlockProgress,
     BrailleNoise,
+    BrailleHeartbeat,
+    BrailleArrow,
 ]

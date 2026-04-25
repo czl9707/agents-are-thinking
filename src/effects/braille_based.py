@@ -29,10 +29,9 @@ class BrailleSpin(Effect):
                 frame.set(cx + dx, dy)
         self._frame += 1
         return frame.render()
-
-
+    
 class BrailleSpin2(Effect):
-    name = "braille-spin"
+    name = "braille-spin2"
     description = "Braille spinner, same char repeated"
 
     PATH = [
@@ -239,6 +238,78 @@ class BrailleNoise(Effect):
                 v = self._noise2d(nx, ny)
                 if v > 0.1:
                     frame.set(x, y)
+        self._frame += 1
+        return frame.render()
+
+
+class BrailleHeartbeat(Effect):
+    name = "braille-heartbeat"
+    description = "ECG-style pulse line with a contemplative rhythm"
+
+    _PATTERNS = [
+        [0, 0, 0, 0, 1, 2, 1, 0, 2, 4, 3, 0, 1, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 1, 2, 3, 2, 1, 0, 2, 2, 3, 1, 0, 0, 0],
+    ]
+    _LEN = 18
+
+    def step(self) -> list[str]:
+        frame = Frame(WIDTH, HEIGHT)
+        for x in range(2 * WIDTH):
+            gi = self._frame - x
+            beat = (gi // self._LEN) % len(self._PATTERNS)
+            pat = self._PATTERNS[beat]
+            i = gi % self._LEN
+            y_off = pat[i]
+            cy = 2
+            for dy in range(-y_off, y_off + 1):
+                ty = cy + dy
+                if 0 <= ty < 4:
+                    frame.set(x, ty)
+        self._frame += 1
+        return frame.render()
+
+
+class BrailleArrow(Effect):
+    name = "braille-arrow"
+    description = "Chevrons slide right, reverse left, pause, repeat"
+
+    _W = 8
+    _SPEED = 2
+    _PAUSE = 16
+
+    _RIGHT = [
+        (0, 0), (1, 0), (2, 0),                (5, 0), (6, 0), (7, 0),
+            (1, 1), (2, 1), (3, 1),                (6, 1), (7, 1), (8, 1),
+            (1, 2), (2, 2), (3, 2),                (6, 2), (7, 2), (8, 2),
+        (0, 3), (1, 3), (2, 3),                (5, 3), (6, 3), (7, 3),
+    ]
+    _LEFT = [
+        (1, 0), (2, 0), (3, 0),                (6, 0), (7, 0), (8, 0),
+            (0, 1), (1, 1), (2, 1),                (5, 1), (6, 1), (7, 1),
+            (0, 2), (1, 2), (2, 2),                (5, 2), (6, 2), (7, 2),
+        (1, 3), (2, 3), (3, 3),                (6, 3), (7, 3), (8, 3),
+    ]
+    def __init__(self):
+        super().__init__()
+        self._travel = (2 * WIDTH + self._W) // self._SPEED + 1
+        self._cycle = self._travel * 2 + self._PAUSE
+
+    def step(self) -> list[str]:
+        frame = Frame(WIDTH, HEIGHT)
+        f = self._frame % self._cycle
+        if f < self._travel:
+            base = -self._W + f * self._SPEED
+            offsets = self._RIGHT
+        elif f < self._travel * 2:
+            base = 2 * WIDTH - (f - self._travel) * self._SPEED
+            offsets = self._LEFT
+        else:
+            self._frame += 1
+            return frame.render()
+        for dx, dy in offsets:
+            x = base + dx
+            if 0 <= x < 2 * WIDTH:
+                frame.set(x, dy)
         self._frame += 1
         return frame.render()
 
