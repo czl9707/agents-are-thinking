@@ -36,14 +36,15 @@ class ShadeScanner(Effect):
 
 class ShadeFire(Effect):
     name = "shade-fire"
-    description = "Flames with heat gradient fading upward"
+    description = "Flames with flickering heat columns"
 
     def step(self) -> list[str]:
         frame = ShadeFrame(WIDTH, HEIGHT)
         for x in range(WIDTH):
-            flicker = math.sin(self._frame * 0.7 + x * 1.3) * 0.15
-            heat = max(0.0, min(1.0, 1.0 + flicker))
-            frame.set(x, 0, heat)
+            v = (math.sin(self._frame * 0.8 + x * 2.1) * 0.3
+                 + math.sin(self._frame * 1.3 + x * 0.7) * 0.2
+                 + 0.5)
+            frame.set(x, 0, max(0.0, min(1.0, v)))
         self._frame += 1
         return frame.render()
 
