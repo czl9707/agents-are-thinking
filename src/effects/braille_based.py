@@ -363,3 +363,33 @@ class BrailleArrow(Effect):
         self._frame += 1
         return frame.render()
 
+
+class BrailleCheckerboard(Effect):
+    name = "braille-checkerboard"
+    description = "Alternating chess board pattern that shifts each frame"
+
+    def step(self) -> list[str]:
+        frame = Frame(WIDTH, HEIGHT)
+        offset = (self._frame // 8) % 2
+        for x in range(2 * WIDTH):
+            for y in range(4):
+                if (x + y + offset) % 2 == 0:
+                    frame.set(x, y)
+        self._frame += 1
+        return frame.render()
+
+
+class BrailleCheckerboard2x2(Effect):
+    name = "braille-checkerboard2x2"
+    description = "2x2 block checkerboard that shifts each frame"
+
+    def step(self) -> list[str]:
+        frame = Frame(WIDTH, HEIGHT)
+        offset = (self._frame // 8) % 2
+        for x in range(2 * WIDTH):
+            for y in range(4):
+                if ((x // 2 + y // 2) + offset) % 2 == 0:
+                    frame.set(x, y)
+        self._frame += 1
+        return frame.render()
+

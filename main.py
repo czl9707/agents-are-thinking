@@ -2,8 +2,10 @@ import sys
 import time
 
 import click
+from rich import box as rich_box
 from rich.console import Console
 from rich.live import Live
+from rich.panel import Panel
 from rich.text import Text
 
 from src.effects import EFFECTS
@@ -33,6 +35,39 @@ _PREVIEW_WORDS = [
     "absorbing",
     "channeling",
     "meditating",
+    "manifesting",
+    "deciphering",
+    "daydreaming",
+    "ideating",
+    "brainstorming",
+    "philosophizing",
+    "percolating",
+    "simmering",
+    "distilling",
+    "unraveling",
+    "connecting",
+    "orchestrating",
+    "choreographing",
+    "architecting",
+    "composing",
+    "sculpting",
+    "weaving",
+    "stewing",
+    "fermenting",
+    "incubating",
+    "crystallizing",
+    "galvanizing",
+    "reassembling",
+    "reconfiguring",
+    "calibrating",
+    "harmonizing",
+    "fractalizing",
+    "quantizing",
+    "transmuting",
+    "metamorphosing",
+    "osmosing",
+    "photosynthesizing",
+    "communing",
 ]
 
 
@@ -54,7 +89,7 @@ def _render_preview(instances, frame_num, console):
     gap = 4
     col_w = cell_w + gap
 
-    cols = max(1, console.width // col_w)
+    cols = max(1, (console.width - 4) // col_w)
     dot_count = (frame_num // FPS) % 4
     rows = []
     for i in range(0, len(instances), cols):
@@ -66,7 +101,15 @@ def _render_preview(instances, frame_num, console):
             dots = "." * dot_count
             parts.append(f"{out:<{WIDTH}} {word}{dots:<{word_w + 3 - len(word)}}")
         rows.append((" " * gap).join(parts))
-    return Text("\n".join(rows))
+
+    content = Text("\n".join(rows))
+    return Panel(
+        content,
+        width=console.width,
+        box=rich_box.ROUNDED,
+        padding=0,
+        expand=True,
+    )
 
 
 @click.group(invoke_without_command=True)

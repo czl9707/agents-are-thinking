@@ -16,6 +16,8 @@ from src.effects.braille_based import (
     BrailleArrow,
     BrailleScanner,
     BrailleMatrix,
+    BrailleCheckerboard,
+    BrailleCheckerboard2x2,
 )
 from src.effects.shade_based import (
     ShadeWave,
@@ -46,6 +48,8 @@ EFFECTS: list[type[Effect]] = [
     BrailleArrow,
     BrailleScanner,
     BrailleMatrix,
+    BrailleCheckerboard,
+    BrailleCheckerboard2x2,
     ShadeWave,
     ShadeScanner,
     ShadeFire,
