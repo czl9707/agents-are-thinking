@@ -1,10 +1,11 @@
-from src.effects.base import WIDTH, HEIGHT
+_DEFAULT_W = 9
+_DEFAULT_H = 1
 
 _SHADES = "░▒▓█"
 
 
 class ShadeFrame:
-    def __init__(self, width: int = WIDTH, height: int = HEIGHT) -> None:
+    def __init__(self, width: int = _DEFAULT_W, height: int = _DEFAULT_H) -> None:
         self.width = width
         self.height = height
         self._cells: list[list[float]] = [[0.0] * width for _ in range(height)]

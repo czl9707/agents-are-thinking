@@ -1,7 +1,7 @@
 import math
 
 from src.shade_helper import ShadeFrame
-from src.effects.base import Effect, WIDTH
+from src.effects.base import Effect, WIDTH, HEIGHT
 
 
 class ShadeWave(Effect):
