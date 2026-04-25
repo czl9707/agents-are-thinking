@@ -1,14 +1,16 @@
 from abc import ABC, abstractmethod
 
+WIDTH = 9
+HEIGHT = 1
+
 
 class Effect(ABC):
     name: str = ""
     description: str = ""
 
-    def __init__(self, width: int, height: int):
-        self.width = width
-        self.height = height
+    def __init__(self):
+        self._frame = 0
 
     @abstractmethod
-    def tick(self, frame: int) -> list[str]:
+    def step(self) -> list[str]:
         ...

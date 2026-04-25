@@ -1,16 +1,39 @@
 import sys
+import time
 
 import click
+from rich.console import Console
 from rich.live import Live
 from rich.text import Text
 
 from src.effects import EFFECTS
+from src.effects.base import WIDTH
+
+FPS = 12
+GAP = 4
+LABEL_W = max(len(ef.name) for ef in EFFECTS)
+CELL_W = LABEL_W + 1 + WIDTH
+COL_W = CELL_W + GAP
+
+
+def _render_grid(instances, console):
+    cols = max(1, console.width // COL_W)
+    rows = []
+    for i in range(0, len(instances), cols):
+        parts = []
+        for ef in instances[i : i + cols]:
+            out = "".join(ef.step())
+            parts.append(f"{ef.name:{LABEL_W}s} {out:<{WIDTH}}")
+        rows.append((" " * GAP).join(parts))
+    return Text("\n".join(rows))
 
 
 @click.command()
 @click.option("--effect", "-e", default=None, help="Effect name to run")
 @click.option("--list", "list_effects", is_flag=True, help="List available effects")
-def main(effect, list_effects):
+def main(effect: str, list_effects: bool):
+    console = Console()
+
     if list_effects:
         for ef in EFFECTS:
             click.echo(f"  {ef.name:20s} {ef.description}")
@@ -21,28 +44,32 @@ def main(effect, list_effects):
         if not cls:
             click.echo(f"Unknown effect: {effect}")
             sys.exit(1)
+
+        inst = cls()
+
+        def generate():
+            out = "".join(inst.step())
+            return Text(f"{cls.name:{LABEL_W}s} {out}")
+
+        with Live(generate(), refresh_per_second=FPS, console=console) as live:
+            try:
+                while True:
+                    live.update(generate())
+                    time.sleep(1 / FPS)
+            except KeyboardInterrupt:
+                pass
     else:
-        click.echo("Available effects:\n")
-        for i, ef in enumerate(EFFECTS):
-            click.echo(f"  [{i}] {ef.name:20s} {ef.description}")
-        click.echo()
-        choice = click.prompt("Select effect", type=int, default=0)
-        cls = EFFECTS[choice]
+        instances = [ef() for ef in EFFECTS]
 
-    instance = cls(width=50, height=3)
-    frame = 0
-
-    def generate():
-        lines = instance.tick(frame)
-        return Text("\n".join(lines))
-
-    try:
-        with Live(generate(), refresh_per_second=12) as live:
-            while True:
-                frame += 1
-                live.update(generate())
-    except KeyboardInterrupt:
-        pass
+        with Live(
+            _render_grid(instances, console), refresh_per_second=FPS, console=console
+        ) as live:
+            try:
+                while True:
+                    live.update(_render_grid(instances, console))
+                    time.sleep(1 / FPS)
+            except KeyboardInterrupt:
+                pass
 
 
 if __name__ == "__main__":
