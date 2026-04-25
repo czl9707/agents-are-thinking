@@ -15,6 +15,26 @@ LABEL_W = max(len(ef.name) for ef in EFFECTS)
 CELL_W = LABEL_W + 1 + WIDTH
 COL_W = CELL_W + GAP
 
+_PREVIEW_WORDS = [
+    "thinking",
+    "analyzing",
+    "cooking",
+    "brewing",
+    "computing",
+    "pondering",
+    "dreaming",
+    "processing",
+    "vibing",
+    "wondering",
+    "imagining",
+    "calculating",
+    "marinating",
+    "reflecting",
+    "absorbing",
+    "channeling",
+    "meditating",
+]
+
 
 def _render_grid(instances, console):
     cols = max(1, console.width // COL_W)
@@ -28,10 +48,34 @@ def _render_grid(instances, console):
     return Text("\n".join(rows))
 
 
-@click.command()
+def _render_preview(instances, frame_num, console):
+    word_w = max(len(w) for w in _PREVIEW_WORDS)
+    cell_w = WIDTH + 1 + word_w + 3
+    gap = 4
+    col_w = cell_w + gap
+
+    cols = max(1, console.width // col_w)
+    dot_count = (frame_num // FPS) % 4
+    rows = []
+    for i in range(0, len(instances), cols):
+        parts = []
+        for j, ef in enumerate(instances[i : i + cols]):
+            idx = i + j
+            word = _PREVIEW_WORDS[idx % len(_PREVIEW_WORDS)]
+            out = "".join(ef.step())
+            dots = "." * dot_count
+            parts.append(f"{out:<{WIDTH}} {word}{dots:<{word_w + 3 - len(word)}}")
+        rows.append((" " * gap).join(parts))
+    return Text("\n".join(rows))
+
+
+@click.group(invoke_without_command=True)
+@click.pass_context
 @click.option("--effect", "-e", default=None, help="Effect name to run")
 @click.option("--list", "list_effects", is_flag=True, help="List available effects")
-def main(effect: str, list_effects: bool):
+def cli(ctx, effect: str, list_effects: bool):
+    if ctx.invoked_subcommand is not None:
+        return
     console = Console()
 
     if list_effects:
@@ -72,5 +116,24 @@ def main(effect: str, list_effects: bool):
                 pass
 
 
+@cli.command()
+def preview():
+    console = Console()
+    instances = [ef() for ef in EFFECTS]
+    frame_num = [0]
+
+    def generate():
+        frame_num[0] += 1
+        return _render_preview(instances, frame_num[0], console)
+
+    with Live(generate(), refresh_per_second=FPS, console=console) as live:
+        try:
+            while True:
+                live.update(generate())
+                time.sleep(1 / FPS)
+        except KeyboardInterrupt:
+            pass
+
+
 if __name__ == "__main__":
-    main()
+    cli()
