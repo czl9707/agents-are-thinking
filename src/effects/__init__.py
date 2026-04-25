@@ -14,6 +14,8 @@ from src.effects.braille_based import (
     BrailleNoise,
     BrailleHeartbeat,
     BrailleArrow,
+    BrailleScanner,
+    BrailleMatrix,
 )
 from src.effects.progress import BlockProgress
 
@@ -33,4 +35,6 @@ EFFECTS: list[type[Effect]] = [
     BrailleNoise,
     BrailleHeartbeat,
     BrailleArrow,
+    BrailleScanner,
+    BrailleMatrix,
 ]

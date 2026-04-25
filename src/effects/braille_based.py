@@ -269,6 +269,56 @@ class BrailleHeartbeat(Effect):
         return frame.render()
 
 
+class BrailleScanner(Effect):
+    name = "braille-scanner"
+    description = "Bright line sweeping left to right with trailing fade"
+
+    _SCAN_WIDTH = 18
+    _TRAIL = 8
+
+    def step(self) -> list[str]:
+        frame = Frame(WIDTH, HEIGHT)
+        pos = self._frame % (self._SCAN_WIDTH + self._TRAIL + 4)
+        for y in range(4):
+            for dx in range(self._TRAIL + 1):
+                x = pos - dx
+                if 0 <= x < 2 * WIDTH:
+                    if dx == 0:
+                        frame.set(x, y)
+                    elif random.random() < 1.0 - dx / self._TRAIL:
+                        frame.set(x, y)
+        self._frame += 1
+        return frame.render()
+
+
+
+class BrailleMatrix(Effect):
+    name = "braille-matrix"
+    description = "Digital rain with bright head and fading tail"
+
+    _TAIL = 4
+
+    def __init__(self):
+        super().__init__()
+        self._columns = [random.randint(-8, 0) for _ in range(2 * WIDTH)]
+        self._speeds = [random.choice([1, 1, 2]) for _ in range(2 * WIDTH)]
+
+    def step(self) -> list[str]:
+        frame = Frame(WIDTH, HEIGHT)
+        for i in range(2 * WIDTH):
+            head = self._columns[i]
+            for t in range(self._TAIL):
+                y = head - t
+                if 0 <= y < 4:
+                    frame.set(i, y)
+            self._columns[i] += self._speeds[i]
+            if self._columns[i] - self._TAIL > 4:
+                self._columns[i] = random.randint(-6, -1)
+                self._speeds[i] = random.choice([1, 1, 2])
+        self._frame += 1
+        return frame.render()
+
+
 class BrailleArrow(Effect):
     name = "braille-arrow"
     description = "Chevrons slide right, reverse left, pause, repeat"
