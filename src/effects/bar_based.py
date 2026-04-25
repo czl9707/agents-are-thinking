@@ -34,27 +34,3 @@ class BarWave(Effect):
             frame.set(i, 0, v)
         self._frame += 1
         return frame.render()
-
-
-class BarRain(Effect):
-    name = "bar-rain"
-    description = "Drops fall as tall bars shrinking to nothing"
-
-    def __init__(self):
-        super().__init__()
-        self._drops = [random.randint(-8, 0) for _ in range(WIDTH)]
-        self._speeds = [random.choice([1, 1, 2]) for _ in range(WIDTH)]
-
-    def step(self) -> list[str]:
-        frame = BarFrame(WIDTH, HEIGHT)
-        for i in range(WIDTH):
-            head = self._drops[i]
-            if 0 <= head < 4:
-                v = max(0.0, 1.0 - head / 4)
-                frame.set(i, 0, v)
-            self._drops[i] += self._speeds[i]
-            if self._drops[i] > 5:
-                self._drops[i] = random.randint(-4, -1)
-                self._speeds[i] = random.choice([1, 1, 2])
-        self._frame += 1
-        return frame.render()

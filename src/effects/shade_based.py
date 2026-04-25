@@ -1,7 +1,7 @@
 import math
 
 from src.shade_helper import ShadeFrame
-from src.effects.base import Effect, WIDTH, HEIGHT
+from src.effects.base import Effect, WIDTH
 
 
 class ShadeWave(Effect):
@@ -44,27 +44,6 @@ class ShadeFire(Effect):
             flicker = math.sin(self._frame * 0.7 + x * 1.3) * 0.15
             heat = max(0.0, min(1.0, 1.0 + flicker))
             frame.set(x, 0, heat)
-        self._frame += 1
-        return frame.render()
-
-
-class ShadeNoise(Effect):
-    name = "shade-noise"
-    description = "Organic blobs via noise field with smooth density"
-
-    @staticmethod
-    def _noise(x: float, y: float) -> float:
-        return (math.sin(x * 1.7 + y * 2.3) * 0.5
-                + math.sin(x * 0.9 - y * 1.1) * 0.3
-                + math.sin(x * 2.5 + y * 0.7) * 0.2)
-
-    def step(self) -> list[str]:
-        frame = ShadeFrame(WIDTH, HEIGHT)
-        t = self._frame * 0.12
-        for x in range(WIDTH):
-            for y in range(HEIGHT):
-                v = self._noise(x * 0.4 + t, y * 0.5 + t * 0.3)
-                frame.set(x, y, max(0.0, min(1.0, (v + 0.3) / 0.8)))
         self._frame += 1
         return frame.render()
 
