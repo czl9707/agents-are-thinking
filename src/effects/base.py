@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
 
-WIDTH = 9
-HEIGHT = 1
+from src.braille import WIDTH
 
 
 class Effect(ABC):
