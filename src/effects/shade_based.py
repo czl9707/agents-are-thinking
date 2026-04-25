@@ -1,5 +1,4 @@
 import math
-import random
 
 from src.shade_helper import ShadeFrame
 from src.effects.base import Effect, WIDTH, HEIGHT
