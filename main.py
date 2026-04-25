@@ -9,7 +9,7 @@ from rich.text import Text
 from src.effects import EFFECTS
 from src.effects.base import WIDTH
 
-FPS = 12
+FPS = 16
 GAP = 4
 LABEL_W = max(len(ef.name) for ef in EFFECTS)
 CELL_W = LABEL_W + 1 + WIDTH

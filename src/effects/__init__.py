@@ -1,18 +1,26 @@
 from src.effects.base import Effect
-from src.effects.spinners import (
+from src.effects.braille_based import (
     BrailleSpin,
     BrailleWave,
-    BrailleCascade,
     BrailleRandom,
     BrailleBreathe,
+    BrailleRipple,
+    BrailleBounce,
+    BrailleRain,
+    BrailleZigzag,
+    BrailleDissolve,
 )
 from src.effects.progress import BlockProgress
 
 EFFECTS: list[type[Effect]] = [
     BrailleSpin,
     BrailleWave,
-    BrailleCascade,
     BrailleRandom,
     BrailleBreathe,
+    BrailleRipple,
+    BrailleBounce,
+    BrailleRain,
+    BrailleZigzag,
+    BrailleDissolve,
     BlockProgress,
 ]
