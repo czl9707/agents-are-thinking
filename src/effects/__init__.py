@@ -17,7 +17,17 @@ from src.effects.braille_based import (
     BrailleScanner,
     BrailleMatrix,
 )
-from src.effects.progress import BlockProgress
+from src.effects.shade_based import (
+    ShadeWave,
+    ShadeScanner,
+    ShadeFire,
+    ShadePulse,
+    ShadeBreathe,
+)
+from src.effects.bar_based import (
+    BarEqualizer,
+    BarWave,
+)
 
 EFFECTS: list[type[Effect]] = [
     BrailleSpin,
@@ -31,10 +41,16 @@ EFFECTS: list[type[Effect]] = [
     BrailleZigzag,
     BrailleDissolve,
     BrailleFire,
-    BlockProgress,
     BrailleNoise,
     BrailleHeartbeat,
     BrailleArrow,
     BrailleScanner,
     BrailleMatrix,
+    ShadeWave,
+    ShadeScanner,
+    ShadeFire,
+    ShadePulse,
+    ShadeBreathe,
+    BarEqualizer,
+    BarWave,
 ]
