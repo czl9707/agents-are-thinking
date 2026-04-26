@@ -36,6 +36,11 @@ from src.effects.vblock_based import (
     VBlockFill,
     VBlockTide,
     VBlockBreathe,
+    VBlockBounce,
+    VBlockRipple,
+    VBlockPulse,
+    VBlockRain,
+    VBlockCascade,
 )
 from src.effects.square_based import (
     SquarePulse,
@@ -82,6 +87,11 @@ EFFECTS: list[type[Effect]] = [
     VBlockFill,
     VBlockTide,
     VBlockBreathe,
+    VBlockBounce,
+    VBlockRipple,
+    VBlockPulse,
+    VBlockRain,
+    VBlockCascade,
     SquarePulse,
     SquareFill,
     SquareBlink,
