@@ -1,4 +1,5 @@
 import math
+import random
 
 from src.helpers.shade_helper import ShadeFrame
 from src.effects.base import Effect, WIDTH
@@ -86,5 +87,104 @@ class ShadeSeeSaw(Effect):
             raw = (math.cos(t * math.pi) + 1) / 2
             blend = 0.5 + (raw - 0.5) * 2
             density = phase * blend + (1.0 - phase) * (1.0 - blend)
+            frame.set(i, density)
+        return frame.render()
+
+
+class ShadeBlink(Effect):
+    name = "shade-blink"
+    description = "Cells breathe in three randomly staggered tiers"
+
+    _SPEED = 0.05
+
+    def __init__(self) -> None:
+        super().__init__()
+        self._tiers: list[int] = [random.randint(0, 2) for _ in range(WIDTH)]
+
+    def _render(self) -> list[str]:
+        frame = ShadeFrame(WIDTH)
+        for i in range(WIDTH):
+            offset = self._tiers[i] / 3.0
+            v = (math.sin((self._frame * self._SPEED + offset) * math.pi * 2) + 1) / 2
+            frame.set(i, v)
+        return frame.render()
+
+
+class ShadeLayers(Effect):
+    name = "shade-layers"
+    description = "Two sine waves add together creating interference moire"
+
+    def _render(self) -> list[str]:
+        frame = ShadeFrame(WIDTH)
+        for i in range(WIDTH):
+            w1 = (math.sin(self._frame * 0.4 + i * 0.8) + 1) / 2
+            w2 = (math.sin(self._frame * 0.7 + i * 1.2) + 1) / 2
+            frame.add(i, w1 * 0.5)
+            frame.add(i, w2 * 0.5)
+        return frame.render()
+
+
+class ShadePinch(Effect):
+    name = "shade-pinch"
+    description = "Bright edges alternate between left and right sides"
+
+    def _render(self) -> list[str]:
+        frame = ShadeFrame(WIDTH)
+        cx = (WIDTH - 1) / 2
+        phase = (math.sin(self._frame * 0.25) + 1) / 2
+        for i in range(WIDTH):
+            edge_dist = abs(i - cx) / cx
+            side_phase = phase if i <= cx else 1.0 - phase
+            density = edge_dist * (0.3 + 0.7 * side_phase)
+            frame.set(i, density)
+        return frame.render()
+
+
+class ShadeStaircase(Effect):
+    name = "shade-staircase"
+    description = "Gradient staircase that rotates one cell per frame"
+
+    def _render(self) -> list[str]:
+        frame = ShadeFrame(WIDTH)
+        shift = self._frame % WIDTH
+        for i in range(WIDTH):
+            density = ((i + shift) % WIDTH) / (WIDTH - 1)
+            frame.set(i, density)
+        return frame.render()
+
+
+class ShadeTide(Effect):
+    name = "shade-tide"
+    description = "Brightness fills from left then drains from right"
+
+    _CYCLE = WIDTH * 2
+
+    def _render(self) -> list[str]:
+        frame = ShadeFrame(WIDTH)
+        t = self._frame % self._CYCLE
+        fill = t if t < WIDTH else self._CYCLE - t
+        for i in range(WIDTH):
+            if i < fill:
+                frame.set(i, (i + 1) / fill)
+            else:
+                frame.set(i, 0.0)
+        return frame.render()
+
+
+class ShadeGrow(Effect):
+    name = "shade-grow"
+    description = "Bright island expands from center then shrinks back"
+
+    def _render(self) -> list[str]:
+        frame = ShadeFrame(WIDTH)
+        cx = (WIDTH - 1) / 2
+        t = (math.sin(self._frame * 0.2) + 1) / 2
+        radius = t * cx
+        for i in range(WIDTH):
+            dist = abs(i - cx)
+            if dist <= radius:
+                density = 1.0 - (dist / max(radius, 0.01)) * 0.5
+            else:
+                density = max(0.0, 1.0 - (dist - radius) / 2) * 0.3
             frame.set(i, density)
         return frame.render()
