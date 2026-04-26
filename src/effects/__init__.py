@@ -36,6 +36,7 @@ from src.effects.shade_based import (
 from src.effects.bar_based import (
     BarEqualizer,
     BarWave,
+    BarSeeSaw,
 )
 from src.effects.vblock_based import (
     VBlockWave,
@@ -95,6 +96,7 @@ EFFECTS: list[type[Effect]] = [
     ShadeGrow,
     BarEqualizer,
     BarWave,
+    BarSeeSaw,
     VBlockWave,
     VBlockFill,
     VBlockTide,

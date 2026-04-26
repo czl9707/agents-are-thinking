@@ -32,3 +32,17 @@ class BarWave(Effect):
             v = (math.sin((i * 0.5) + self._frame * 0.15) + 1) / 2
             frame.set(i, v)
         return frame.render()
+
+
+class BarSeeSaw(Effect):
+    name = "bar-seesaw"
+    description = "Left side rises while right side drops like a teeter-totter"
+
+    def _render(self) -> list[str]:
+        frame = BarFrame(WIDTH)
+        t = (math.sin(self._frame * 0.2) + 1) / 2
+        for i in range(WIDTH):
+            ratio = i / (WIDTH - 1) if WIDTH > 1 else 0.5
+            v = t * (1 - ratio) + (1 - t) * ratio
+            frame.set(i, v)
+        return frame.render()
