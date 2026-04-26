@@ -1,8 +1,8 @@
 import math
 import random
 
-from src.helpers.braille_helper import Frame
-from src.effects.base import (
+from agents_are_thinking.helpers.braille_helper import Frame
+from agents_are_thinking.effects.base import (
     Effect, WIDTH, HEIGHT,
     TEMPORAL_SPEED, SPATIAL_FREQUENCY, CYCLE_LENGTH, PAUSE, TRAIL, TOGGLE_RATE,
 )

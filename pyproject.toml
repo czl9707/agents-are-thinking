@@ -1,10 +1,19 @@
 [project]
-name = "thinking-effects"
+name = "agents-are-thinking"
 version = "0.1.0"
-description = "Add your description here"
+description = "Terminal animation effects built with braille, block characters, and unicode glyphs"
 readme = "README.md"
 requires-python = ">=3.11"
-dependencies = [
+
+[project.optional-dependencies]
+cli = [
     "click>=8.3.3",
     "rich>=15.0.0",
 ]
+
+[project.scripts]
+agents-are-thinking = "agents_are_thinking.cli:cli"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

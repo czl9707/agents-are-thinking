@@ -1,7 +1,7 @@
 import math
 
-from src.helpers.square_helper import SquareFrame
-from src.effects.base import Effect, WIDTH, CYCLE_LENGTH, PAUSE
+from agents_are_thinking.helpers.square_helper import SquareFrame
+from agents_are_thinking.effects.base import Effect, WIDTH, CYCLE_LENGTH, PAUSE
 
 
 class SquarePulse(Effect):

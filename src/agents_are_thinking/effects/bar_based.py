@@ -1,7 +1,7 @@
 import math
 
-from src.helpers.bar_helper import BarFrame
-from src.effects.base import Effect, WIDTH, TEMPORAL_SPEED, SPATIAL_FREQUENCY
+from agents_are_thinking.helpers.bar_helper import BarFrame
+from agents_are_thinking.effects.base import Effect, WIDTH, TEMPORAL_SPEED, SPATIAL_FREQUENCY
 
 
 class BarBounce(Effect):

@@ -1,5 +1,5 @@
-from src.effects.base import Effect
-from src.effects.braille_based import (
+from agents_are_thinking.effects.base import Effect
+from agents_are_thinking.effects.braille_based import (
     BrailleSpin,
     BrailleSpin2,
     BrailleWave,
@@ -19,7 +19,7 @@ from src.effects.braille_based import (
     BrailleCheckerboard,
     BrailleCheckerboard2x2,
 )
-from src.effects.shade_based import (
+from agents_are_thinking.effects.shade_based import (
     ShadeWave,
     ShadeScanner,
     ShadeFire,
@@ -30,12 +30,12 @@ from src.effects.shade_based import (
     ShadeLayers,
     ShadePinch,
 )
-from src.effects.bar_based import (
+from agents_are_thinking.effects.bar_based import (
     BarBounce,
     BarWave,
     BarSeeSaw,
 )
-from src.effects.vblock_based import (
+from agents_are_thinking.effects.vblock_based import (
     VBlockWave,
     VBlockFill,
     VBlockTide,
@@ -46,13 +46,13 @@ from src.effects.vblock_based import (
     VBlockRain,
     VBlockCascade,
 )
-from src.effects.square_based import (
+from agents_are_thinking.effects.square_based import (
     SquarePulse,
     SquareFill,
     SquareBlink,
     SquareArrow,
 )
-from src.effects.dot_based import (
+from agents_are_thinking.effects.dot_based import (
     DotWave,
     DotPulse,
     DotHeartbeat,
