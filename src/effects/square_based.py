@@ -20,13 +20,8 @@ class SquarePulse(Effect):
             ring = self._FULL_CYCLE - f - 1
         for i in range(WIDTH):
             dist = abs(i - cx + 0.5)
-            d = int(dist)
-            if d < ring:
-                frame.set(i, 1.0)
-            elif d == ring:
-                frame.set(i, 0.5)
-            else:
-                frame.set(i, 0.0)
+            v = max(0.0, min(1.0, (ring - dist + 1) / 2))
+            frame.set(i, v)
         self._frame += 1
         return frame.render()
 

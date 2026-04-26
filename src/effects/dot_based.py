@@ -53,18 +53,8 @@ class DotPulse(Effect):
             ring = self._FULL_CYCLE - f - 1
         for i in range(WIDTH):
             dist = abs(i - cx + 0.5)
-            d = int(dist)
-            diff = ring - d
-            if diff > 1:
-                frame.set(i, 1.0)
-            elif diff > 0:
-                frame.set(i, 0.75)
-            elif diff == 0:
-                frame.set(i, 0.5)
-            elif diff > -1:
-                frame.set(i, 0.25)
-            else:
-                frame.set(i, 0.0)
+            v = max(0.0, min(1.0, (ring - dist + 1) / 3))
+            frame.set(i, v)
         self._frame += 1
         return frame.render()
 
@@ -75,31 +65,29 @@ class DotArrow(Effect):
 
     _SPEED = 1
     _PAUSE = 12
+    _LENGTH = 5
 
     def __init__(self):
         super().__init__()
-        self._travel = WIDTH + 2
+        self._travel = WIDTH + 2 * (self._LENGTH - 1)
         self._cycle = self._travel * 2 + self._PAUSE
 
     def _render(self) -> list[str]:
         frame = DotFrame(WIDTH)
         f = self._frame % self._cycle
         if f < self._travel:
-            head = -2 + f * self._SPEED
+            head = -(self._LENGTH - 1) + f * self._SPEED
             direction = 1
         elif f < self._travel * 2:
-            head = WIDTH - 1 - (f - self._travel) * self._SPEED
+            head = WIDTH - 1 + (self._LENGTH - 1) - (f - self._travel) * self._SPEED
             direction = -1
         else:
             return frame.render()
-        empty = head
-        solid1 = head + direction
-        solid2 = head + direction * 2
-        if 0 <= empty < WIDTH:
-            frame.set(empty, 0.75)
-        for x in (solid1, solid2):
-            if 0 <= x < WIDTH:
-                frame.set(x, 1.0)
+        for t in range(self._LENGTH):
+            pos = head - direction * t
+            if 0 <= pos < WIDTH:
+                v = (self._LENGTH - t) / self._LENGTH
+                frame.set(pos, v)
         return frame.render()
 
 

@@ -28,7 +28,7 @@ class VBlockFill(Effect):
         for i in range(WIDTH):
             if i < pos:
                 dist = pos - i
-                v = max(0.0, 1.0 - (dist - 1) * 0.25)
+                v = max(0.0, 1.0 - (dist - 1) / (WIDTH - 1))
                 frame.set(i, v)
         return frame.render()
 
