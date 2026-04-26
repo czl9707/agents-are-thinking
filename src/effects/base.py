@@ -1,3 +1,4 @@
+import random
 from abc import ABC, abstractmethod
 
 WIDTH = 9
@@ -46,8 +47,9 @@ class Effect(ABC):
     name: str = ""
     description: str = ""
 
-    def __init__(self):
+    def __init__(self, seed: int = 42):
         self._frame = 0
+        self._rng = random.Random(seed)
 
     def step(self) -> list[str]:
         result = self._render()

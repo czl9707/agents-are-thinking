@@ -124,37 +124,11 @@ class VBlockRain(Effect):
 
     def _render(self) -> list[str]:
         for i in range(WIDTH):
-            if random.random() < 0.12:
-                self._levels[i] = min(1.0, self._levels[i] + random.uniform(0.5, 1.0))
+            col_rng = random.Random(self._frame * WIDTH + i)
+            if col_rng.random() < 0.12:
+                self._levels[i] = min(1.0, self._levels[i] + col_rng.uniform(0.5, 1.0))
             else:
                 self._levels[i] *= 0.85
-        frame = VBlockFrame(WIDTH)
-        for i in range(WIDTH):
-            frame.set(i, self._levels[i])
-        return frame.render()
-
-
-class VBlockEq(Effect):
-    name = "vblock-eq"
-    description = "Audio equalizer bars bouncing independently with gravity"
-
-    def __init__(self) -> None:
-        super().__init__()
-        self._levels: list[float] = [random.uniform(0.2, 0.8) for _ in range(WIDTH)]
-        self._velocity: list[float] = [0.0] * WIDTH
-
-    def _render(self) -> list[str]:
-        for i in range(WIDTH):
-            if random.random() < 0.15:
-                self._velocity[i] = random.uniform(0.08, 0.25)
-            self._velocity[i] -= 0.02
-            self._levels[i] += self._velocity[i]
-            if self._levels[i] <= 0:
-                self._levels[i] = 0.0
-                self._velocity[i] = abs(self._velocity[i]) * 0.6
-            elif self._levels[i] >= 1:
-                self._levels[i] = 1.0
-                self._velocity[i] = -abs(self._velocity[i]) * 0.6
         frame = VBlockFrame(WIDTH)
         for i in range(WIDTH):
             frame.set(i, self._levels[i])

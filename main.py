@@ -161,7 +161,7 @@ def cli(ctx, effect: str, list_effects: bool):
 @cli.command()
 def preview():
     console = Console()
-    efs = EFFECTS[:18]
+    efs = EFFECTS[:]
     random.shuffle(efs)
     instances = [ef() for ef in efs]
     frame_num = [0]

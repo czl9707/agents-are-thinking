@@ -1,5 +1,4 @@
 import math
-import random
 
 from src.helpers.dot_helper import DotFrame
 from src.effects.base import (
@@ -100,8 +99,8 @@ class DotBounce(Effect):
 
     def __init__(self):
         super().__init__()
-        self._phases = [random.uniform(0, math.tau) for _ in range(WIDTH)]
-        self._speeds = [random.uniform(TEMPORAL_SPEED.GENTLE, TEMPORAL_SPEED.FAST) for _ in range(WIDTH)]
+        self._phases = [self._rng.uniform(0, math.tau) for _ in range(WIDTH)]
+        self._speeds = [self._rng.uniform(TEMPORAL_SPEED.GENTLE, TEMPORAL_SPEED.FAST) for _ in range(WIDTH)]
 
     def _render(self) -> list[str]:
         frame = DotFrame(WIDTH)

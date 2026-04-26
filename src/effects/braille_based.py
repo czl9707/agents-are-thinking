@@ -72,8 +72,9 @@ class BrailleRandom(Effect):
 
     def _render(self) -> list[str]:
         frame = Frame(WIDTH, HEIGHT)
+        rng = random.Random(self._frame)
         for i in range(WIDTH):
-            val = random.getrandbits(8)
+            val = rng.getrandbits(8)
             for b in range(8):
                 if val & (1 << b):
                     px, py = _PIXEL_ORDER[b]
@@ -286,8 +287,8 @@ class BrailleMatrix(Effect):
 
     def __init__(self):
         super().__init__()
-        self._columns = [random.randint(-8, 0) for _ in range(2 * WIDTH)]
-        self._speeds = [random.choice([1, 1, 2]) for _ in range(2 * WIDTH)]
+        self._columns = [self._rng.randint(-8, 0) for _ in range(2 * WIDTH)]
+        self._speeds = [self._rng.choice([1, 1, 2]) for _ in range(2 * WIDTH)]
 
     def _render(self) -> list[str]:
         frame = Frame(WIDTH, HEIGHT)
@@ -299,8 +300,9 @@ class BrailleMatrix(Effect):
                     frame.set(i, y)
             self._columns[i] += self._speeds[i]
             if self._columns[i] - self._TAIL > 4:
-                self._columns[i] = random.randint(-6, -1)
-                self._speeds[i] = random.choice([1, 1, 2])
+                col_rng = random.Random(self._frame * 2 * WIDTH + i)
+                self._columns[i] = col_rng.randint(-6, -1)
+                self._speeds[i] = col_rng.choice([1, 1, 2])
         return frame.render()
 
 

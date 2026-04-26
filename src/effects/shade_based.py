@@ -1,5 +1,4 @@
 import math
-import random
 
 from src.helpers.shade_helper import ShadeFrame
 from src.effects.base import (
@@ -101,8 +100,8 @@ class ShadeBlink(Effect):
     _SPEED = TEMPORAL_SPEED.CRAWL
 
     def __init__(self) -> None:
-        super().__init__()
-        self._tiers: list[int] = [random.randint(0, 2) for _ in range(WIDTH)]
+        super().__init__(seed=38)
+        self._tiers: list[int] = [self._rng.randint(0, 2) for _ in range(WIDTH)]
 
     def _render(self) -> list[str]:
         frame = ShadeFrame(WIDTH)

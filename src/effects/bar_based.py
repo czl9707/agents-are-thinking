@@ -1,5 +1,4 @@
 import math
-import random
 
 from src.helpers.bar_helper import BarFrame
 from src.effects.base import Effect, WIDTH, TEMPORAL_SPEED, SPATIAL_FREQUENCY
@@ -11,8 +10,8 @@ class BarBounce(Effect):
 
     def __init__(self):
         super().__init__()
-        self._phases = [random.uniform(0, math.tau) for _ in range(WIDTH)]
-        self._speeds = [random.uniform(TEMPORAL_SPEED.GENTLE, TEMPORAL_SPEED.FAST) for _ in range(WIDTH)]
+        self._phases = [self._rng.uniform(0, math.tau) for _ in range(WIDTH)]
+        self._speeds = [self._rng.uniform(TEMPORAL_SPEED.GENTLE, TEMPORAL_SPEED.FAST) for _ in range(WIDTH)]
 
     def _render(self) -> list[str]:
         frame = BarFrame(WIDTH)

@@ -99,6 +99,7 @@ EFFECTS: list[type[Effect]] = [
     VBlockPulse,
     VBlockRipple,
     VBlockRain,
+    
     VBlockCascade,
     SquarePulse,
     SquareFill,
