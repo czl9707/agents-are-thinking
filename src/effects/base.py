@@ -11,6 +11,11 @@ class Effect(ABC):
     def __init__(self):
         self._frame = 0
 
-    @abstractmethod
     def step(self) -> list[str]:
+        result = self._render()
+        self._frame += 1
+        return result
+
+    @abstractmethod
+    def _render(self) -> list[str]:
         ...

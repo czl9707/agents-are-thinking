@@ -71,6 +71,16 @@ _PREVIEW_WORDS = [
 ]
 
 
+def _run_live(render_fn, console):
+    with Live(render_fn(), refresh_per_second=FPS, console=console) as live:
+        try:
+            while True:
+                live.update(render_fn())
+                time.sleep(1 / FPS)
+        except KeyboardInterrupt:
+            pass
+
+
 def _render_grid(instances, console):
     cols = max(1, console.width // COL_W)
     rows = []
@@ -134,29 +144,14 @@ def cli(ctx, effect: str, list_effects: bool):
 
         inst = cls()
 
-        def generate():
+        def render():
             out = "".join(inst.step())
             return Text(f"{cls.name:{LABEL_W}s} {out}")
 
-        with Live(generate(), refresh_per_second=FPS, console=console) as live:
-            try:
-                while True:
-                    live.update(generate())
-                    time.sleep(1 / FPS)
-            except KeyboardInterrupt:
-                pass
+        _run_live(render, console)
     else:
         instances = [ef() for ef in EFFECTS]
-
-        with Live(
-            _render_grid(instances, console), refresh_per_second=FPS, console=console
-        ) as live:
-            try:
-                while True:
-                    live.update(_render_grid(instances, console))
-                    time.sleep(1 / FPS)
-            except KeyboardInterrupt:
-                pass
+        _run_live(lambda: _render_grid(instances, console), console)
 
 
 @cli.command()
@@ -165,17 +160,11 @@ def preview():
     instances = [ef() for ef in EFFECTS]
     frame_num = [0]
 
-    def generate():
+    def render():
         frame_num[0] += 1
         return _render_preview(instances, frame_num[0], console)
 
-    with Live(generate(), refresh_per_second=FPS, console=console) as live:
-        try:
-            while True:
-                live.update(generate())
-                time.sleep(1 / FPS)
-        except KeyboardInterrupt:
-            pass
+    _run_live(render, console)
 
 
 if __name__ == "__main__":
