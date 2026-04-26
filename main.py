@@ -1,3 +1,4 @@
+import random
 import sys
 import time
 
@@ -160,7 +161,9 @@ def cli(ctx, effect: str, list_effects: bool):
 @cli.command()
 def preview():
     console = Console()
-    instances = [ef() for ef in EFFECTS]
+    efs = EFFECTS[:18]
+    random.shuffle(efs)
+    instances = [ef() for ef in efs]
     frame_num = [0]
 
     def render():
