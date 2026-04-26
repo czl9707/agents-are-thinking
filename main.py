@@ -73,12 +73,11 @@ _PREVIEW_WORDS = [
 ]
 
 
-def _run_live(render_fn, console):
-    with Live(render_fn(), refresh_per_second=FPS, console=console) as live:
+def _run_live(render_fn, console, screen=False):
+    with Live(get_renderable=render_fn, refresh_per_second=FPS, console=console, screen=screen):
         try:
             while True:
-                live.update(render_fn())
-                time.sleep(1 / FPS)
+                time.sleep(1)
         except KeyboardInterrupt:
             pass
 
@@ -119,10 +118,7 @@ def _render_preview(instances, frame_num, console):
     content = Text("\n".join(rows))
     return Panel(
         content,
-        width=console.width,
         box=rich_box.ROUNDED,
-        padding=0,
-        expand=True,
     )
 
 
@@ -170,7 +166,7 @@ def preview():
         frame_num[0] += 1
         return _render_preview(instances, frame_num[0], console)
 
-    _run_live(render, console)
+    _run_live(render, console, screen=True)
 
 
 if __name__ == "__main__":
