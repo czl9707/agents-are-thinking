@@ -1,9 +1,9 @@
 _DEFAULT_W = 9
 
-_BARS = " ▁▂▃▄▅▆▇█"
+_SQUARES = "·□■"
 
 
-class BarFrame:
+class SquareFrame:
     def __init__(self, width: int = _DEFAULT_W) -> None:
         self.width = width
         self._cells: list[float] = [0.0] * width
@@ -18,6 +18,6 @@ class BarFrame:
     def render(self) -> list[str]:
         row = []
         for c in range(self.width):
-            idx = min(round(self._cells[c] * (len(_BARS) - 1)), len(_BARS) - 1)
-            row.append(_BARS[idx])
+            idx = min(round(self._cells[c] * (len(_SQUARES) - 1)), len(_SQUARES) - 1)
+            row.append(_SQUARES[idx])
         return ["".join(row)]

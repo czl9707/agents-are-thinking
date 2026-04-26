@@ -25,10 +25,30 @@ from src.effects.shade_based import (
     ShadeFire,
     ShadePulse,
     ShadeBreathe,
+    ShadeSeeSaw,
 )
 from src.effects.bar_based import (
     BarEqualizer,
     BarWave,
+)
+from src.effects.vblock_based import (
+    VBlockWave,
+    VBlockFill,
+    VBlockTide,
+    VBlockBreathe,
+)
+from src.effects.square_based import (
+    SquarePulse,
+    SquareFill,
+    SquareBlink,
+    SquareArrow,
+)
+from src.effects.dot_based import (
+    DotWave,
+    DotPulse,
+    DotHeartbeat,
+    DotArrow,
+    DotBounce,
 )
 
 EFFECTS: list[type[Effect]] = [
@@ -55,6 +75,20 @@ EFFECTS: list[type[Effect]] = [
     ShadeFire,
     ShadePulse,
     ShadeBreathe,
+    ShadeSeeSaw,
     BarEqualizer,
     BarWave,
+    VBlockWave,
+    VBlockFill,
+    VBlockTide,
+    VBlockBreathe,
+    SquarePulse,
+    SquareFill,
+    SquareBlink,
+    SquareArrow,
+    DotWave,
+    DotPulse,
+    DotHeartbeat,
+    DotArrow,
+    DotBounce,
 ]

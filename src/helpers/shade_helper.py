@@ -1,32 +1,27 @@
 _DEFAULT_W = 9
-_DEFAULT_H = 1
 
 _SHADES = "░▒▓█"
 
 
 class ShadeFrame:
-    def __init__(self, width: int = _DEFAULT_W, height: int = _DEFAULT_H) -> None:
+    def __init__(self, width: int = _DEFAULT_W) -> None:
         self.width = width
-        self.height = height
-        self._cells: list[list[float]] = [[0.0] * width for _ in range(height)]
+        self._cells: list[float] = [0.0] * width
 
-    def set(self, x: int, y: int, density: float = 1.0) -> None:
-        if 0 <= x < self.width and 0 <= y < self.height:
-            self._cells[y][x] = max(0.0, min(1.0, density))
+    def set(self, x: int, density: float = 1.0) -> None:
+        if 0 <= x < self.width:
+            self._cells[x] = max(0.0, min(1.0, density))
 
-    def add(self, x: int, y: int, density: float = 1.0) -> None:
-        if 0 <= x < self.width and 0 <= y < self.height:
-            self._cells[y][x] = max(0.0, min(1.0, self._cells[y][x] + density))
+    def add(self, x: int, density: float = 1.0) -> None:
+        if 0 <= x < self.width:
+            self._cells[x] = max(0.0, min(1.0, self._cells[x] + density))
 
     def clear(self) -> None:
-        self._cells = [[0.0] * self.width for _ in range(self.height)]
+        self._cells = [0.0] * self.width
 
     def render(self) -> list[str]:
-        rows = []
-        for r in range(self.height):
-            row = []
-            for c in range(self.width):
-                idx = min(int(self._cells[r][c] * len(_SHADES)), len(_SHADES) - 1)
-                row.append(_SHADES[idx])
-            rows.append("".join(row))
-        return rows
+        row = []
+        for c in range(self.width):
+            idx = min(round(self._cells[c] * (len(_SHADES) - 1)), len(_SHADES) - 1)
+            row.append(_SHADES[idx])
+        return ["".join(row)]

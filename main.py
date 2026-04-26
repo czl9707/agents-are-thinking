@@ -10,6 +10,7 @@ from rich.text import Text
 
 from src.effects import EFFECTS
 from src.effects.base import WIDTH
+import src.effects as effects
 
 FPS = 16
 GAP = 4
@@ -111,6 +112,8 @@ def _render_preview(instances, frame_num, console):
             dots = "." * dot_count
             parts.append(f"{out:<{WIDTH}} {word}{dots:<{word_w + 3 - len(word)}}")
         rows.append((" " * gap).join(parts))
+        if i < len(instances) - cols:
+            rows.append("")
 
     content = Text("\n".join(rows))
     return Panel(
