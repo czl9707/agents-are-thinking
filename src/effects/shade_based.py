@@ -55,7 +55,7 @@ class ShadeRipple(Effect):
 
     def _render(self) -> list[str]:
         frame = ShadeFrame(WIDTH)
-        cx = WIDTH / 2
+        cx = (WIDTH - 1) / 2
         for i in range(WIDTH):
             dist = abs(i - cx) / cx
             wave = (math.sin(dist * SPATIAL_FREQUENCY.EXTRA_DENSE - self._frame * TEMPORAL_SPEED.MODERATE) + 1) / 2
