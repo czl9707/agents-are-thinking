@@ -1,12 +1,12 @@
 import math
 
 from src.helpers.square_helper import SquareFrame
-from src.effects.base import Effect, WIDTH
+from src.effects.base import Effect, WIDTH, CYCLE_LENGTH, PAUSE
 
 
 class SquarePulse(Effect):
     name = "square-pulse"
-    description = "Dot to outline to filled expands from center and back"
+    description = "Expanding ring radiates from center then contracts back"
 
     _FULL_CYCLE = WIDTH * 2
 
@@ -28,7 +28,7 @@ class SquarePulse(Effect):
 
 class SquareFill(Effect):
     name = "square-fill"
-    description = "Dots morph left to right: dot to outline to filled"
+    description = "Fills progressively from left to right, then resets"
 
     _SPEED = 3
     _CYCLE = WIDTH * _SPEED + 8
@@ -50,9 +50,9 @@ class SquareFill(Effect):
 
 class SquareBlink(Effect):
     name = "square-blink"
-    description = "Alternating pattern shifts each cycle"
+    description = "Pattern alternates on a fixed cycle"
 
-    _PERIOD = 10
+    _PERIOD = CYCLE_LENGTH.SHORT
 
     def _render(self) -> list[str]:
         frame = SquareFrame(WIDTH)
@@ -65,10 +65,10 @@ class SquareBlink(Effect):
 
 class SquareArrow(Effect):
     name = "square-arrow"
-    description = "Two solid blocks and one empty slide and reverse"
+    description = "Shape slides right, reverses left, pauses, repeats"
 
     _SPEED = 1
-    _PAUSE = 12
+    _PAUSE = PAUSE.MEDIUM
 
     def __init__(self):
         super().__init__()

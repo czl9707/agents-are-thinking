@@ -2,28 +2,31 @@ import math
 import random
 
 from src.helpers.dot_helper import DotFrame
-from src.effects.base import Effect, WIDTH
+from src.effects.base import (
+    Effect, WIDTH,
+    TEMPORAL_SPEED, SPATIAL_FREQUENCY, CYCLE_LENGTH, PAUSE,
+)
 
 
 class DotWave(Effect):
     name = "dot-wave"
-    description = "Sine wave where dot size varies instead of shade"
+    description = "Smooth sine wave scrolls across as dot sizes"
 
     def _render(self) -> list[str]:
         frame = DotFrame(WIDTH)
         for i in range(WIDTH):
-            v = (math.sin((i + self._frame) * 0.6) + 1) / 2
+            v = (math.sin((i + self._frame) * SPATIAL_FREQUENCY.LOW) + 1) / 2
             frame.set(i, v)
         return frame.render()
 
 
 class DotHeartbeat(Effect):
     name = "dot-heartbeat"
-    description = "Heartbeat throb, all dots size up then snap back"
+    description = "Pulsing rhythm that mimics a heartbeat"
 
     def _render(self) -> list[str]:
         frame = DotFrame(WIDTH)
-        phase = self._frame % 16
+        phase = self._frame % CYCLE_LENGTH.MEDIUM
         if phase < 5:
             v = phase / 5
         elif phase < 8:
@@ -39,7 +42,7 @@ class DotHeartbeat(Effect):
 
 class DotPulse(Effect):
     name = "dot-pulse"
-    description = "Dots expand from center then shrink back"
+    description = "Expanding ring radiates from center then contracts back"
 
     _FULL_CYCLE = WIDTH * 2
 
@@ -61,10 +64,10 @@ class DotPulse(Effect):
 
 class DotArrow(Effect):
     name = "dot-arrow"
-    description = "Two solid dots and one outline slide and reverse"
+    description = "Shape slides right, reverses left, pauses, repeats"
 
     _SPEED = 1
-    _PAUSE = 12
+    _PAUSE = PAUSE.MEDIUM
     _LENGTH = 5
 
     def __init__(self):
@@ -93,12 +96,12 @@ class DotArrow(Effect):
 
 class DotBounce(Effect):
     name = "dot-bounce"
-    description = "Random dots bounce between sizes at different speeds"
+    description = "Each dot bounces independently at its own speed"
 
     def __init__(self):
         super().__init__()
         self._phases = [random.uniform(0, math.tau) for _ in range(WIDTH)]
-        self._speeds = [random.uniform(0.15, 0.5) for _ in range(WIDTH)]
+        self._speeds = [random.uniform(TEMPORAL_SPEED.GENTLE, TEMPORAL_SPEED.FAST) for _ in range(WIDTH)]
 
     def _render(self) -> list[str]:
         frame = DotFrame(WIDTH)

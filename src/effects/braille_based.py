@@ -2,7 +2,10 @@ import math
 import random
 
 from src.helpers.braille_helper import Frame
-from src.effects.base import Effect, WIDTH, HEIGHT
+from src.effects.base import (
+    Effect, WIDTH, HEIGHT,
+    TEMPORAL_SPEED, SPATIAL_FREQUENCY, CYCLE_LENGTH, PAUSE, TRAIL, TOGGLE_RATE,
+)
 
 
 _PIXEL_ORDER = [
@@ -18,12 +21,12 @@ class BrailleSpin(Effect):
         (0, 0), (0, 1), (0, 2), (0, 3),
         (1, 3), (1, 2), (1, 1), (1, 0),
     ]
-    TRAIL = 3
+    _TRAIL = TRAIL.SHORT
 
     def _render(self) -> list[str]:
         frame = Frame(WIDTH, HEIGHT)
         for cx in range(0, WIDTH * 2, 4):
-            for i in range(self.TRAIL):
+            for i in range(self._TRAIL):
                 dx, dy = self.PATH[(self._frame + i) % len(self.PATH)]
                 frame.set(cx + dx, dy)
         return frame.render()
@@ -39,12 +42,12 @@ class BrailleSpin2(Effect):
         (5, 3), (5, 2), (5, 1), (5, 0),
         (4, 0), (3, 0), (2, 0), (1, 0),
     ]
-    TRAIL = 4
+    _TRAIL = TRAIL.SHORT
 
     def _render(self) -> list[str]:
         frame = Frame(WIDTH, HEIGHT)
         for cx in range(0, WIDTH * 2 - 4, 4):
-            for i in range(self.TRAIL):
+            for i in range(self._TRAIL):
                 dx, dy = self.PATH[(self._frame + i) % len(self.PATH)]
                 frame.set(cx + dx, dy)
         return frame.render()
@@ -52,7 +55,7 @@ class BrailleSpin2(Effect):
 
 class BrailleWave(Effect):
     name = "braille-wave"
-    description = "Braille wave, each col at different phase"
+    description = "Smooth sine wave scrolls across as braille dots"
 
     def _render(self) -> list[str]:
         frame = Frame(WIDTH, HEIGHT)
@@ -80,15 +83,15 @@ class BrailleRandom(Effect):
 
 class BrailleBreathe(Effect):
     name = "braille-breathe"
-    description = "Braille breathe, grows from center then shrinks"
+    description = "Dots breathe outward from center then inward"
 
     def _render(self) -> list[str]:
-        phase = self._frame % 10
+        phase = self._frame % CYCLE_LENGTH.SHORT
         frame = Frame(WIDTH, HEIGHT)
         for i in range(WIDTH):
             dist = abs(i - WIDTH // 2)
-            ci = (phase + dist) % 10
-            count = ci if ci < 5 else 10 - ci
+            ci = (phase + dist) % CYCLE_LENGTH.SHORT
+            count = ci if ci < 5 else CYCLE_LENGTH.SHORT - ci
             n = count * 8 // 5
             for b in range(n):
                 px, py = _PIXEL_ORDER[b]
@@ -98,7 +101,7 @@ class BrailleBreathe(Effect):
 
 class BrailleRipple(Effect):
     name = "braille-ripple"
-    description = "Concentric ripple rings pulsing outward from center"
+    description = "Concentric rings pulse outward from center"
 
     def _render(self) -> list[str]:
         frame = Frame(WIDTH, HEIGHT)
@@ -106,7 +109,7 @@ class BrailleRipple(Effect):
         for x in range(2 * WIDTH):
             for y in range(4):
                 d = math.sqrt((x - cx) ** 2 + (y - cy) ** 2)
-                wave = math.sin(d * 2 - self._frame * 0.5)
+                wave = math.sin(d * 2 - self._frame * TEMPORAL_SPEED.FAST)
                 if wave > 0.3:
                     frame.set(x, y)
         return frame.render()
@@ -114,7 +117,7 @@ class BrailleRipple(Effect):
 
 class BrailleBounce(Effect):
     name = "braille-bounce"
-    description = "Solid block with gradient edges shifts left to right then back"
+    description = "Solid block bounces left to right with a fading trail"
 
     def _render(self) -> list[str]:
         frame = Frame(WIDTH, HEIGHT)
@@ -133,7 +136,7 @@ class BrailleBounce(Effect):
 
 class BrailleRain(Effect):
     name = "braille-rain"
-    description = "Drops fall from top, each column at its own pace"
+    description = "Elements fall independently at their own pace"
 
     def _render(self) -> list[str]:
         frame = Frame(WIDTH, HEIGHT)
@@ -168,7 +171,7 @@ class BrailleDissolve(Effect):
     def _render(self) -> list[str]:
         frame = Frame(WIDTH, HEIGHT)
         total = 2 * WIDTH * 4
-        cycle = 36
+        cycle = CYCLE_LENGTH.LONG
         phase = self._frame % cycle
         half = cycle // 2
         rng = random.Random(42)
@@ -188,7 +191,7 @@ class BrailleDissolve(Effect):
 
 class BrailleFire(Effect):
     name = "braille-fire"
-    description = "Flames rising from bottom with flicker"
+    description = "FASTing flames rising from the bottom"
 
     def _render(self) -> list[str]:
         frame = Frame(WIDTH, HEIGHT)
@@ -197,8 +200,8 @@ class BrailleFire(Effect):
             for y in range(4):
                 row_from_bottom = 3 - y
                 decay = row_from_bottom * 0.28
-                flicker = math.sin(self._frame * 0.7 + x * 1.3) * 0.2
-                heat = max(0.0, 1.0 - decay + flicker)
+                FAST = math.sin(self._frame * TEMPORAL_SPEED.FAST + x * SPATIAL_FREQUENCY.HIGH) * 0.2
+                heat = max(0.0, 1.0 - decay + FAST)
                 if rng.random() < heat:
                     frame.set(x, y)
         return frame.render()
@@ -216,10 +219,10 @@ class BrailleNoise(Effect):
 
     def _render(self) -> list[str]:
         frame = Frame(WIDTH, HEIGHT)
-        t = self._frame * 0.12
+        t = self._frame * TEMPORAL_SPEED.SLOW
         for x in range(2 * WIDTH):
             for y in range(4):
-                nx = x * 0.35 + t
+                nx = x * SPATIAL_FREQUENCY.LOW + t
                 ny = y * 0.5 + t * 0.3
                 v = self._noise2d(nx, ny)
                 if v > 0.1:
@@ -229,13 +232,13 @@ class BrailleNoise(Effect):
 
 class BrailleHeartbeat(Effect):
     name = "braille-heartbeat"
-    description = "ECG-style pulse line with a contemplative rhythm"
+    description = "Pulsing rhythm that mimics a heartbeat"
 
     _PATTERNS = [
         [0, 0, 0, 0, 1, 2, 1, 0, 2, 4, 3, 0, 1, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 1, 2, 3, 2, 1, 0, 2, 2, 3, 1, 0, 0, 0],
     ]
-    _LEN = 18
+    _LEN = CYCLE_LENGTH.MEDIUM
 
     def _render(self) -> list[str]:
         frame = Frame(WIDTH, HEIGHT)
@@ -255,10 +258,10 @@ class BrailleHeartbeat(Effect):
 
 class BrailleScanner(Effect):
     name = "braille-scanner"
-    description = "Bright line sweeping left to right with trailing fade"
+    description = "Bright line sweeps across with a fading trail"
 
-    _SCAN_WIDTH = 18
-    _TRAIL = 8
+    _SCAN_WIDTH = CYCLE_LENGTH.MEDIUM
+    _TRAIL = TRAIL.EXTENDED
 
     def _render(self) -> list[str]:
         frame = Frame(WIDTH, HEIGHT)
@@ -279,7 +282,7 @@ class BrailleMatrix(Effect):
     name = "braille-matrix"
     description = "Digital rain with bright head and fading tail"
 
-    _TAIL = 4
+    _TAIL = TRAIL.SHORT
 
     def __init__(self):
         super().__init__()
@@ -303,11 +306,11 @@ class BrailleMatrix(Effect):
 
 class BrailleArrow(Effect):
     name = "braille-arrow"
-    description = "Chevrons slide right, reverse left, pause, repeat"
+    description = "Shape slides right, reverses left, pauses, repeats"
 
     _W = 8
     _SPEED = 2
-    _PAUSE = 16
+    _PAUSE = PAUSE.LONG
 
     _RIGHT = [
         (0, 0), (1, 0), (2, 0),                (5, 0), (6, 0), (7, 0),
@@ -351,7 +354,7 @@ class BrailleCheckerboard(Effect):
 
     def _render(self) -> list[str]:
         frame = Frame(WIDTH, HEIGHT)
-        offset = (self._frame // 8) % 2
+        offset = (self._frame // TOGGLE_RATE.SLOW) % 2
         for x in range(2 * WIDTH):
             for y in range(4):
                 if (x + y + offset) % 2 == 0:
@@ -365,7 +368,7 @@ class BrailleCheckerboard2x2(Effect):
 
     def _render(self) -> list[str]:
         frame = Frame(WIDTH, HEIGHT)
-        offset = (self._frame // 8) % 2
+        offset = (self._frame // TOGGLE_RATE.SLOW) % 2
         for x in range(2 * WIDTH):
             for y in range(4):
                 if ((x // 2 + y // 2) + offset) % 2 == 0:

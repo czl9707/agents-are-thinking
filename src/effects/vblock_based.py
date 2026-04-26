@@ -2,24 +2,27 @@ import math
 import random
 
 from src.helpers.vblock_helper import VBlockFrame
-from src.effects.base import Effect, WIDTH
+from src.effects.base import (
+    Effect, WIDTH,
+    TEMPORAL_SPEED, SPATIAL_FREQUENCY, CYCLE_LENGTH,
+)
 
 
 class VBlockWave(Effect):
     name = "vblock-wave"
-    description = "Sine wave scrolls, each cell fills to wave height"
+    description = "Smooth sine wave scrolls across as block heights"
 
     def _render(self) -> list[str]:
         frame = VBlockFrame(WIDTH)
         for i in range(WIDTH):
-            v = (math.sin((i + self._frame) * 0.6) + 1) / 2
+            v = (math.sin((i + self._frame) * SPATIAL_FREQUENCY.LOW) + 1) / 2
             frame.set(i, v)
         return frame.render()
 
 
 class VBlockFill(Effect):
     name = "vblock-fill"
-    description = "Loading bar sweeps left to right, resets"
+    description = "Fills progressively from left to right, then resets"
 
     _CYCLE = WIDTH + 4
 
@@ -36,11 +39,11 @@ class VBlockFill(Effect):
 
 class VBlockTide(Effect):
     name = "vblock-tide"
-    description = "Left fills while right drains, then reverses"
+    description = "Fills from one side while draining from the other"
 
     def _render(self) -> list[str]:
         frame = VBlockFrame(WIDTH)
-        phase = (math.sin(self._frame * 0.15) + 1) / 2
+        phase = (math.sin(self._frame * TEMPORAL_SPEED.GENTLE) + 1) / 2
         for i in range(WIDTH):
             t = i / (WIDTH - 1)
             density = phase * (1 - t) + (1 - phase) * t
@@ -50,10 +53,10 @@ class VBlockTide(Effect):
 
 class VBlockBreathe(Effect):
     name = "vblock-breathe"
-    description = "All cells fill and empty in unison"
+    description = "All columns breathe in and out in unison"
 
     def _render(self) -> list[str]:
-        phase = self._frame % 20
+        phase = self._frame % CYCLE_LENGTH.MEDIUM
         v = (math.sin(phase * math.pi / 10) + 1) / 2
         frame = VBlockFrame(WIDTH)
         for i in range(WIDTH):
@@ -63,7 +66,7 @@ class VBlockBreathe(Effect):
 
 class VBlockBounce(Effect):
     name = "vblock-bounce"
-    description = "A bright block bounces left to right with a fading trail"
+    description = "Bright block bounces left to right with a fading trail"
 
     _PERIOD = (WIDTH - 1) * 2
 
@@ -78,9 +81,9 @@ class VBlockBounce(Effect):
         return frame.render()
 
 
-class VBlockRipple(Effect):
-    name = "vblock-ripple"
-    description = "Pulse emanates from center, fades at edges, repeats"
+class VBlockPulse(Effect):
+    name = "vblock-pulse"
+    description = "Expanding ring radiates from center then contracts back"
 
     _CYCLE = WIDTH + 4
 
@@ -96,16 +99,16 @@ class VBlockRipple(Effect):
         return frame.render()
 
 
-class VBlockPulse(Effect):
-    name = "vblock-pulse"
-    description = "Concentric rings radiating from center"
+class VBlockRipple(Effect):
+    name = "vblock-ripple"
+    description = "Concentric rings pulse outward from center"
 
     def _render(self) -> list[str]:
         frame = VBlockFrame(WIDTH)
         cx = (WIDTH - 1) / 2
         for i in range(WIDTH):
             dist = abs(i - cx) / cx
-            wave = (math.sin(dist * 6 - self._frame * 0.4) + 1) / 2
+            wave = (math.sin(dist * SPATIAL_FREQUENCY.EXTRA_DENSE - self._frame * TEMPORAL_SPEED.MODERATE) + 1) / 2
             density = max(0.0, wave - dist * 0.5)
             frame.set(i, density)
         return frame.render()
@@ -113,7 +116,7 @@ class VBlockPulse(Effect):
 
 class VBlockRain(Effect):
     name = "vblock-rain"
-    description = "Cells randomly fill and slowly drain independently"
+    description = "Elements fall independently at their own pace"
 
     def __init__(self) -> None:
         super().__init__()
@@ -163,7 +166,7 @@ class VBlockCascade(Effect):
     description = "Full stream with empty gaps flowing rightward like water"
 
     _GAPS = 3
-    _SPEED = 0.35
+    _SPEED = TEMPORAL_SPEED.MODERATE
     _SPACING = WIDTH / _GAPS
 
     def _render(self) -> list[str]:
@@ -173,11 +176,10 @@ class VBlockCascade(Effect):
             v = 1.0
             for g in range(self._GAPS):
                 pos = (t + g * self._SPACING) % (WIDTH + 4) - 2
-                wobble = 0.3 * math.sin(self._frame * 0.12 + g * 2.1)
+                wobble = 0.3 * math.sin(self._frame * TEMPORAL_SPEED.SLOW + g * 2.1)
                 half = 1.0 + wobble
                 dist = i - pos
                 if abs(dist) < half:
                     v = min(v, max(0.0, (abs(dist) - half + 0.6) / 0.6))
             frame.set(i, v)
         return frame.render()
-
