@@ -31,7 +31,7 @@ jobs:
         fetch-depth: 0
 
     - name: Install uv
-      uses: astral-sh/setup-uv@v4
+      uses: astral-sh/setup-uv@v7
 
     - name: Install Python ${{ env.PYTHON_LATEST }}
       run: uv python install ${{ env.PYTHON_LATEST }}
