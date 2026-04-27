@@ -11,6 +11,8 @@ class ShadeWave(Effect):
     name = "shade-wave"
     description = "Smooth sine wave scrolls across as shade density"
 
+    cycle_length = 10
+
     def _render(self) -> list[str]:
         frame = ShadeFrame(WIDTH)
         for i in range(WIDTH):
@@ -22,6 +24,8 @@ class ShadeWave(Effect):
 class ShadeScanner(Effect):
     name = "shade-scanner"
     description = "Bright line sweeps across with a fading trail"
+
+    cycle_length = 15
 
     _SCAN_RANGE = WIDTH + 6
 
@@ -39,6 +43,8 @@ class ShadeFire(Effect):
     name = "shade-fire"
     description = "FASTing flames rising from the bottom"
 
+    cycle_length = 20
+
     def _render(self) -> list[str]:
         frame = ShadeFrame(WIDTH)
         for x in range(WIDTH):
@@ -52,6 +58,8 @@ class ShadeFire(Effect):
 class ShadeRipple(Effect):
     name = "shade-ripple"
     description = "Concentric rings pulse outward from center"
+
+    cycle_length = 16
 
     def _render(self) -> list[str]:
         frame = ShadeFrame(WIDTH)
@@ -68,6 +76,8 @@ class ShadeBreathe(Effect):
     name = "shade-breathe"
     description = "All columns breathe in and out in unison"
 
+    cycle_length = 18
+
     def _render(self) -> list[str]:
         phase = self._frame % CYCLE_LENGTH.MEDIUM
         v = (math.sin(phase * math.pi / 10) + 1) / 2
@@ -80,6 +90,8 @@ class ShadeBreathe(Effect):
 class ShadeSeeSaw(Effect):
     name = "shade-seesaw"
     description = "Left and right halves alternate like a seesaw"
+
+    cycle_length = 16
 
     def _render(self) -> list[str]:
         frame = ShadeFrame(WIDTH)
@@ -96,6 +108,8 @@ class ShadeSeeSaw(Effect):
 class ShadeBlink(Effect):
     name = "shade-blink"
     description = "Cells breathe in three randomly staggered tiers"
+
+    cycle_length = 20
 
     _SPEED = TEMPORAL_SPEED.CRAWL
 
@@ -116,6 +130,8 @@ class ShadeLayers(Effect):
     name = "shade-layers"
     description = "Two sine waves add together creating interference moire"
 
+    cycle_length = 25
+
     def _render(self) -> list[str]:
         frame = ShadeFrame(WIDTH)
         for i in range(WIDTH):
@@ -129,6 +145,8 @@ class ShadeLayers(Effect):
 class ShadePinch(Effect):
     name = "shade-pinch"
     description = "Bright edges alternate between left and right sides"
+
+    cycle_length = 25
 
     def _render(self) -> list[str]:
         frame = ShadeFrame(WIDTH)

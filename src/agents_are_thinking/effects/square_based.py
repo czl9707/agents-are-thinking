@@ -9,6 +9,7 @@ class SquarePulse(Effect):
     description = "Expanding ring radiates from center then contracts back"
 
     _FULL_CYCLE = WIDTH * 2
+    cycle_length = 18
 
     def _render(self) -> list[str]:
         frame = SquareFrame(WIDTH)
@@ -22,7 +23,6 @@ class SquarePulse(Effect):
             dist = abs(i - cx + 0.5)
             v = max(0.0, min(1.0, (ring - dist + 1) / 2))
             frame.set(i, v)
-        self._frame += 1
         return frame.render()
 
 
@@ -32,6 +32,7 @@ class SquareFill(Effect):
 
     _SPEED = 3
     _CYCLE = WIDTH * _SPEED + 8
+    cycle_length = 35
 
     def _render(self) -> list[str]:
         frame = SquareFrame(WIDTH)
@@ -53,6 +54,7 @@ class SquareBlink(Effect):
     description = "Pattern alternates on a fixed cycle"
 
     _PERIOD = CYCLE_LENGTH.SHORT
+    cycle_length = 27
 
     def _render(self) -> list[str]:
         frame = SquareFrame(WIDTH)
@@ -69,6 +71,7 @@ class SquareArrow(Effect):
 
     _SPEED = 1
     _PAUSE = PAUSE.MEDIUM
+    cycle_length = 34
 
     def __init__(self):
         super().__init__()
