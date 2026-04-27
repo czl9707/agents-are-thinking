@@ -1,0 +1,56 @@
+name: Publish to PyPI
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_type:
+        description: "Release Type"
+        required: true
+        type: choice
+        default: "patch"
+        options:
+        - major
+        - minor
+        - patch
+
+env:
+  PYTHON_LATEST: "3.12"
+
+jobs:
+  build:
+    name: Publish
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v4
+
+    - name: Install Python ${{ env.PYTHON_LATEST }}
+      run: uv python install ${{ env.PYTHON_LATEST }}
+
+    - name: Bump version
+      id: bump
+      uses: callowayproject/bump-my-version@master
+      env:
+        BUMPVERSION_TAG: "false"
+      with:
+        args: ${{ inputs.release_type }}
+        github-token: ${{ secrets.GH_TOKEN }}
+
+    - name: Build
+      run: uv build
+
+    - name: Publish
+      run: uv publish --token ${{ secrets.PYPI_API_TOKEN }}
+
+    - name: GitHub Release v${{ steps.bump.outputs.current-version }}
+      uses: ncipollo/release-action@v1
+      with:
+        name: agents-are-thinking v${{ steps.bump.outputs.current-version }}
+        tag: v${{ steps.bump.outputs.current-version }}
+        body: "Automated release of v${{ steps.bump.outputs.current-version }}"
+        artifacts: dist/*
+        token: ${{ secrets.GH_TOKEN }}
+        generateReleaseNotes: true

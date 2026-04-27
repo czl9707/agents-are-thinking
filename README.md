@@ -4,6 +4,8 @@ A Weekend project exporing agents' "thinking" animation.
 
 Terminal animation effects built with braille, block characters, and unicode glyphs. Pure Python, no dependencies.
 
+<img src="./agents-are-thinking-demo.gif" width="100%" height="100%">
+
 ## Get Started 
 
 ``` bash
