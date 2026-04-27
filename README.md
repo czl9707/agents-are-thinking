@@ -47,6 +47,7 @@ t0 = time.time()
 
 with Live(refresh_per_second=16) as live:
     for frame in ef:
+        time.sleep(0.1)
         live.update(frame)
         if time.time() - t0 > 5:
             break
@@ -66,9 +67,10 @@ for cls in EFFECTS:
 `agents-are-thinking` ships with a CLI for previewing effects in your terminal. Requires the `[cli]` extra.
 
 ```
-agents-are-thinking preview          # gallery showcase
-agents-are-thinking list             # list all effects
-agents-are-thinking run braille-spin # run a single effect
+uv tool run agents-are-thinking preview          # gallery showcase
+uv tool run agents-are-thinking list             # list all effects
+uv tool run agents-are-thinking run braille-spin # run a single effect
+uv tool run agents-are-thinking                  # name-effect showcase
 ```
 
 ## All effects
