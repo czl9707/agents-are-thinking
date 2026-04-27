@@ -153,18 +153,18 @@ class VBlockCascade(Effect):
     description = "Full stream with empty gaps flowing rightward like water"
 
     _GAPS = 3
-    _SPEED = TEMPORAL_SPEED.MODERATE
     _SPACING = WIDTH / _GAPS
-    cycle_length = 25
+    cycle_length = 26
 
     def _render(self) -> list[str]:
         frame = VBlockFrame(WIDTH)
-        t = self._frame * self._SPEED
+        phase = self._frame / self.cycle_length
+        t = phase * (WIDTH + 4)
         for i in range(WIDTH):
             v = 1.0
             for g in range(self._GAPS):
                 pos = (t + g * self._SPACING) % (WIDTH + 4) - 2
-                wobble = 0.3 * math.sin(self._frame * TEMPORAL_SPEED.SLOW + g * 2.1)
+                wobble = 0.3 * math.sin(math.tau * phase + g * 2.1)
                 half = 1.0 + wobble
                 dist = i - pos
                 if abs(dist) < half:
