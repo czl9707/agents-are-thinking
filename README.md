@@ -9,14 +9,14 @@ Terminal animation effects built with braille, block characters, and unicode gly
 ## Get Started 
 
 ``` bash
-uv install agents-are-thinking
+uv add agents-are-thinking
 ```
 
 ### I just want to watch agents thinking in terminals
 
 ``` bash
-uv install agents-are-thinking[cli]  # with rich and click
-uv run agents-are-thinking preview
+uv tool install agents-are-thinking[cli]  # with rich and click
+uv tool run agents-are-thinking preview
 ```
 
 And Enjoy :)
