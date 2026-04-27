@@ -89,7 +89,7 @@ def _render_grid(instances, console):
     for i in range(0, len(instances), cols):
         parts = []
         for ef in instances[i : i + cols]:
-            out = "".join(ef.step())
+            out = next(ef)
             parts.append(f"{ef.name:{label_w}s} {out:<{WIDTH}}")
         rows.append((" " * GAP).join(parts))
     return Text("\n".join(rows))
@@ -109,7 +109,7 @@ def _render_preview(instances, frame_num, console):
         for j, ef in enumerate(instances[i : i + cols]):
             idx = i + j
             word = _PREVIEW_WORDS[idx % len(_PREVIEW_WORDS)]
-            out = "".join(ef.step())
+            out = next(ef)
             dots = "." * dot_count
             parts.append(f"{out:<{WIDTH}} {word}{dots:<{word_w + 3 - len(word)}}")
         rows.append((" " * gap).join(parts))
@@ -149,7 +149,7 @@ def cli():
             inst = cls()
 
             def render():
-                out = "".join(inst.step())
+                out = next(inst)
                 return Text(f"{cls.name:{label_w}s} {out}")
 
             _run_live(render, console)
@@ -174,7 +174,7 @@ def cli():
         inst = cls()
 
         def render():
-            out = "".join(inst.step())
+            out = next(inst)
             return Text(f"{cls.name:{label_w}s} {out}")
 
         _run_live(render, console)

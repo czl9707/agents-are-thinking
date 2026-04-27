@@ -51,10 +51,16 @@ class Effect(ABC):
         self._frame = 0
         self._rng = random.Random(seed)
 
-    def step(self) -> list[str]:
-        result = self._render()
+    def step(self) -> str:
+        result = "\n".join(self._render())
         self._frame += 1
         return result
+
+    def __iter__(self):
+        return self
+
+    def __next__(self) -> str:
+        return self.step()
 
     @abstractmethod
     def _render(self) -> list[str]:
