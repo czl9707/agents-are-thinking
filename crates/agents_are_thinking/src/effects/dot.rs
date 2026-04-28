@@ -1,6 +1,6 @@
 use std::f64::consts::TAU;
 
-use crate::effect::{Effect, EffectState, WIDTH, cycle_length, pause, spatial_frequency, temporal_speed};
+use crate::effect::{Effect, EffectState, WIDTH, cycle_length, spatial_frequency, temporal_speed};
 use crate::frame::DotFrame;
 use rand::Rng;
 
@@ -126,9 +126,10 @@ impl Effect for DotPulse {
 }
 
 impl DotPulse {
+    const CX: f64 = WIDTH as f64 / 2.0;
+
     fn render(&mut self) -> String {
         let mut f = DotFrame::new(WIDTH);
-        let cx = WIDTH as f64 / 2.0;
         let frame_mod = self.state.frame % Self::cycle_length();
         let ring = if frame_mod < Self::cycle_length() / 2 {
             frame_mod
@@ -136,7 +137,7 @@ impl DotPulse {
             Self::cycle_length() - frame_mod - 1
         };
         for i in 0..WIDTH {
-            let dist = (i as f64 - cx + 0.5).abs();
+            let dist = (i as f64 - Self::CX + 0.5).abs();
             let v = ((ring as f64 - dist + 1.0) / 3.0).clamp(0.0, 1.0);
             f.set(i, v);
         }
@@ -176,23 +177,24 @@ impl Effect for DotArrow {
 }
 
 impl DotArrow {
+    const SPEED: isize = 1;
+    const LENGTH: isize = 5;
+    const TRAVEL: isize = WIDTH as isize + 2 * (Self::LENGTH - 1);
+
     fn render(&mut self) -> String {
-        let speed: isize = 1;
-        let length: isize = 5;
-        let travel: isize = WIDTH as isize + 2 * (length - 1);
         let mut f = DotFrame::new(WIDTH);
-        let (head, direction): (isize, isize) = if self.state.frame < travel as usize {
-            (-(length - 1) + self.state.frame as isize * speed, 1)
-        } else if self.state.frame < travel as usize * 2 {
-            let f2 = self.state.frame as isize - travel;
-            ((WIDTH - 1) as isize + (length - 1) - f2 * speed, -1)
+        let (head, direction): (isize, isize) = if self.state.frame < Self::TRAVEL as usize {
+            (-(Self::LENGTH - 1) + self.state.frame as isize * Self::SPEED, 1)
+        } else if self.state.frame < Self::TRAVEL as usize * 2 {
+            let f2 = self.state.frame as isize - Self::TRAVEL;
+            ((WIDTH - 1) as isize + (Self::LENGTH - 1) - f2 * Self::SPEED, -1)
         } else {
             return f.render().join("\n");
         };
-        for t in 0..length {
+        for t in 0..Self::LENGTH {
             let pos = head - direction * t;
             if pos >= 0 && (pos as usize) < WIDTH {
-                let v = (length - t) as f64 / length as f64;
+                let v = (Self::LENGTH - t) as f64 / Self::LENGTH as f64;
                 f.set(pos as usize, v);
             }
         }

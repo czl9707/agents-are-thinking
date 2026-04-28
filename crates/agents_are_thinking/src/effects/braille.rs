@@ -304,13 +304,14 @@ impl Effect for BrailleRipple {
 }
 
 impl BrailleRipple {
+    const CENTER_X: f64 = WIDTH as f64;
+    const CENTER_Y: f64 = 1.5;
+
     fn render(&mut self) -> String {
         let mut f = BrailleFrame::new(WIDTH, HEIGHT);
-        let cx = WIDTH as f64;
-        let cy = 1.5;
         for x in 0..(2 * WIDTH) {
             for y in 0..4usize {
-                let d = ((x as f64 - cx).powi(2) + (y as f64 - cy).powi(2)).sqrt();
+                let d = ((x as f64 - Self::CENTER_X).powi(2) + (y as f64 - Self::CENTER_Y).powi(2)).sqrt();
                 let wave = (d * 2.0 - self.state.frame as f64 * temporal_speed::FAST).sin();
                 if wave > 0.3 {
                     f.set(x, y);
@@ -491,20 +492,21 @@ impl Effect for BrailleDissolve {
 }
 
 impl BrailleDissolve {
+    const TOTAL_PIXELS: usize = 2 * WIDTH * 4;
+    const HALF_CYCLE: usize = cycle_length::LONG / 2;
+
     fn render(&mut self) -> String {
         let mut f = BrailleFrame::new(WIDTH, HEIGHT);
-        let total = 2 * WIDTH * 4;
         let cycle = cycle_length::LONG;
         let phase = self.state.frame % cycle;
-        let half = cycle / 2;
-        let mut order: Vec<usize> = (0..total).collect();
+        let mut order: Vec<usize> = (0..Self::TOTAL_PIXELS).collect();
         order.shuffle(&mut self.state.rng);
-        let remaining = if phase < half {
-            total.saturating_sub(phase * total / half)
+        let remaining = if phase < Self::HALF_CYCLE {
+            Self::TOTAL_PIXELS.saturating_sub(phase * Self::TOTAL_PIXELS / Self::HALF_CYCLE)
         } else {
-            (phase - half) * total / half
+            (phase - Self::HALF_CYCLE) * Self::TOTAL_PIXELS / Self::HALF_CYCLE
         };
-        let remaining = remaining.min(total);
+        let remaining = remaining.min(Self::TOTAL_PIXELS);
         for &idx in &order[..remaining] {
             let x = idx % (2 * WIDTH);
             let y = idx / (2 * WIDTH);
@@ -702,11 +704,11 @@ impl Effect for BrailleScanner {
 }
 
 impl BrailleScanner {
+    const SCAN_RANGE: usize = cycle_length::MEDIUM + trail::EXTENDED + 4;
+
     fn render(&mut self) -> String {
-        let scan_width = cycle_length::MEDIUM;
         let t = trail::EXTENDED;
-        let scan_range = scan_width + t + 4;
-        let pos = (self.state.frame % scan_range) as isize;
+        let pos = (self.state.frame % Self::SCAN_RANGE) as isize;
         let mut f = BrailleFrame::new(WIDTH, HEIGHT);
         for y in 0..4usize {
             for dx in 0..=t {
@@ -912,25 +914,24 @@ impl BrailleArrow {
             [1, 3], [2, 3], [3, 3],                [6, 3], [7, 3], [8, 3],
     ];
 
+    const SPEED: usize = 2;
+    const ARROW_WIDTH: usize = 8;
+    const TRAVEL: usize = (2 * WIDTH + Self::ARROW_WIDTH) / Self::SPEED + 1;
+
     fn render(&mut self) -> String {
-        let speed = 2;
-        let arrow_width = 8;
-
-        let travel = (2 * WIDTH + arrow_width) / speed + 1;
-
         let mut f = BrailleFrame::new(WIDTH, HEIGHT);
-        if self.state.frame >= 2 * travel  {
+        if self.state.frame >= 2 * Self::TRAVEL  {
             return f.render().join("\n");
         }
-        let (base, offset) = if self.state.frame < travel  {
+        let (base, offset) = if self.state.frame < Self::TRAVEL  {
             (
-                - (arrow_width as isize) + ((self.state.frame * speed) as isize),
+                - (Self::ARROW_WIDTH as isize) + ((self.state.frame * Self::SPEED) as isize),
                 Self::RIGHT_ARROW,
             )
         }
         else {
             (
-                2 * (arrow_width as isize) - (self.state.frame as isize - travel as isize) * speed as isize,
+                2 * (Self::ARROW_WIDTH as isize) - (self.state.frame as isize - Self::TRAVEL as isize) * Self::SPEED as isize,
                 Self::LEFT_ARROW,
             )
         };

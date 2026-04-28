@@ -6,6 +6,11 @@ use crate::effect::{
 use crate::frame::VBlockFrame;
 use rand::Rng;
 
+const CENTER: f64 = (WIDTH - 1) as f64 / 2.0;
+const FILL_CYCLE: usize = WIDTH + 4;
+const BOUNCE_PERIOD: usize = (WIDTH - 1) * 2;
+const CASCADE_SPACING: f64 = WIDTH as f64 / 3.0;
+
 pub struct VBlockWave {
     state: EffectState,
 }
@@ -79,9 +84,8 @@ impl Effect for VBlockFill {
 
 impl VBlockFill {
     fn render(&mut self) -> String {
-        let cycle = WIDTH + 4;
         let mut f = VBlockFrame::new(WIDTH);
-        let pos = self.state.frame % cycle;
+        let pos = self.state.frame % FILL_CYCLE;
         for i in 0..WIDTH {
             if i < pos {
                 let dist = pos - i;
@@ -210,10 +214,9 @@ impl Effect for VBlockBounce {
 
 impl VBlockBounce {
     fn render(&mut self) -> String {
-        let period = (WIDTH - 1) * 2;
         let mut f = VBlockFrame::new(WIDTH);
-        let t = self.state.frame % period;
-        let pos = if t < WIDTH { t } else { period - t };
+        let t = self.state.frame % BOUNCE_PERIOD;
+        let pos = if t < WIDTH { t } else { BOUNCE_PERIOD - t };
         for i in 0..WIDTH {
             let dist = (pos as isize - i as isize).unsigned_abs() as f64;
             if dist < 4.0 {
@@ -257,11 +260,10 @@ impl Effect for VBlockPulse {
 impl VBlockPulse {
     fn render(&mut self) -> String {
         let mut f = VBlockFrame::new(WIDTH);
-        let center = (WIDTH - 1) as f64 / 2.0;
         let age = self.state.frame as f64;
         let intensity: f64 = (self.state.frame as f64 / (Self::cycle_length() as f64 * 0.6)).min(1.0);
         for i in 0..WIDTH {
-            let dist = (i as f64 - center).abs();
+            let dist = (i as f64 - CENTER).abs();
             let wave = (1.0 - (dist - age + 2.0) * 0.25).max(0.0);
             f.set(i, wave * intensity);
         }
@@ -302,9 +304,8 @@ impl Effect for VBlockRipple {
 impl VBlockRipple {
     fn render(&mut self) -> String {
         let mut f = VBlockFrame::new(WIDTH);
-        let cx = (WIDTH - 1) as f64 / 2.0;
         for i in 0..WIDTH {
-            let dist = (i as f64 - cx).abs() / cx;
+            let dist = (i as f64 - CENTER).abs() / CENTER;
             let wave = ((dist * spatial_frequency::EXTRA_DENSE
                 - self.state.frame as f64 * temporal_speed::MODERATE)
                 .sin()
@@ -400,14 +401,13 @@ impl Effect for VBlockCascade {
 impl VBlockCascade {
     fn render(&mut self) -> String {
         let gaps: usize = 3;
-        let spacing: f64 = WIDTH as f64 / 3.0;
         let mut f = VBlockFrame::new(WIDTH);
         let phase = self.state.frame as f64 / Self::cycle_length() as f64;
         let t = phase * (WIDTH + 4) as f64;
         for i in 0..WIDTH {
             let mut v: f64 = 1.0;
             for g in 0..gaps {
-                let pos = (t + g as f64 * spacing) % (WIDTH + 4) as f64 - 2.0;
+                let pos = (t + g as f64 * CASCADE_SPACING) % (WIDTH + 4) as f64 - 2.0;
                 let wobble = 0.3 * (TAU * phase + g as f64 * 2.1).sin();
                 let half = 1.0 + wobble;
                 let dist = i as f64 - pos;

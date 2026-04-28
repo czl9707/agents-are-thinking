@@ -4,6 +4,9 @@ use crate::effect::{Effect, EffectState, WIDTH, cycle_length, spatial_frequency,
 use crate::frame::ShadeFrame;
 use rand::Rng;
 
+const CENTER_X: f64 = (WIDTH - 1) as f64 / 2.0;
+const SCAN_RANGE: usize = WIDTH + 6;
+
 pub struct ShadeWave {
     state: EffectState,
 }
@@ -77,9 +80,8 @@ impl Effect for ShadeScanner {
 
 impl ShadeScanner {
     fn render(&mut self) -> String {
-        let scan_range = WIDTH + 6;
         let mut f = ShadeFrame::new(WIDTH);
-        let pos = self.state.frame % scan_range;
+        let pos = self.state.frame % SCAN_RANGE;
         for i in 0..WIDTH {
             let dist = (i as isize - pos as isize).unsigned_abs() as f64;
             let density = (1.0 - dist / 4.0).max(0.0);
@@ -169,9 +171,8 @@ impl Effect for ShadeRipple {
 impl ShadeRipple {
     fn render(&mut self) -> String {
         let mut f = ShadeFrame::new(WIDTH);
-        let cx = (WIDTH - 1) as f64 / 2.0;
         for i in 0..WIDTH {
-            let dist = (i as f64 - cx) / cx;
+            let dist = (i as f64 - CENTER_X) / CENTER_X;
             let wave = ((dist * spatial_frequency::EXTRA_DENSE
                 - self.state.frame as f64 * temporal_speed::MODERATE)
                 .sin()
@@ -273,16 +274,16 @@ impl ShadeSeeSaw {
 
 pub struct ShadeBlink {
     state: EffectState,
-    tiers: Vec<usize>,
+    offsets: Vec<f64>,
 }
 
 impl ShadeBlink {
     pub fn new() -> Self {
         let mut state = EffectState::new(42, Self::cycle_length());
-        let tiers: Vec<usize> = (0..WIDTH)
-            .map(|_| state.rng.random_range(0..=2usize))
+        let offsets: Vec<f64> = (0..WIDTH)
+            .map(|_| state.rng.random_range(0..=2usize) as f64 / 3.0)
             .collect();
-        Self { state, tiers }
+        Self { state, offsets }
     }
 }
 
@@ -309,7 +310,7 @@ impl ShadeBlink {
         let speed = temporal_speed::CRAWL;
         let mut f = ShadeFrame::new(WIDTH);
         for i in 0..WIDTH {
-            let offset = self.tiers[i] as f64 / 3.0;
+            let offset = self.offsets[i];
             let v = ((self.state.frame as f64 * speed + offset) * TAU).sin() / 2.0 + 0.5;
             f.set(i, v);
         }
@@ -399,11 +400,10 @@ impl Effect for ShadePinch {
 impl ShadePinch {
     fn render(&mut self) -> String {
         let mut f = ShadeFrame::new(WIDTH);
-        let cx = (WIDTH - 1) as f64 / 2.0;
         let phase = (self.state.frame as f64 * temporal_speed::GENTLE).sin() / 2.0 + 0.5;
         for i in 0..WIDTH {
-            let edge_dist = (i as f64 - cx).abs() / cx;
-            let side_phase = if i as f64 <= cx { phase } else { 1.0 - phase };
+            let edge_dist = (i as f64 - CENTER_X).abs() / CENTER_X;
+            let side_phase = if i as f64 <= CENTER_X { phase } else { 1.0 - phase };
             let density = edge_dist * (0.3 + 0.7 * side_phase);
             f.set(i, density);
         }

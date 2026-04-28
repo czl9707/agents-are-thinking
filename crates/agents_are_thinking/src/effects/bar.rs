@@ -58,12 +58,16 @@ impl BarBounce {
 
 pub struct BarWave {
     state: EffectState,
+    spatial_offsets: Vec<f64>,
 }
 
 impl BarWave {
     pub fn new() -> Self {
         Self {
             state: EffectState::new(42, Self::cycle_length()),
+            spatial_offsets: (0..WIDTH)
+                .map(|i| i as f64 * spatial_frequency::LOW)
+                .collect(),
         }
     }
 }
@@ -90,7 +94,7 @@ impl BarWave {
     fn render(&mut self) -> String {
         let mut f = BarFrame::new(WIDTH);
         for i in 0..WIDTH {
-            let v = (i as f64 * spatial_frequency::LOW + self.state.frame as f64 * temporal_speed::GENTLE)
+            let v = (self.spatial_offsets[i] + self.state.frame as f64 * temporal_speed::GENTLE)
                 .sin()
                 / 2.0
                 + 0.5;
@@ -102,12 +106,16 @@ impl BarWave {
 
 pub struct BarSeeSaw {
     state: EffectState,
+    ratios: Vec<f64>,
 }
 
 impl BarSeeSaw {
     pub fn new() -> Self {
         Self {
             state: EffectState::new(42, Self::cycle_length()),
+            ratios: (0..WIDTH)
+                .map(|i| if WIDTH > 1 { i as f64 / (WIDTH - 1) as f64 } else { 0.5 })
+                .collect(),
         }
     }
 }
@@ -135,11 +143,7 @@ impl BarSeeSaw {
         let mut f = BarFrame::new(WIDTH);
         let t = (self.state.frame as f64 * temporal_speed::GENTLE).sin() / 2.0 + 0.5;
         for i in 0..WIDTH {
-            let ratio = if WIDTH > 1 {
-                i as f64 / (WIDTH - 1) as f64
-            } else {
-                0.5
-            };
+            let ratio = self.ratios[i];
             let v = t * (1.0 - ratio) + (1.0 - t) * ratio;
             f.set(i, v);
         }
