@@ -12,3 +12,8 @@ docs/
 
 # Worktrees
 .worktrees/
+
+
+# Added by cargo
+
+/target
