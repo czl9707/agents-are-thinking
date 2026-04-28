@@ -6,38 +6,37 @@ pub struct SquarePulse {
 }
 
 impl SquarePulse {
-    pub fn new(seed: u64) -> Self {
+    pub fn new() -> Self {
         Self {
-            state: EffectState::new(seed),
+            state: EffectState::new(42, Self::cycle_length()),
         }
     }
 }
 
 impl Effect for SquarePulse {
-    fn name(&self) -> &'static str {
+    fn name() -> &'static str {
         "square-pulse"
     }
-    fn description(&self) -> &'static str {
+    fn description() -> &'static str {
         "Expanding ring in square characters"
     }
-    fn cycle_length(&self) -> usize {
+    fn cycle_length() -> usize {
         18
     }
 
     fn step(&mut self) -> String {
-        let frame_idx = self.state.frame;
-        let result = self.render(frame_idx);
-        self.state.advance(self.cycle_length());
+        let result = self.render();
+        self.state.advance();
         result
     }
 }
 
 impl SquarePulse {
-    fn render(&mut self, frame: usize) -> String {
+    fn render(&mut self) -> String {
         let full_cycle = WIDTH * 2;
         let mut f = SquareFrame::new(WIDTH);
         let cx = WIDTH as f64 / 2.0;
-        let frame_mod = frame % full_cycle;
+        let frame_mod = self.state.frame % full_cycle;
         let ring = if frame_mod < full_cycle / 2 {
             frame_mod
         } else {
@@ -57,38 +56,37 @@ pub struct SquareFill {
 }
 
 impl SquareFill {
-    pub fn new(seed: u64) -> Self {
+    pub fn new() -> Self {
         Self {
-            state: EffectState::new(seed),
+            state: EffectState::new(42, Self::cycle_length()),
         }
     }
 }
 
 impl Effect for SquareFill {
-    fn name(&self) -> &'static str {
+    fn name() -> &'static str {
         "square-fill"
     }
-    fn description(&self) -> &'static str {
+    fn description() -> &'static str {
         "Progressive fill using square characters"
     }
-    fn cycle_length(&self) -> usize {
+    fn cycle_length() -> usize {
         35
     }
 
     fn step(&mut self) -> String {
-        let frame_idx = self.state.frame;
-        let result = self.render(frame_idx);
-        self.state.advance(self.cycle_length());
+        let result = self.render();
+        self.state.advance();
         result
     }
 }
 
 impl SquareFill {
-    fn render(&mut self, frame: usize) -> String {
+    fn render(&mut self) -> String {
         let speed: isize = 3;
         let cycle = WIDTH as isize * speed + 8;
         let mut f = SquareFrame::new(WIDTH);
-        let pos = (frame % cycle as usize) as isize;
+        let pos = (self.state.frame % cycle as usize) as isize;
         for i in 0..WIDTH {
             let target = i as isize * speed;
             let elapsed = pos - target;
@@ -109,37 +107,36 @@ pub struct SquareBlink {
 }
 
 impl SquareBlink {
-    pub fn new(seed: u64) -> Self {
+    pub fn new() -> Self {
         Self {
-            state: EffectState::new(seed),
+            state: EffectState::new(42, Self::cycle_length()),
         }
     }
 }
 
 impl Effect for SquareBlink {
-    fn name(&self) -> &'static str {
+    fn name() -> &'static str {
         "square-blink"
     }
-    fn description(&self) -> &'static str {
+    fn description() -> &'static str {
         "Blinking square levels"
     }
-    fn cycle_length(&self) -> usize {
+    fn cycle_length() -> usize {
         27
     }
 
     fn step(&mut self) -> String {
-        let frame_idx = self.state.frame;
-        let result = self.render(frame_idx);
-        self.state.advance(self.cycle_length());
+        let result = self.render();
+        self.state.advance();
         result
     }
 }
 
 impl SquareBlink {
-    fn render(&mut self, frame: usize) -> String {
+    fn render(&mut self) -> String {
         let period = cycle_length::SHORT;
         let mut f = SquareFrame::new(WIDTH);
-        let offset = (frame / period) % 3;
+        let offset = (self.state.frame / period) % 3;
         for i in 0..WIDTH {
             let level = (i + offset) % 3;
             f.set(i, level as f64 / 2.0);
@@ -153,39 +150,38 @@ pub struct SquareArrow {
 }
 
 impl SquareArrow {
-    pub fn new(seed: u64) -> Self {
+    pub fn new() -> Self {
         Self {
-            state: EffectState::new(seed),
+            state: EffectState::new(42, Self::cycle_length()),
         }
     }
 }
 
 impl Effect for SquareArrow {
-    fn name(&self) -> &'static str {
+    fn name() -> &'static str {
         "square-arrow"
     }
-    fn description(&self) -> &'static str {
+    fn description() -> &'static str {
         "Arrow bouncing in square characters"
     }
-    fn cycle_length(&self) -> usize {
+    fn cycle_length() -> usize {
         34
     }
 
     fn step(&mut self) -> String {
-        let frame_idx = self.state.frame;
-        let result = self.render(frame_idx);
-        self.state.advance(self.cycle_length());
+        let result = self.render();
+        self.state.advance();
         result
     }
 }
 
 impl SquareArrow {
-    fn render(&mut self, frame: usize) -> String {
+    fn render(&mut self) -> String {
         let travel: isize = WIDTH as isize + 2;
         let paws: usize = pause::MEDIUM;
         let cycle = (travel * 2 + paws as isize) as usize;
         let mut f = SquareFrame::new(WIDTH);
-        let frame = frame % cycle;
+        let frame = self.state.frame % cycle;
         let (head, direction): (isize, isize) = if frame < travel as usize {
             (-2 + frame as isize, 1)
         } else if frame < travel as usize * 2 {

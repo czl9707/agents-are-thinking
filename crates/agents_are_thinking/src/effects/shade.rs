@@ -9,37 +9,36 @@ pub struct ShadeWave {
 }
 
 impl ShadeWave {
-    pub fn new(seed: u64) -> Self {
+    pub fn new() -> Self {
         Self {
-            state: EffectState::new(seed),
+            state: EffectState::new(42, Self::cycle_length()),
         }
     }
 }
 
 impl Effect for ShadeWave {
-    fn name(&self) -> &'static str {
+    fn name() -> &'static str {
         "shade-wave"
     }
-    fn description(&self) -> &'static str {
+    fn description() -> &'static str {
         "Sine wave using shade characters"
     }
-    fn cycle_length(&self) -> usize {
+    fn cycle_length() -> usize {
         10
     }
 
     fn step(&mut self) -> String {
-        let frame_idx = self.state.frame;
-        let result = self.render(frame_idx);
-        self.state.advance(self.cycle_length());
+        let result = self.render();
+        self.state.advance();
         result
     }
 }
 
 impl ShadeWave {
-    fn render(&mut self, frame: usize) -> String {
+    fn render(&mut self) -> String {
         let mut f = ShadeFrame::new(WIDTH);
         for i in 0..WIDTH {
-            let v = ((i as f64 + frame as f64) * spatial_frequency::LOW).sin() / 2.0 + 0.5;
+            let v = ((i as f64 + self.state.frame as f64) * spatial_frequency::LOW).sin() / 2.0 + 0.5;
             f.set(i, v);
         }
         f.render().join("\n")
@@ -51,37 +50,36 @@ pub struct ShadeScanner {
 }
 
 impl ShadeScanner {
-    pub fn new(seed: u64) -> Self {
+    pub fn new() -> Self {
         Self {
-            state: EffectState::new(seed),
+            state: EffectState::new(42, Self::cycle_length()),
         }
     }
 }
 
 impl Effect for ShadeScanner {
-    fn name(&self) -> &'static str {
+    fn name() -> &'static str {
         "shade-scanner"
     }
-    fn description(&self) -> &'static str {
+    fn description() -> &'static str {
         "Scanning highlight in shade"
     }
-    fn cycle_length(&self) -> usize {
+    fn cycle_length() -> usize {
         15
     }
 
     fn step(&mut self) -> String {
-        let frame_idx = self.state.frame;
-        let result = self.render(frame_idx);
-        self.state.advance(self.cycle_length());
+        let result = self.render();
+        self.state.advance();
         result
     }
 }
 
 impl ShadeScanner {
-    fn render(&mut self, frame: usize) -> String {
+    fn render(&mut self) -> String {
         let scan_range = WIDTH + 6;
         let mut f = ShadeFrame::new(WIDTH);
-        let pos = frame % scan_range;
+        let pos = self.state.frame % scan_range;
         for i in 0..WIDTH {
             let dist = (i as isize - pos as isize).unsigned_abs() as f64;
             let density = (1.0 - dist / 4.0).max(0.0);
@@ -96,40 +94,39 @@ pub struct ShadeFire {
 }
 
 impl ShadeFire {
-    pub fn new(seed: u64) -> Self {
+    pub fn new() -> Self {
         Self {
-            state: EffectState::new(seed),
+            state: EffectState::new(42, Self::cycle_length()),
         }
     }
 }
 
 impl Effect for ShadeFire {
-    fn name(&self) -> &'static str {
+    fn name() -> &'static str {
         "shade-fire"
     }
-    fn description(&self) -> &'static str {
+    fn description() -> &'static str {
         "Fire effect using shade characters"
     }
-    fn cycle_length(&self) -> usize {
+    fn cycle_length() -> usize {
         20
     }
 
     fn step(&mut self) -> String {
-        let frame_idx = self.state.frame;
-        let result = self.render(frame_idx);
-        self.state.advance(self.cycle_length());
+        let result = self.render();
+        self.state.advance();
         result
     }
 }
 
 impl ShadeFire {
-    fn render(&mut self, frame: usize) -> String {
+    fn render(&mut self) -> String {
         let mut f = ShadeFrame::new(WIDTH);
         for x in 0..WIDTH {
-            let v = (frame as f64 * temporal_speed::FAST + x as f64 * spatial_frequency::DENSE)
+            let v = (self.state.frame as f64 * temporal_speed::FAST + x as f64 * spatial_frequency::DENSE)
                 .sin()
                 * 0.3
-                + (frame as f64 * temporal_speed::INTENSE + x as f64 * spatial_frequency::HIGH)
+                + (self.state.frame as f64 * temporal_speed::INTENSE + x as f64 * spatial_frequency::HIGH)
                     .sin()
                     * 0.2
                 + 0.5;
@@ -144,40 +141,39 @@ pub struct ShadeRipple {
 }
 
 impl ShadeRipple {
-    pub fn new(seed: u64) -> Self {
+    pub fn new() -> Self {
         Self {
-            state: EffectState::new(seed),
+            state: EffectState::new(42, Self::cycle_length()),
         }
     }
 }
 
 impl Effect for ShadeRipple {
-    fn name(&self) -> &'static str {
+    fn name() -> &'static str {
         "shade-ripple"
     }
-    fn description(&self) -> &'static str {
+    fn description() -> &'static str {
         "Ripple from center in shade"
     }
-    fn cycle_length(&self) -> usize {
+    fn cycle_length() -> usize {
         16
     }
 
     fn step(&mut self) -> String {
-        let frame_idx = self.state.frame;
-        let result = self.render(frame_idx);
-        self.state.advance(self.cycle_length());
+        let result = self.render();
+        self.state.advance();
         result
     }
 }
 
 impl ShadeRipple {
-    fn render(&mut self, frame: usize) -> String {
+    fn render(&mut self) -> String {
         let mut f = ShadeFrame::new(WIDTH);
         let cx = (WIDTH - 1) as f64 / 2.0;
         for i in 0..WIDTH {
             let dist = (i as f64 - cx) / cx;
             let wave = ((dist * spatial_frequency::EXTRA_DENSE
-                - frame as f64 * temporal_speed::MODERATE)
+                - self.state.frame as f64 * temporal_speed::MODERATE)
                 .sin()
                 + 1.0)
                 / 2.0;
@@ -193,35 +189,34 @@ pub struct ShadeBreathe {
 }
 
 impl ShadeBreathe {
-    pub fn new(seed: u64) -> Self {
+    pub fn new() -> Self {
         Self {
-            state: EffectState::new(seed),
+            state: EffectState::new(42, Self::cycle_length()),
         }
     }
 }
 
 impl Effect for ShadeBreathe {
-    fn name(&self) -> &'static str {
+    fn name() -> &'static str {
         "shade-breathe"
     }
-    fn description(&self) -> &'static str {
+    fn description() -> &'static str {
         "Breathing shade animation"
     }
-    fn cycle_length(&self) -> usize {
+    fn cycle_length() -> usize {
         18
     }
 
     fn step(&mut self) -> String {
-        let frame_idx = self.state.frame;
-        let result = self.render(frame_idx);
-        self.state.advance(self.cycle_length());
+        let result = self.render();
+        self.state.advance();
         result
     }
 }
 
 impl ShadeBreathe {
-    fn render(&mut self, frame: usize) -> String {
-        let phase = frame % cycle_length::MEDIUM;
+    fn render(&mut self) -> String {
+        let phase = self.state.frame % cycle_length::MEDIUM;
         let v = (phase as f64 * PI / 10.0).sin() / 2.0 + 0.5;
         let mut f = ShadeFrame::new(WIDTH);
         for i in 0..WIDTH {
@@ -236,36 +231,35 @@ pub struct ShadeSeeSaw {
 }
 
 impl ShadeSeeSaw {
-    pub fn new(seed: u64) -> Self {
+    pub fn new() -> Self {
         Self {
-            state: EffectState::new(seed),
+            state: EffectState::new(42, Self::cycle_length()),
         }
     }
 }
 
 impl Effect for ShadeSeeSaw {
-    fn name(&self) -> &'static str {
+    fn name() -> &'static str {
         "shade-seesaw"
     }
-    fn description(&self) -> &'static str {
+    fn description() -> &'static str {
         "See-saw gradient in shade"
     }
-    fn cycle_length(&self) -> usize {
+    fn cycle_length() -> usize {
         16
     }
 
     fn step(&mut self) -> String {
-        let frame_idx = self.state.frame;
-        let result = self.render(frame_idx);
-        self.state.advance(self.cycle_length());
+        let result = self.render();
+        self.state.advance();
         result
     }
 }
 
 impl ShadeSeeSaw {
-    fn render(&mut self, frame: usize) -> String {
+    fn render(&mut self) -> String {
         let mut f = ShadeFrame::new(WIDTH);
-        let phase = (frame as f64 * temporal_speed::MODERATE).sin() / 2.0 + 0.5;
+        let phase = (self.state.frame as f64 * temporal_speed::MODERATE).sin() / 2.0 + 0.5;
         for i in 0..WIDTH {
             let t = i as f64 / (WIDTH - 1) as f64;
             let raw = (t * PI).cos() / 2.0 + 0.5;
@@ -283,8 +277,8 @@ pub struct ShadeBlink {
 }
 
 impl ShadeBlink {
-    pub fn new(seed: u64) -> Self {
-        let mut state = EffectState::new(seed);
+    pub fn new() -> Self {
+        let mut state = EffectState::new(42, Self::cycle_length());
         let tiers: Vec<usize> = (0..WIDTH)
             .map(|_| state.rng.random_range(0..=2usize))
             .collect();
@@ -293,31 +287,30 @@ impl ShadeBlink {
 }
 
 impl Effect for ShadeBlink {
-    fn name(&self) -> &'static str {
+    fn name() -> &'static str {
         "shade-blink"
     }
-    fn description(&self) -> &'static str {
+    fn description() -> &'static str {
         "Tiered blinking shade"
     }
-    fn cycle_length(&self) -> usize {
+    fn cycle_length() -> usize {
         20
     }
 
     fn step(&mut self) -> String {
-        let frame_idx = self.state.frame;
-        let result = self.render(frame_idx);
-        self.state.advance(self.cycle_length());
+        let result = self.render();
+        self.state.advance();
         result
     }
 }
 
 impl ShadeBlink {
-    fn render(&mut self, frame: usize) -> String {
+    fn render(&mut self) -> String {
         let speed = temporal_speed::CRAWL;
         let mut f = ShadeFrame::new(WIDTH);
         for i in 0..WIDTH {
             let offset = self.tiers[i] as f64 / 3.0;
-            let v = ((frame as f64 * speed + offset) * TAU).sin() / 2.0 + 0.5;
+            let v = ((self.state.frame as f64 * speed + offset) * TAU).sin() / 2.0 + 0.5;
             f.set(i, v);
         }
         f.render().join("\n")
@@ -329,41 +322,40 @@ pub struct ShadeLayers {
 }
 
 impl ShadeLayers {
-    pub fn new(seed: u64) -> Self {
+    pub fn new() -> Self {
         Self {
-            state: EffectState::new(seed),
+            state: EffectState::new(42, Self::cycle_length()),
         }
     }
 }
 
 impl Effect for ShadeLayers {
-    fn name(&self) -> &'static str {
+    fn name() -> &'static str {
         "shade-layers"
     }
-    fn description(&self) -> &'static str {
+    fn description() -> &'static str {
         "Layered wave patterns in shade"
     }
-    fn cycle_length(&self) -> usize {
+    fn cycle_length() -> usize {
         25
     }
 
     fn step(&mut self) -> String {
-        let frame_idx = self.state.frame;
-        let result = self.render(frame_idx);
-        self.state.advance(self.cycle_length());
+        let result = self.render();
+        self.state.advance();
         result
     }
 }
 
 impl ShadeLayers {
-    fn render(&mut self, frame: usize) -> String {
+    fn render(&mut self) -> String {
         let mut f = ShadeFrame::new(WIDTH);
         for i in 0..WIDTH {
-            let w1 = (frame as f64 * temporal_speed::MODERATE + i as f64 * spatial_frequency::HIGH)
+            let w1 = (self.state.frame as f64 * temporal_speed::MODERATE + i as f64 * spatial_frequency::HIGH)
                 .sin()
                 / 2.0
                 + 0.5;
-            let w2 = (frame as f64 * temporal_speed::FAST + i as f64 * spatial_frequency::HIGH)
+            let w2 = (self.state.frame as f64 * temporal_speed::FAST + i as f64 * spatial_frequency::HIGH)
                 .sin()
                 / 2.0
                 + 0.5;
@@ -379,37 +371,36 @@ pub struct ShadePinch {
 }
 
 impl ShadePinch {
-    pub fn new(seed: u64) -> Self {
+    pub fn new() -> Self {
         Self {
-            state: EffectState::new(seed),
+            state: EffectState::new(42, Self::cycle_length()),
         }
     }
 }
 
 impl Effect for ShadePinch {
-    fn name(&self) -> &'static str {
+    fn name() -> &'static str {
         "shade-pinch"
     }
-    fn description(&self) -> &'static str {
+    fn description() -> &'static str {
         "Pinching gradient in shade"
     }
-    fn cycle_length(&self) -> usize {
+    fn cycle_length() -> usize {
         25
     }
 
     fn step(&mut self) -> String {
-        let frame_idx = self.state.frame;
-        let result = self.render(frame_idx);
-        self.state.advance(self.cycle_length());
+        let result = self.render();
+        self.state.advance();
         result
     }
 }
 
 impl ShadePinch {
-    fn render(&mut self, frame: usize) -> String {
+    fn render(&mut self) -> String {
         let mut f = ShadeFrame::new(WIDTH);
         let cx = (WIDTH - 1) as f64 / 2.0;
-        let phase = (frame as f64 * temporal_speed::GENTLE).sin() / 2.0 + 0.5;
+        let phase = (self.state.frame as f64 * temporal_speed::GENTLE).sin() / 2.0 + 0.5;
         for i in 0..WIDTH {
             let edge_dist = (i as f64 - cx).abs() / cx;
             let side_phase = if i as f64 <= cx { phase } else { 1.0 - phase };

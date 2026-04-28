@@ -9,37 +9,36 @@ pub struct DotWave {
 }
 
 impl DotWave {
-    pub fn new(seed: u64) -> Self {
+    pub fn new() -> Self {
         Self {
-            state: EffectState::new(seed),
+            state: EffectState::new(42, Self::cycle_length()),
         }
     }
 }
 
 impl Effect for DotWave {
-    fn name(&self) -> &'static str {
+    fn name() -> &'static str {
         "dot-wave"
     }
-    fn description(&self) -> &'static str {
+    fn description() -> &'static str {
         "Sine wave using dot characters"
     }
-    fn cycle_length(&self) -> usize {
+    fn cycle_length() -> usize {
         10
     }
 
     fn step(&mut self) -> String {
-        let frame_idx = self.state.frame;
-        let result = self.render(frame_idx);
-        self.state.advance(self.cycle_length());
+        let result = self.render();
+        self.state.advance();
         result
     }
 }
 
 impl DotWave {
-    fn render(&mut self, frame: usize) -> String {
+    fn render(&mut self) -> String {
         let mut f = DotFrame::new(WIDTH);
         for i in 0..WIDTH {
-            let v = ((i as f64 + frame as f64) * spatial_frequency::LOW).sin() / 2.0 + 0.5;
+            let v = ((i as f64 + self.state.frame as f64) * spatial_frequency::LOW).sin() / 2.0 + 0.5;
             f.set(i, v);
         }
         f.render().join("\n")
@@ -51,36 +50,35 @@ pub struct DotHeartbeat {
 }
 
 impl DotHeartbeat {
-    pub fn new(seed: u64) -> Self {
+    pub fn new() -> Self {
         Self {
-            state: EffectState::new(seed),
+            state: EffectState::new(42, Self::cycle_length()),
         }
     }
 }
 
 impl Effect for DotHeartbeat {
-    fn name(&self) -> &'static str {
+    fn name() -> &'static str {
         "dot-heartbeat"
     }
-    fn description(&self) -> &'static str {
+    fn description() -> &'static str {
         "Heartbeat pulse in dots"
     }
-    fn cycle_length(&self) -> usize {
+    fn cycle_length() -> usize {
         18
     }
 
     fn step(&mut self) -> String {
-        let frame_idx = self.state.frame;
-        let result = self.render(frame_idx);
-        self.state.advance(self.cycle_length());
+        let result = self.render();
+        self.state.advance();
         result
     }
 }
 
 impl DotHeartbeat {
-    fn render(&mut self, frame: usize) -> String {
+    fn render(&mut self) -> String {
         let mut f = DotFrame::new(WIDTH);
-        let phase = frame % cycle_length::MEDIUM;
+        let phase = self.state.frame % cycle_length::MEDIUM;
         let v = if phase < 5 {
             phase as f64 / 5.0
         } else if phase < 8 {
@@ -102,42 +100,40 @@ pub struct DotPulse {
 }
 
 impl DotPulse {
-    pub fn new(seed: u64) -> Self {
+    pub fn new() -> Self {
         Self {
-            state: EffectState::new(seed),
+            state: EffectState::new(42, Self::cycle_length()),
         }
     }
 }
 
 impl Effect for DotPulse {
-    fn name(&self) -> &'static str {
+    fn name() -> &'static str {
         "dot-pulse"
     }
-    fn description(&self) -> &'static str {
+    fn description() -> &'static str {
         "Expanding ring in dot characters"
     }
-    fn cycle_length(&self) -> usize {
-        18
+    fn cycle_length() -> usize {
+        2 * WIDTH
     }
 
     fn step(&mut self) -> String {
-        let frame_idx = self.state.frame;
-        let result = self.render(frame_idx);
-        self.state.advance(self.cycle_length());
+        let result = self.render();
+        self.state.advance();
         result
     }
 }
 
 impl DotPulse {
-    fn render(&mut self, frame: usize) -> String {
-        let full_cycle = WIDTH * 2;
+    fn render(&mut self) -> String {
         let mut f = DotFrame::new(WIDTH);
         let cx = WIDTH as f64 / 2.0;
-        let frame_mod = frame % full_cycle;
-        let ring = if frame_mod < full_cycle / 2 {
+        let frame_mod = self.state.frame % Self::cycle_length();
+        let ring = if frame_mod < Self::cycle_length() / 2 {
             frame_mod
         } else {
-            full_cycle - frame_mod - 1
+            Self::cycle_length() - frame_mod - 1
         };
         for i in 0..WIDTH {
             let dist = (i as f64 - cx + 0.5).abs();
@@ -153,45 +149,42 @@ pub struct DotArrow {
 }
 
 impl DotArrow {
-    pub fn new(seed: u64) -> Self {
+    pub fn new() -> Self {
         Self {
-            state: EffectState::new(seed),
+            state: EffectState::new(42, Self::cycle_length()),
         }
     }
 }
 
 impl Effect for DotArrow {
-    fn name(&self) -> &'static str {
+    fn name() -> &'static str {
         "dot-arrow"
     }
-    fn description(&self) -> &'static str {
+    fn description() -> &'static str {
         "Arrow bouncing in dot characters"
     }
-    fn cycle_length(&self) -> usize {
+    fn cycle_length() -> usize {
+        // let cycle = (travel * 2 + pause::MEDIUM as isize) as usize;
         46
     }
 
     fn step(&mut self) -> String {
-        let frame_idx = self.state.frame;
-        let result = self.render(frame_idx);
-        self.state.advance(self.cycle_length());
+        let result = self.render();
+        self.state.advance();
         result
     }
 }
 
 impl DotArrow {
-    fn render(&mut self, frame: usize) -> String {
+    fn render(&mut self) -> String {
         let speed: isize = 1;
-        let paws: usize = pause::MEDIUM;
         let length: isize = 5;
         let travel: isize = WIDTH as isize + 2 * (length - 1);
-        let cycle = (travel * 2 + paws as isize) as usize;
         let mut f = DotFrame::new(WIDTH);
-        let frame = frame % cycle;
-        let (head, direction): (isize, isize) = if frame < travel as usize {
-            (-(length - 1) + frame as isize * speed, 1)
-        } else if frame < travel as usize * 2 {
-            let f2 = frame as isize - travel;
+        let (head, direction): (isize, isize) = if self.state.frame < travel as usize {
+            (-(length - 1) + self.state.frame as isize * speed, 1)
+        } else if self.state.frame < travel as usize * 2 {
+            let f2 = self.state.frame as isize - travel;
             ((WIDTH - 1) as isize + (length - 1) - f2 * speed, -1)
         } else {
             return f.render().join("\n");
@@ -214,8 +207,8 @@ pub struct DotBounce {
 }
 
 impl DotBounce {
-    pub fn new(seed: u64) -> Self {
-        let mut state = EffectState::new(seed);
+    pub fn new() -> Self {
+        let mut state = EffectState::new(42, Self::cycle_length());
         let phases: Vec<f64> = (0..WIDTH)
             .map(|_| state.rng.random_range(0.0..=TAU))
             .collect();
@@ -231,29 +224,28 @@ impl DotBounce {
 }
 
 impl Effect for DotBounce {
-    fn name(&self) -> &'static str {
+    fn name() -> &'static str {
         "dot-bounce"
     }
-    fn description(&self) -> &'static str {
+    fn description() -> &'static str {
         "Bouncing dots with random phases"
     }
-    fn cycle_length(&self) -> usize {
+    fn cycle_length() -> usize {
         25
     }
 
     fn step(&mut self) -> String {
-        let frame_idx = self.state.frame;
-        let result = self.render(frame_idx);
-        self.state.advance(self.cycle_length());
+        let result = self.render();
+        self.state.advance();
         result
     }
 }
 
 impl DotBounce {
-    fn render(&mut self, frame: usize) -> String {
+    fn render(&mut self) -> String {
         let mut f = DotFrame::new(WIDTH);
         for i in 0..WIDTH {
-            let v = (self.phases[i] + frame as f64 * self.speeds[i]).sin() / 2.0 + 0.5;
+            let v = (self.phases[i] + self.state.frame as f64 * self.speeds[i]).sin() / 2.0 + 0.5;
             f.set(i, v);
         }
         f.render().join("\n")

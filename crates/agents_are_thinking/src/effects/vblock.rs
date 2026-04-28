@@ -11,37 +11,36 @@ pub struct VBlockWave {
 }
 
 impl VBlockWave {
-    pub fn new(seed: u64) -> Self {
+    pub fn new() -> Self {
         Self {
-            state: EffectState::new(seed),
+            state: EffectState::new(42, Self::cycle_length()),
         }
     }
 }
 
 impl Effect for VBlockWave {
-    fn name(&self) -> &'static str {
+    fn name() -> &'static str {
         "vblock-wave"
     }
-    fn description(&self) -> &'static str {
+    fn description() -> &'static str {
         "Sine wave using vertical blocks"
     }
-    fn cycle_length(&self) -> usize {
+    fn cycle_length() -> usize {
         10
     }
 
     fn step(&mut self) -> String {
-        let frame_idx = self.state.frame;
-        let result = self.render(frame_idx);
-        self.state.advance(self.cycle_length());
+        let result = self.render();
+        self.state.advance();
         result
     }
 }
 
 impl VBlockWave {
-    fn render(&mut self, frame: usize) -> String {
+    fn render(&mut self) -> String {
         let mut f = VBlockFrame::new(WIDTH);
         for i in 0..WIDTH {
-            let v = ((i as f64 + frame as f64) * spatial_frequency::LOW).sin() / 2.0 + 0.5;
+            let v = ((i as f64 + self.state.frame as f64) * spatial_frequency::LOW).sin() / 2.0 + 0.5;
             f.set(i, v);
         }
         f.render().join("\n")
@@ -53,37 +52,36 @@ pub struct VBlockFill {
 }
 
 impl VBlockFill {
-    pub fn new(seed: u64) -> Self {
+    pub fn new() -> Self {
         Self {
-            state: EffectState::new(seed),
+            state: EffectState::new(42, Self::cycle_length()),
         }
     }
 }
 
 impl Effect for VBlockFill {
-    fn name(&self) -> &'static str {
+    fn name() -> &'static str {
         "vblock-fill"
     }
-    fn description(&self) -> &'static str {
+    fn description() -> &'static str {
         "Progressive fill using vertical blocks"
     }
-    fn cycle_length(&self) -> usize {
+    fn cycle_length() -> usize {
         13
     }
 
     fn step(&mut self) -> String {
-        let frame_idx = self.state.frame;
-        let result = self.render(frame_idx);
-        self.state.advance(self.cycle_length());
+        let result = self.render();
+        self.state.advance();
         result
     }
 }
 
 impl VBlockFill {
-    fn render(&mut self, frame: usize) -> String {
+    fn render(&mut self) -> String {
         let cycle = WIDTH + 4;
         let mut f = VBlockFrame::new(WIDTH);
-        let pos = frame % cycle;
+        let pos = self.state.frame % cycle;
         for i in 0..WIDTH {
             if i < pos {
                 let dist = pos - i;
@@ -100,36 +98,35 @@ pub struct VBlockTide {
 }
 
 impl VBlockTide {
-    pub fn new(seed: u64) -> Self {
+    pub fn new() -> Self {
         Self {
-            state: EffectState::new(seed),
+            state: EffectState::new(42, Self::cycle_length()),
         }
     }
 }
 
 impl Effect for VBlockTide {
-    fn name(&self) -> &'static str {
+    fn name() -> &'static str {
         "vblock-tide"
     }
-    fn description(&self) -> &'static str {
+    fn description() -> &'static str {
         "Tidal gradient using vertical blocks"
     }
-    fn cycle_length(&self) -> usize {
+    fn cycle_length() -> usize {
         25
     }
 
     fn step(&mut self) -> String {
-        let frame_idx = self.state.frame;
-        let result = self.render(frame_idx);
-        self.state.advance(self.cycle_length());
+        let result = self.render();
+        self.state.advance();
         result
     }
 }
 
 impl VBlockTide {
-    fn render(&mut self, frame: usize) -> String {
+    fn render(&mut self) -> String {
         let mut f = VBlockFrame::new(WIDTH);
-        let phase = (frame as f64 * temporal_speed::GENTLE).sin() / 2.0 + 0.5;
+        let phase = (self.state.frame as f64 * temporal_speed::GENTLE).sin() / 2.0 + 0.5;
         for i in 0..WIDTH {
             let t = i as f64 / (WIDTH - 1) as f64;
             let density = phase * (1.0 - t) + (1.0 - phase) * t;
@@ -144,35 +141,34 @@ pub struct VBlockBreathe {
 }
 
 impl VBlockBreathe {
-    pub fn new(seed: u64) -> Self {
+    pub fn new() -> Self {
         Self {
-            state: EffectState::new(seed),
+            state: EffectState::new(42, Self::cycle_length()),
         }
     }
 }
 
 impl Effect for VBlockBreathe {
-    fn name(&self) -> &'static str {
+    fn name() -> &'static str {
         "vblock-breathe"
     }
-    fn description(&self) -> &'static str {
+    fn description() -> &'static str {
         "Breathing vertical block animation"
     }
-    fn cycle_length(&self) -> usize {
+    fn cycle_length() -> usize {
         18
     }
 
     fn step(&mut self) -> String {
-        let frame_idx = self.state.frame;
-        let result = self.render(frame_idx);
-        self.state.advance(self.cycle_length());
+        let result = self.render();
+        self.state.advance();
         result
     }
 }
 
 impl VBlockBreathe {
-    fn render(&mut self, frame: usize) -> String {
-        let phase = frame % cycle_length::MEDIUM;
+    fn render(&mut self) -> String {
+        let phase = self.state.frame % cycle_length::MEDIUM;
         let v = (phase as f64 * std::f64::consts::PI / 10.0).sin() / 2.0 + 0.5;
         let mut f = VBlockFrame::new(WIDTH);
         for i in 0..WIDTH {
@@ -187,37 +183,36 @@ pub struct VBlockBounce {
 }
 
 impl VBlockBounce {
-    pub fn new(seed: u64) -> Self {
+    pub fn new() -> Self {
         Self {
-            state: EffectState::new(seed),
+            state: EffectState::new(42, Self::cycle_length()),
         }
     }
 }
 
 impl Effect for VBlockBounce {
-    fn name(&self) -> &'static str {
+    fn name() -> &'static str {
         "vblock-bounce"
     }
-    fn description(&self) -> &'static str {
+    fn description() -> &'static str {
         "Bouncing highlight in vertical blocks"
     }
-    fn cycle_length(&self) -> usize {
+    fn cycle_length() -> usize {
         16
     }
 
     fn step(&mut self) -> String {
-        let frame_idx = self.state.frame;
-        let result = self.render(frame_idx);
-        self.state.advance(self.cycle_length());
+        let result = self.render();
+        self.state.advance();
         result
     }
 }
 
 impl VBlockBounce {
-    fn render(&mut self, frame: usize) -> String {
+    fn render(&mut self) -> String {
         let period = (WIDTH - 1) * 2;
         let mut f = VBlockFrame::new(WIDTH);
-        let t = frame % period;
+        let t = self.state.frame % period;
         let pos = if t < WIDTH { t } else { period - t };
         for i in 0..WIDTH {
             let dist = (pos as isize - i as isize).unsigned_abs() as f64;
@@ -234,39 +229,37 @@ pub struct VBlockPulse {
 }
 
 impl VBlockPulse {
-    pub fn new(seed: u64) -> Self {
+    pub fn new() -> Self {
         Self {
-            state: EffectState::new(seed),
+            state: EffectState::new(42, Self::cycle_length()),
         }
     }
 }
 
 impl Effect for VBlockPulse {
-    fn name(&self) -> &'static str {
+    fn name() -> &'static str {
         "vblock-pulse"
     }
-    fn description(&self) -> &'static str {
+    fn description() -> &'static str {
         "Expanding pulse in vertical blocks"
     }
-    fn cycle_length(&self) -> usize {
-        13
+    fn cycle_length() -> usize {
+        WIDTH + 4
     }
 
     fn step(&mut self) -> String {
-        let frame_idx = self.state.frame;
-        let result = self.render(frame_idx);
-        self.state.advance(self.cycle_length());
+        let result = self.render();
+        self.state.advance();
         result
     }
 }
 
 impl VBlockPulse {
-    fn render(&mut self, frame: usize) -> String {
-        let cycle = WIDTH + 4;
+    fn render(&mut self) -> String {
         let mut f = VBlockFrame::new(WIDTH);
         let center = (WIDTH - 1) as f64 / 2.0;
-        let age = (frame % cycle) as f64;
-        let intensity = (age / (cycle as f64 * 0.6)).min(1.0);
+        let age = self.state.frame as f64;
+        let intensity: f64 = (self.state.frame as f64 / (Self::cycle_length() as f64 * 0.6)).min(1.0);
         for i in 0..WIDTH {
             let dist = (i as f64 - center).abs();
             let wave = (1.0 - (dist - age + 2.0) * 0.25).max(0.0);
@@ -281,40 +274,39 @@ pub struct VBlockRipple {
 }
 
 impl VBlockRipple {
-    pub fn new(seed: u64) -> Self {
+    pub fn new() -> Self {
         Self {
-            state: EffectState::new(seed),
+            state: EffectState::new(42, Self::cycle_length()),
         }
     }
 }
 
 impl Effect for VBlockRipple {
-    fn name(&self) -> &'static str {
+    fn name() -> &'static str {
         "vblock-ripple"
     }
-    fn description(&self) -> &'static str {
+    fn description() -> &'static str {
         "Ripple from center in vertical blocks"
     }
-    fn cycle_length(&self) -> usize {
+    fn cycle_length() -> usize {
         16
     }
 
     fn step(&mut self) -> String {
-        let frame_idx = self.state.frame;
-        let result = self.render(frame_idx);
-        self.state.advance(self.cycle_length());
+        let result = self.render();
+        self.state.advance();
         result
     }
 }
 
 impl VBlockRipple {
-    fn render(&mut self, frame: usize) -> String {
+    fn render(&mut self) -> String {
         let mut f = VBlockFrame::new(WIDTH);
         let cx = (WIDTH - 1) as f64 / 2.0;
         for i in 0..WIDTH {
             let dist = (i as f64 - cx).abs() / cx;
             let wave = ((dist * spatial_frequency::EXTRA_DENSE
-                - frame as f64 * temporal_speed::MODERATE)
+                - self.state.frame as f64 * temporal_speed::MODERATE)
                 .sin()
                 + 1.0)
                 / 2.0;
@@ -331,35 +323,34 @@ pub struct VBlockRain {
 }
 
 impl VBlockRain {
-    pub fn new(seed: u64) -> Self {
+    pub fn new() -> Self {
         Self {
-            state: EffectState::new(seed),
+            state: EffectState::new(42, Self::cycle_length()),
             levels: vec![0.0; WIDTH],
         }
     }
 }
 
 impl Effect for VBlockRain {
-    fn name(&self) -> &'static str {
+    fn name() -> &'static str {
         "vblock-rain"
     }
-    fn description(&self) -> &'static str {
+    fn description() -> &'static str {
         "Rain drops with persistent levels"
     }
-    fn cycle_length(&self) -> usize {
+    fn cycle_length() -> usize {
         25
     }
 
     fn step(&mut self) -> String {
-        let frame_idx = self.state.frame;
-        let result = self.render(frame_idx);
-        self.state.advance(self.cycle_length());
+        let result = self.render();
+        self.state.advance();
         result
     }
 }
 
 impl VBlockRain {
-    fn render(&mut self, _frame: usize) -> String {
+    fn render(&mut self) -> String {
         for i in 0..WIDTH {
             if self.state.rng.random::<f64>() < 0.12 {
                 self.levels[i] =
@@ -381,38 +372,37 @@ pub struct VBlockCascade {
 }
 
 impl VBlockCascade {
-    pub fn new(seed: u64) -> Self {
+    pub fn new() -> Self {
         Self {
-            state: EffectState::new(seed),
+            state: EffectState::new(42, Self::cycle_length()),
         }
     }
 }
 
 impl Effect for VBlockCascade {
-    fn name(&self) -> &'static str {
+    fn name() -> &'static str {
         "vblock-cascade"
     }
-    fn description(&self) -> &'static str {
+    fn description() -> &'static str {
         "Cascade gaps in vertical blocks"
     }
-    fn cycle_length(&self) -> usize {
+    fn cycle_length() -> usize {
         26
     }
 
     fn step(&mut self) -> String {
-        let frame_idx = self.state.frame;
-        let result = self.render(frame_idx);
-        self.state.advance(self.cycle_length());
+        let result = self.render();
+        self.state.advance();
         result
     }
 }
 
 impl VBlockCascade {
-    fn render(&mut self, frame: usize) -> String {
+    fn render(&mut self) -> String {
         let gaps: usize = 3;
         let spacing: f64 = WIDTH as f64 / 3.0;
         let mut f = VBlockFrame::new(WIDTH);
-        let phase = frame as f64 / self.cycle_length() as f64;
+        let phase = self.state.frame as f64 / Self::cycle_length() as f64;
         let t = phase * (WIDTH + 4) as f64;
         for i in 0..WIDTH {
             let mut v: f64 = 1.0;

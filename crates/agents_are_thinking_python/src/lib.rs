@@ -13,21 +13,6 @@ mod _impl {
 
     #[pymethods]
     impl Effect {
-        #[getter]
-        fn name(&self) -> PyResult<String> {
-            Ok(self.instance.name().to_string())
-        }
-
-        #[getter]
-        fn description(&self) -> PyResult<String> {
-            Ok(self.instance.description().to_string())
-        }
-
-        #[getter]
-        fn cycle_length(&self) -> PyResult<i32> {
-            Ok(self.instance.cycle_length() as i32)
-        }
-
         fn step(&mut self) -> String {
             self.instance.step()
         }
@@ -51,18 +36,23 @@ mod _impl {
                 #[new]
                 fn new() -> PyClassInitializer<Self> {
                     PyClassInitializer::from(Effect {
-                        instance: Box::new(agents_are_thinking::effects::$cls::new(42)),
+                        instance: Box::new(agents_are_thinking::effects::$cls::new()),
                     }).add_subclass($cls {})
                 }
 
                 #[classattr]
                 fn name() -> String {
-                    agents_are_thinking::effects::$cls::new(42).name().to_string()
+                    agents_are_thinking::effects::$cls::name().to_string()
                 }
 
                 #[classattr]
                 fn description() -> String {
-                    agents_are_thinking::effects::$cls::new(42).description().to_string()
+                    agents_are_thinking::effects::$cls::description().to_string()
+                }
+
+                #[classattr]
+                fn cycle_length() -> PyResult<u8> {
+                    Ok(agents_are_thinking::effects::$cls::cycle_length() as u8)
                 }
             }
         };

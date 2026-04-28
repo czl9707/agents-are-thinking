@@ -2,7 +2,7 @@ use std::f64::consts::TAU;
 
 use crate::effect::{
     Effect, EffectState, HEIGHT, WIDTH, cycle_length, spatial_frequency, temporal_speed,
-    toggle_rate, trail,
+    toggle_rate, trail
 };
 use crate::frame::BrailleFrame;
 use rand::Rng;
@@ -24,49 +24,49 @@ pub struct BrailleSpin {
 }
 
 impl BrailleSpin {
-    pub fn new(seed: u64) -> Self {
+    pub fn new() -> Self {
         Self {
-            state: EffectState::new(seed),
+            state: EffectState::new(42, Self::cycle_length()),
         }
     }
 }
 
 impl Effect for BrailleSpin {
-    fn name(&self) -> &'static str {
+    fn name() -> &'static str {
         "braille-spin"
     }
-    fn description(&self) -> &'static str {
+    fn description() -> &'static str {
         "Braille spinner, same char repeated"
     }
-    fn cycle_length(&self) -> usize {
+    fn cycle_length() -> usize {
         8
     }
 
     fn step(&mut self) -> String {
-        let frame_idx = self.state.frame;
-        let result = self.render(frame_idx);
-        self.state.advance(self.cycle_length());
+        let result = self.render();
+        self.state.advance();
         result
     }
 }
 
 impl BrailleSpin {
-    fn render(&mut self, frame: usize) -> String {
-        const PATH: [(usize, usize); 8] = [
-            (0, 0),
-            (0, 1),
-            (0, 2),
-            (0, 3),
-            (1, 3),
-            (1, 2),
-            (1, 1),
-            (1, 0),
-        ];
+    const PATH: [(usize, usize); 8] = [
+        (0, 0),
+        (0, 1),
+        (0, 2),
+        (0, 3),
+        (1, 3),
+        (1, 2),
+        (1, 1),
+        (1, 0),
+    ];
+
+    fn render(&mut self) -> String {
         let t = trail::SHORT;
         let mut f = BrailleFrame::new(WIDTH, HEIGHT);
         for cx in (0..WIDTH * 2).step_by(4) {
             for i in 0..t {
-                let (dx, dy) = PATH[(frame + i) % PATH.len()];
+                let (dx, dy) = Self::PATH[(self.state.frame + i) % Self::PATH.len()];
                 f.set(cx + dx, dy);
             }
         }
@@ -79,57 +79,56 @@ pub struct BrailleSpin2 {
 }
 
 impl BrailleSpin2 {
-    pub fn new(seed: u64) -> Self {
+    pub fn new() -> Self {
         Self {
-            state: EffectState::new(seed),
+            state: EffectState::new(42, Self::cycle_length()),
         }
     }
 }
 
 impl Effect for BrailleSpin2 {
-    fn name(&self) -> &'static str {
+    fn name() -> &'static str {
         "braille-spin2"
     }
-    fn description(&self) -> &'static str {
+    fn description() -> &'static str {
         "Larger braille spinner with wider path"
     }
-    fn cycle_length(&self) -> usize {
+    fn cycle_length() -> usize {
         16
     }
 
     fn step(&mut self) -> String {
-        let frame_idx = self.state.frame;
-        let result = self.render(frame_idx);
-        self.state.advance(self.cycle_length());
+        let result = self.render();
+        self.state.advance();
         result
     }
 }
 
 impl BrailleSpin2 {
-    fn render(&mut self, frame: usize) -> String {
-        const PATH: [(usize, usize); 16] = [
-            (0, 0),
-            (0, 1),
-            (0, 2),
-            (0, 3),
-            (1, 3),
-            (2, 3),
-            (3, 3),
-            (4, 3),
-            (5, 3),
-            (5, 2),
-            (5, 1),
-            (5, 0),
-            (4, 0),
-            (3, 0),
-            (2, 0),
-            (1, 0),
-        ];
+    const PATH: [(usize, usize); 16] = [
+        (0, 0),
+        (0, 1),
+        (0, 2),
+        (0, 3),
+        (1, 3),
+        (2, 3),
+        (3, 3),
+        (4, 3),
+        (5, 3),
+        (5, 2),
+        (5, 1),
+        (5, 0),
+        (4, 0),
+        (3, 0),
+        (2, 0),
+        (1, 0),
+    ];
+    fn render(&mut self) -> String {
         let t = trail::SHORT;
         let mut f = BrailleFrame::new(WIDTH, HEIGHT);
         for cx in (0..WIDTH * 2 - 4).step_by(4) {
             for i in 0..t {
-                let (dx, dy) = PATH[(frame + i) % PATH.len()];
+                let (dx, dy) = Self::PATH[(self.state.frame + i) % Self::PATH.len()];
                 f.set(cx + dx, dy);
             }
         }
@@ -142,37 +141,36 @@ pub struct BrailleWave {
 }
 
 impl BrailleWave {
-    pub fn new(seed: u64) -> Self {
+    pub fn new() -> Self {
         Self {
-            state: EffectState::new(seed),
+            state: EffectState::new(42, Self::cycle_length()),
         }
     }
 }
 
 impl Effect for BrailleWave {
-    fn name(&self) -> &'static str {
+    fn name() -> &'static str {
         "braille-wave"
     }
-    fn description(&self) -> &'static str {
+    fn description() -> &'static str {
         "Sine wave across braille cells"
     }
-    fn cycle_length(&self) -> usize {
+    fn cycle_length() -> usize {
         8
     }
 
     fn step(&mut self) -> String {
-        let frame_idx = self.state.frame;
-        let result = self.render(frame_idx);
-        self.state.advance(self.cycle_length());
+        let result = self.render();
+        self.state.advance();
         result
     }
 }
 
 impl BrailleWave {
-    fn render(&mut self, frame: usize) -> String {
+    fn render(&mut self) -> String {
         let mut f = BrailleFrame::new(WIDTH, HEIGHT);
         for i in 0..WIDTH {
-            let phase = (frame + i) % 8;
+            let phase = (self.state.frame + i) % 8;
             let y = if phase < 4 { phase } else { 7 - phase };
             f.set(i * 2, y);
         }
@@ -185,34 +183,33 @@ pub struct BrailleRandom {
 }
 
 impl BrailleRandom {
-    pub fn new(seed: u64) -> Self {
+    pub fn new() -> Self {
         Self {
-            state: EffectState::new(seed),
+            state: EffectState::new(42, Self::cycle_length()),
         }
     }
 }
 
 impl Effect for BrailleRandom {
-    fn name(&self) -> &'static str {
+    fn name() -> &'static str {
         "braille-random"
     }
-    fn description(&self) -> &'static str {
+    fn description() -> &'static str {
         "Random braille noise"
     }
-    fn cycle_length(&self) -> usize {
+    fn cycle_length() -> usize {
         36
     }
 
     fn step(&mut self) -> String {
-        let frame_idx = self.state.frame;
-        let result = self.render(frame_idx);
-        self.state.advance(self.cycle_length());
+        let result = self.render();
+        self.state.advance();
         result
     }
 }
 
 impl BrailleRandom {
-    fn render(&mut self, _frame: usize) -> String {
+    fn render(&mut self) -> String {
         let mut f = BrailleFrame::new(WIDTH, HEIGHT);
         for i in 0..WIDTH {
             let val = self.state.rng.random::<u8>();
@@ -232,36 +229,35 @@ pub struct BrailleBreathe {
 }
 
 impl BrailleBreathe {
-    pub fn new(seed: u64) -> Self {
+    pub fn new() -> Self {
         Self {
-            state: EffectState::new(seed),
+            state: EffectState::new(42, Self::cycle_length()),
         }
     }
 }
 
 impl Effect for BrailleBreathe {
-    fn name(&self) -> &'static str {
+    fn name() -> &'static str {
         "braille-breathe"
     }
-    fn description(&self) -> &'static str {
+    fn description() -> &'static str {
         "Breathing braille expansion"
     }
-    fn cycle_length(&self) -> usize {
+    fn cycle_length() -> usize {
         9
     }
 
     fn step(&mut self) -> String {
-        let frame_idx = self.state.frame;
-        let result = self.render(frame_idx);
-        self.state.advance(self.cycle_length());
+        let result = self.render();
+        self.state.advance();
         result
     }
 }
 
 impl BrailleBreathe {
-    fn render(&mut self, frame: usize) -> String {
+    fn render(&mut self) -> String {
         let cl = cycle_length::SHORT;
-        let phase = frame % cl;
+        let phase = self.state.frame % cl;
         let mut f = BrailleFrame::new(WIDTH, HEIGHT);
         for i in 0..WIDTH {
             let dist = (i as isize - WIDTH as isize / 2).unsigned_abs();
@@ -282,41 +278,40 @@ pub struct BrailleRipple {
 }
 
 impl BrailleRipple {
-    pub fn new(seed: u64) -> Self {
+    pub fn new() -> Self {
         Self {
-            state: EffectState::new(seed),
+            state: EffectState::new(42, Self::cycle_length()),
         }
     }
 }
 
 impl Effect for BrailleRipple {
-    fn name(&self) -> &'static str {
+    fn name() -> &'static str {
         "braille-ripple"
     }
-    fn description(&self) -> &'static str {
+    fn description() -> &'static str {
         "Ripple wave in braille dots"
     }
-    fn cycle_length(&self) -> usize {
+    fn cycle_length() -> usize {
         9
     }
 
     fn step(&mut self) -> String {
-        let frame_idx = self.state.frame;
-        let result = self.render(frame_idx);
-        self.state.advance(self.cycle_length());
+        let result = self.render();
+        self.state.advance();
         result
     }
 }
 
 impl BrailleRipple {
-    fn render(&mut self, frame: usize) -> String {
+    fn render(&mut self) -> String {
         let mut f = BrailleFrame::new(WIDTH, HEIGHT);
         let cx = WIDTH as f64;
         let cy = 1.5;
         for x in 0..(2 * WIDTH) {
             for y in 0..4usize {
                 let d = ((x as f64 - cx).powi(2) + (y as f64 - cy).powi(2)).sqrt();
-                let wave = (d * 2.0 - frame as f64 * temporal_speed::FAST).sin();
+                let wave = (d * 2.0 - self.state.frame as f64 * temporal_speed::FAST).sin();
                 if wave > 0.3 {
                     f.set(x, y);
                 }
@@ -331,36 +326,35 @@ pub struct BrailleBounce {
 }
 
 impl BrailleBounce {
-    pub fn new(seed: u64) -> Self {
+    pub fn new() -> Self {
         Self {
-            state: EffectState::new(seed),
+            state: EffectState::new(42, Self::cycle_length()),
         }
     }
 }
 
 impl Effect for BrailleBounce {
-    fn name(&self) -> &'static str {
+    fn name() -> &'static str {
         "braille-bounce"
     }
-    fn description(&self) -> &'static str {
+    fn description() -> &'static str {
         "Bouncing center with random dots"
     }
-    fn cycle_length(&self) -> usize {
+    fn cycle_length() -> usize {
         36
     }
 
     fn step(&mut self) -> String {
-        let frame_idx = self.state.frame;
-        let result = self.render(frame_idx);
-        self.state.advance(self.cycle_length());
+        let result = self.render();
+        self.state.advance();
         result
     }
 }
 
 impl BrailleBounce {
-    fn render(&mut self, frame: usize) -> String {
+    fn render(&mut self) -> String {
         let mut f = BrailleFrame::new(WIDTH, HEIGHT);
-        let t = frame % (WIDTH * 4);
+        let t = self.state.frame % (WIDTH * 4);
         let center = if t < WIDTH * 2 { t } else { WIDTH * 4 - t };
         for x in 0..(2 * WIDTH) {
             let dist = (x as isize - center as isize).unsigned_abs() as f64;
@@ -380,39 +374,38 @@ pub struct BrailleRain {
 }
 
 impl BrailleRain {
-    pub fn new(seed: u64) -> Self {
+    pub fn new() -> Self {
         Self {
-            state: EffectState::new(seed),
+            state: EffectState::new(42, Self::cycle_length()),
         }
     }
 }
 
 impl Effect for BrailleRain {
-    fn name(&self) -> &'static str {
+    fn name() -> &'static str {
         "braille-rain"
     }
-    fn description(&self) -> &'static str {
+    fn description() -> &'static str {
         "Falling rain drops in braille"
     }
-    fn cycle_length(&self) -> usize {
+    fn cycle_length() -> usize {
         7
     }
 
     fn step(&mut self) -> String {
-        let frame_idx = self.state.frame;
-        let result = self.render(frame_idx);
-        self.state.advance(self.cycle_length());
+        let result = self.render();
+        self.state.advance();
         result
     }
 }
 
 impl BrailleRain {
-    fn render(&mut self, frame: usize) -> String {
+    fn render(&mut self) -> String {
         let mut f = BrailleFrame::new(WIDTH, HEIGHT);
         for i in 0..WIDTH {
             let speed = 1 + (i * 3 + 1) % 3;
             let offset = (i * 7) % 8;
-            let drop_y = (frame * speed + offset) % 7;
+            let drop_y = (self.state.frame * speed + offset) % 7;
             let drop_y = drop_y as isize - 1;
             for t in 0..3isize {
                 let y = drop_y - t;
@@ -430,37 +423,36 @@ pub struct BrailleZigzag {
 }
 
 impl BrailleZigzag {
-    pub fn new(seed: u64) -> Self {
+    pub fn new() -> Self {
         Self {
-            state: EffectState::new(seed),
+            state: EffectState::new(42, Self::cycle_length()),
         }
     }
 }
 
 impl Effect for BrailleZigzag {
-    fn name(&self) -> &'static str {
+    fn name() -> &'static str {
         "braille-zigzag"
     }
-    fn description(&self) -> &'static str {
+    fn description() -> &'static str {
         "Zigzag pattern in braille"
     }
-    fn cycle_length(&self) -> usize {
+    fn cycle_length() -> usize {
         6
     }
 
     fn step(&mut self) -> String {
-        let frame_idx = self.state.frame;
-        let result = self.render(frame_idx);
-        self.state.advance(self.cycle_length());
+        let result = self.render();
+        self.state.advance();
         result
     }
 }
 
 impl BrailleZigzag {
-    fn render(&mut self, frame: usize) -> String {
+    fn render(&mut self) -> String {
         let mut f = BrailleFrame::new(WIDTH, HEIGHT);
         for x in 0..(2 * WIDTH) {
-            let phase = (x + frame) % 6;
+            let phase = (x + self.state.frame) % 6;
             let y = if phase < 4 { phase } else { 6 - phase };
             f.set(x, y);
         }
@@ -473,34 +465,33 @@ pub struct BrailleDissolve {
 }
 
 impl BrailleDissolve {
-    pub fn new(seed: u64) -> Self {
+    pub fn new() -> Self {
         Self {
-            state: EffectState::new(seed),
+            state: EffectState::new(42, Self::cycle_length()),
         }
     }
 }
 
 impl Effect for BrailleDissolve {
-    fn name(&self) -> &'static str {
+    fn name() -> &'static str {
         "braille-dissolve"
     }
-    fn description(&self) -> &'static str {
+    fn description() -> &'static str {
         "Dissolving and rebuilding braille"
     }
-    fn cycle_length(&self) -> usize {
+    fn cycle_length() -> usize {
         cycle_length::LONG
     }
 
     fn step(&mut self) -> String {
-        let frame_idx = self.state.frame;
-        let result = self.render(frame_idx);
-        self.state.advance(self.cycle_length());
+        let result = self.render();
+        self.state.advance();
         result
     }
 }
 
 impl BrailleDissolve {
-    fn render(&mut self, _frame: usize) -> String {
+    fn render(&mut self) -> String {
         let mut f = BrailleFrame::new(WIDTH, HEIGHT);
         let total = 2 * WIDTH * 4;
         let cycle = cycle_length::LONG;
@@ -528,40 +519,39 @@ pub struct BrailleFire {
 }
 
 impl BrailleFire {
-    pub fn new(seed: u64) -> Self {
+    pub fn new() -> Self {
         Self {
-            state: EffectState::new(seed),
+            state: EffectState::new(42, Self::cycle_length()),
         }
     }
 }
 
 impl Effect for BrailleFire {
-    fn name(&self) -> &'static str {
+    fn name() -> &'static str {
         "braille-fire"
     }
-    fn description(&self) -> &'static str {
+    fn description() -> &'static str {
         "Fire effect using braille dots"
     }
-    fn cycle_length(&self) -> usize {
+    fn cycle_length() -> usize {
         9
     }
 
     fn step(&mut self) -> String {
-        let frame_idx = self.state.frame;
-        let result = self.render(frame_idx);
-        self.state.advance(self.cycle_length());
+        let result = self.render();
+        self.state.advance();
         result
     }
 }
 
 impl BrailleFire {
-    fn render(&mut self, frame: usize) -> String {
+    fn render(&mut self) -> String {
         let mut f = BrailleFrame::new(WIDTH, HEIGHT);
         for x in 0..(2 * WIDTH) {
             for y in 0..4usize {
                 let row_from_bottom = 3 - y;
                 let decay = row_from_bottom as f64 * 0.28;
-                let fast = (frame as f64 * temporal_speed::FAST
+                let fast = (self.state.frame as f64 * temporal_speed::FAST
                     + x as f64 * spatial_frequency::HIGH)
                     .sin()
                     * 0.2;
@@ -580,36 +570,35 @@ pub struct BrailleNoise {
 }
 
 impl BrailleNoise {
-    pub fn new(seed: u64) -> Self {
+    pub fn new() -> Self {
         Self {
-            state: EffectState::new(seed),
+            state: EffectState::new(42, Self::cycle_length()),
         }
     }
 }
 
 impl Effect for BrailleNoise {
-    fn name(&self) -> &'static str {
+    fn name() -> &'static str {
         "braille-noise"
     }
-    fn description(&self) -> &'static str {
+    fn description() -> &'static str {
         "Smooth noise in braille dots"
     }
-    fn cycle_length(&self) -> usize {
+    fn cycle_length() -> usize {
         36
     }
 
     fn step(&mut self) -> String {
-        let frame_idx = self.state.frame;
-        let result = self.render(frame_idx);
-        self.state.advance(self.cycle_length());
+        let result = self.render();
+        self.state.advance();
         result
     }
 }
 
 impl BrailleNoise {
-    fn render(&mut self, frame: usize) -> String {
+    fn render(&mut self) -> String {
         let mut f = BrailleFrame::new(WIDTH, HEIGHT);
-        let phase = TAU * frame as f64 / self.cycle_length() as f64;
+        let phase = TAU * self.state.frame as f64 / Self::cycle_length() as f64;
         for x in 0..(2 * WIDTH) {
             for y in 0..4usize {
                 let nx = x as f64 * spatial_frequency::LOW;
@@ -631,34 +620,33 @@ pub struct BrailleHeartbeat {
 }
 
 impl BrailleHeartbeat {
-    pub fn new(seed: u64) -> Self {
+    pub fn new() -> Self {
         Self {
-            state: EffectState::new(seed),
+            state: EffectState::new(42, Self::cycle_length()),
         }
     }
 }
 
 impl Effect for BrailleHeartbeat {
-    fn name(&self) -> &'static str {
+    fn name() -> &'static str {
         "braille-heartbeat"
     }
-    fn description(&self) -> &'static str {
+    fn description() -> &'static str {
         "Heartbeat pulse in braille"
     }
-    fn cycle_length(&self) -> usize {
+    fn cycle_length() -> usize {
         36
     }
 
     fn step(&mut self) -> String {
-        let frame_idx = self.state.frame;
-        let result = self.render(frame_idx);
-        self.state.advance(self.cycle_length());
+        let result = self.render();
+        self.state.advance();
         result
     }
 }
 
 impl BrailleHeartbeat {
-    fn render(&mut self, frame: usize) -> String {
+    fn render(&mut self) -> String {
         const PATTERNS: [[usize; 18]; 2] = [
             [0, 0, 0, 0, 1, 2, 1, 0, 2, 4, 3, 0, 1, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 1, 2, 3, 2, 1, 0, 2, 2, 3, 1, 0, 0, 0],
@@ -666,7 +654,7 @@ impl BrailleHeartbeat {
         const LEN: isize = cycle_length::MEDIUM as isize;
         let mut f = BrailleFrame::new(WIDTH, HEIGHT);
         for x in 0..(2 * WIDTH) {
-            let gi: isize = frame as isize - x as isize;
+            let gi: isize = self.state.frame as isize - x as isize;
             let beat = gi.div_euclid(LEN).rem_euclid(PATTERNS.len() as isize) as usize;
             let pat = &PATTERNS[beat];
             let i = gi.rem_euclid(LEN) as usize;
@@ -688,38 +676,37 @@ pub struct BrailleScanner {
 }
 
 impl BrailleScanner {
-    pub fn new(seed: u64) -> Self {
+    pub fn new() -> Self {
         Self {
-            state: EffectState::new(seed),
+            state: EffectState::new(42, Self::cycle_length()),
         }
     }
 }
 
 impl Effect for BrailleScanner {
-    fn name(&self) -> &'static str {
+    fn name() -> &'static str {
         "braille-scanner"
     }
-    fn description(&self) -> &'static str {
+    fn description() -> &'static str {
         "Scanning beam across braille"
     }
-    fn cycle_length(&self) -> usize {
+    fn cycle_length() -> usize {
         30
     }
 
     fn step(&mut self) -> String {
-        let frame_idx = self.state.frame;
-        let result = self.render(frame_idx);
-        self.state.advance(self.cycle_length());
+        let result = self.render();
+        self.state.advance();
         result
     }
 }
 
 impl BrailleScanner {
-    fn render(&mut self, frame: usize) -> String {
+    fn render(&mut self) -> String {
         let scan_width = cycle_length::MEDIUM;
         let t = trail::EXTENDED;
         let scan_range = scan_width + t + 4;
-        let pos = (frame % scan_range) as isize;
+        let pos = (self.state.frame % scan_range) as isize;
         let mut f = BrailleFrame::new(WIDTH, HEIGHT);
         for y in 0..4usize {
             for dx in 0..=t {
@@ -742,41 +729,40 @@ pub struct BrailleMatrix {
 }
 
 impl BrailleMatrix {
-    pub fn new(seed: u64) -> Self {
+    pub fn new() -> Self {
         Self {
-            state: EffectState::new(seed),
+            state: EffectState::new(42, Self::cycle_length()),
         }
     }
 }
 
 impl Effect for BrailleMatrix {
-    fn name(&self) -> &'static str {
+    fn name() -> &'static str {
         "braille-matrix"
     }
-    fn description(&self) -> &'static str {
+    fn description() -> &'static str {
         "Matrix-style falling columns"
     }
-    fn cycle_length(&self) -> usize {
+    fn cycle_length() -> usize {
         36
     }
 
     fn step(&mut self) -> String {
-        let frame_idx = self.state.frame;
-        let result = self.render(frame_idx);
-        self.state.advance(self.cycle_length());
+        let result = self.render();
+        self.state.advance();
         result
     }
 }
 
 impl BrailleMatrix {
-    fn render(&mut self, frame: usize) -> String {
+    fn render(&mut self) -> String {
         let tail = trail::SHORT;
         let mut f = BrailleFrame::new(WIDTH, HEIGHT);
         for i in 0..(2 * WIDTH) {
             let speed: i64 = [1i64, 1, 2][self.state.rng.random_range(0..3usize)];
             let init_offset: i64 = self.state.rng.random_range(-8..=0i64);
             let span: i64 = 4 + tail as i64 + init_offset.abs();
-            let steps: i64 = frame as i64 * speed;
+            let steps: i64 = self.state.frame as i64 * speed;
             let head: i64 = init_offset + steps % span;
             for t in 0..tail {
                 let y: i64 = head - t as i64;
@@ -794,36 +780,35 @@ pub struct BrailleCheckerboard {
 }
 
 impl BrailleCheckerboard {
-    pub fn new(seed: u64) -> Self {
+    pub fn new() -> Self {
         Self {
-            state: EffectState::new(seed),
+            state: EffectState::new(42, Self::cycle_length()),
         }
     }
 }
 
 impl Effect for BrailleCheckerboard {
-    fn name(&self) -> &'static str {
+    fn name() -> &'static str {
         "braille-checkerboard"
     }
-    fn description(&self) -> &'static str {
+    fn description() -> &'static str {
         "Alternating checkerboard pattern"
     }
-    fn cycle_length(&self) -> usize {
+    fn cycle_length() -> usize {
         16
     }
 
     fn step(&mut self) -> String {
-        let frame_idx = self.state.frame;
-        let result = self.render(frame_idx);
-        self.state.advance(self.cycle_length());
+        let result = self.render();
+        self.state.advance();
         result
     }
 }
 
 impl BrailleCheckerboard {
-    fn render(&mut self, frame: usize) -> String {
+    fn render(&mut self) -> String {
         let mut f = BrailleFrame::new(WIDTH, HEIGHT);
-        let offset = (frame / toggle_rate::SLOW) % 2;
+        let offset = (self.state.frame / toggle_rate::SLOW) % 2;
         for x in 0..(2 * WIDTH) {
             for y in 0..4usize {
                 if (x + y + offset) % 2 == 0 {
@@ -840,36 +825,35 @@ pub struct BrailleCheckerboard2x2 {
 }
 
 impl BrailleCheckerboard2x2 {
-    pub fn new(seed: u64) -> Self {
+    pub fn new() -> Self {
         Self {
-            state: EffectState::new(seed),
+            state: EffectState::new(42, Self::cycle_length()),
         }
     }
 }
 
 impl Effect for BrailleCheckerboard2x2 {
-    fn name(&self) -> &'static str {
+    fn name() -> &'static str {
         "braille-checkerboard-2x2"
     }
-    fn description(&self) -> &'static str {
+    fn description() -> &'static str {
         "2x2 block checkerboard pattern"
     }
-    fn cycle_length(&self) -> usize {
+    fn cycle_length() -> usize {
         16
     }
 
     fn step(&mut self) -> String {
-        let frame_idx = self.state.frame;
-        let result = self.render(frame_idx);
-        self.state.advance(self.cycle_length());
+        let result = self.render();
+        self.state.advance();
         result
     }
 }
 
 impl BrailleCheckerboard2x2 {
-    fn render(&mut self, frame: usize) -> String {
+    fn render(&mut self) -> String {
         let mut f = BrailleFrame::new(WIDTH, HEIGHT);
-        let offset = (frame / toggle_rate::SLOW) % 2;
+        let offset = (self.state.frame / toggle_rate::SLOW) % 2;
         for x in 0..(2 * WIDTH) {
             for y in 0..4usize {
                 if (x / 2 + y / 2 + offset) % 2 == 0 {
@@ -886,60 +870,78 @@ pub struct BrailleArrow {
 }
 
 impl BrailleArrow {
-    pub fn new(seed: u64) -> Self {
+    pub fn new() -> Self {
         Self {
-            state: EffectState::new(seed),
+            state: EffectState::new(42, Self::cycle_length()),
         }
     }
 }
 
 impl Effect for BrailleArrow {
-    fn name(&self) -> &'static str {
+    fn name() -> &'static str {
         "braille-arrow"
     }
-    fn description(&self) -> &'static str {
+    fn description() -> &'static str {
         "Arrow bouncing across braille display"
     }
-    fn cycle_length(&self) -> usize {
-        52
+    fn cycle_length() -> usize {
+        // let travel = (2 * WIDTH + arrow_width) / speed + 1;
+        // let cycle = travel * 2 + pause::LONG;
+        44
     }
 
     fn step(&mut self) -> String {
-        let frame_idx = self.state.frame;
-        let result = self.render(frame_idx);
-        self.state.advance(self.cycle_length());
+        let result = self.render();
+        self.state.advance();
         result
     }
 }
 
 impl BrailleArrow {
-    fn render(&mut self, frame: usize) -> String {
-        let travel: isize = 2 * WIDTH as isize + 2;
-        let pause: usize = 12;
-        let cycle = (travel * 2 + pause as isize) as usize;
+    const RIGHT_ARROW : [[u8; 2]; 24] = [
+        [0, 0], [1, 0], [2, 0],                [5, 0], [6, 0], [7, 0],
+            [1, 1], [2, 1], [3, 1],                [6, 1], [7, 1], [8, 1],
+            [1, 2], [2, 2], [3, 2],                [6, 2], [7, 2], [8, 2],
+        [0, 3], [1, 3], [2, 3],                [5, 3], [6, 3], [7, 3],
+    ];
+
+    const LEFT_ARROW : [[u8; 2]; 24] = [
+            [1, 0], [2, 0], [3, 0],                [6, 0], [7, 0], [8, 0],
+        [0, 1], [1, 1], [2, 1],                [5, 1], [6, 1], [7, 1],
+        [0, 2], [1, 2], [2, 2],                [5, 2], [6, 2], [7, 2],
+            [1, 3], [2, 3], [3, 3],                [6, 3], [7, 3], [8, 3],
+    ];
+
+    fn render(&mut self) -> String {
+        let speed = 2;
+        let arrow_width = 8;
+
+        let travel = (2 * WIDTH + arrow_width) / speed + 1;
+
         let mut f = BrailleFrame::new(WIDTH, HEIGHT);
-        let frame = frame % cycle;
-        let (head, direction): (isize, isize) = if frame < travel as usize {
-            (-2 + frame as isize, 1)
-        } else if frame < travel as usize * 2 {
-            let f2 = frame as isize - travel;
-            (2 * WIDTH as isize - 1 + 2 - f2, -1)
-        } else {
+        if self.state.frame >= 2 * travel  {
             return f.render().join("\n");
+        }
+        let (base, offset) = if self.state.frame < travel  {
+            (
+                - (arrow_width as isize) + ((self.state.frame * speed) as isize),
+                Self::RIGHT_ARROW,
+            )
+        }
+        else {
+            (
+                2 * (arrow_width as isize) - (self.state.frame as isize - travel as isize) * speed as isize,
+                Self::LEFT_ARROW,
+            )
         };
-        for y in 0..4usize {
-            let x = head;
-            if x >= 0 && (x as usize) < 2 * WIDTH {
-                f.set(x as usize, y);
+
+        for [dx, dy] in offset {
+            let x = base + dx as isize;
+            if 0 <= x && x < (2 * WIDTH) as isize  {
+                f.set(x as usize, dy as usize);
             }
         }
-        for offset in 1..=2isize {
-            let x = head - direction * offset;
-            if x >= 0 && (x as usize) < 2 * WIDTH {
-                f.set(x as usize, 1);
-                f.set(x as usize, 2);
-            }
-        }
+
         f.render().join("\n")
     }
 }

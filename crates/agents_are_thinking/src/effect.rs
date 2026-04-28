@@ -47,26 +47,28 @@ pub fn new_rng(seed: u64) -> StdRng {
 }
 
 pub trait Effect: Send + Sync {
-    fn name(&self) -> &'static str;
-    fn description(&self) -> &'static str;
-    fn cycle_length(&self) -> usize;
+    fn name() -> &'static str where Self: Sized;
+    fn description() -> &'static str where Self: Sized;
+    fn cycle_length() -> usize where Self: Sized;
     fn step(&mut self) -> String;
 }
 
 pub struct EffectState {
     pub frame: usize,
     pub rng: StdRng,
+    cycle: usize,
 }
 
 impl EffectState {
-    pub fn new(seed: u64) -> Self {
+    pub fn new(seed: u64, cycle: usize) -> Self {
         Self {
             frame: 0,
             rng: new_rng(seed),
+            cycle: cycle
         }
     }
 
-    pub fn advance(&mut self, cycle_length: usize) {
-        self.frame = (self.frame + 1) % cycle_length;
+    pub fn advance(&mut self) {
+        self.frame = (self.frame + 1) % self.cycle;
     }
 }
