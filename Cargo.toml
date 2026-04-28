@@ -1,10 +1,3 @@
-[package]
-name = "agents-are-thinking"
-version = "0.1.0"
-edition = "2024"
-
-[lib]
-name = "agents_are_thinking"
-path = "crates/agents_are_thinking"
-
-[dependencies]
+[workspace]
+members = ["crates/agents_are_thinking"]
+resolver = "3"
