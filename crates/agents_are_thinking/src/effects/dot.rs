@@ -1,6 +1,6 @@
 use std::f64::consts::TAU;
 
-use crate::effect::{Effect, EffectState, WIDTH, cycle_length, spatial_frequency, temporal_speed};
+use crate::effect::{Effect, EffectState, WIDTH, cycle_length, pause, spatial_frequency, temporal_speed};
 use crate::frame::DotFrame;
 use rand::Rng;
 
@@ -165,8 +165,7 @@ impl Effect for DotArrow {
         "Arrow bouncing in dot characters"
     }
     fn cycle_length() -> usize {
-        // let cycle = (travel * 2 + pause::MEDIUM as isize) as usize;
-        46
+        (Self::TRAVEL * 2 + pause::MEDIUM as isize) as usize
     }
 
     fn step(&mut self) -> String {

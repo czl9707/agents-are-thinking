@@ -1,23 +1,12 @@
 use std::f64::consts::TAU;
 
 use crate::effect::{
-    Effect, EffectState, HEIGHT, WIDTH, cycle_length, spatial_frequency, temporal_speed,
+    Effect, EffectState, HEIGHT, WIDTH, cycle_length, pause, spatial_frequency, temporal_speed,
     toggle_rate, trail
 };
 use crate::frame::BrailleFrame;
 use rand::Rng;
 use rand::seq::SliceRandom;
-
-const PIXEL_ORDER: [(usize, usize); 8] = [
-    (0, 0),
-    (0, 1),
-    (0, 2),
-    (1, 0),
-    (1, 1),
-    (1, 2),
-    (0, 3),
-    (1, 3),
-];
 
 pub struct BrailleSpin {
     state: EffectState,
@@ -209,13 +198,24 @@ impl Effect for BrailleRandom {
 }
 
 impl BrailleRandom {
+    const PIXEL_ORDER: [(usize, usize); 8] = [
+        (0, 0),
+        (0, 1),
+        (0, 2),
+        (1, 0),
+        (1, 1),
+        (1, 2),
+        (0, 3),
+        (1, 3),
+    ];
+
     fn render(&mut self) -> String {
         let mut f = BrailleFrame::new(WIDTH, HEIGHT);
         for i in 0..WIDTH {
             let val = self.state.rng.random::<u8>();
             for b in 0..8u8 {
                 if val & (1 << b) != 0 {
-                    let (px, py) = PIXEL_ORDER[b as usize];
+                    let (px, py) = Self::PIXEL_ORDER[b as usize];
                     f.set(i * 2 + px, py);
                 }
             }
@@ -255,6 +255,17 @@ impl Effect for BrailleBreathe {
 }
 
 impl BrailleBreathe {
+    const PIXEL_ORDER: [(usize, usize); 8] = [
+        (0, 0),
+        (0, 1),
+        (0, 2),
+        (1, 0),
+        (1, 1),
+        (1, 2),
+        (0, 3),
+        (1, 3),
+    ];
+
     fn render(&mut self) -> String {
         let cl = cycle_length::SHORT;
         let phase = self.state.frame % cl;
@@ -265,7 +276,7 @@ impl BrailleBreathe {
             let count = if ci < 5 { ci } else { cl - ci };
             let n = count * 8 / 5;
             for b in 0..n {
-                let (px, py) = PIXEL_ORDER[b];
+                let (px, py) = Self::PIXEL_ORDER[b];
                 f.set(i * 2 + px, py);
             }
         }
@@ -693,7 +704,7 @@ impl Effect for BrailleScanner {
         "Scanning beam across braille"
     }
     fn cycle_length() -> usize {
-        30
+        cycle_length::MEDIUM + trail::EXTENDED + 4
     }
 
     fn step(&mut self) -> String {
@@ -704,11 +715,9 @@ impl Effect for BrailleScanner {
 }
 
 impl BrailleScanner {
-    const SCAN_RANGE: usize = cycle_length::MEDIUM + trail::EXTENDED + 4;
-
     fn render(&mut self) -> String {
         let t = trail::EXTENDED;
-        let pos = (self.state.frame % Self::SCAN_RANGE) as isize;
+        let pos = (self.state.frame % Self::cycle_length()) as isize;
         let mut f = BrailleFrame::new(WIDTH, HEIGHT);
         for y in 0..4usize {
             for dx in 0..=t {
@@ -887,9 +896,7 @@ impl Effect for BrailleArrow {
         "Arrow bouncing across braille display"
     }
     fn cycle_length() -> usize {
-        // let travel = (2 * WIDTH + arrow_width) / speed + 1;
-        // let cycle = travel * 2 + pause::LONG;
-        44
+        2 * Self::TRAVEL + pause::LONG
     }
 
     fn step(&mut self) -> String {

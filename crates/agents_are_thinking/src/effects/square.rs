@@ -1,15 +1,5 @@
 use crate::effect::{Effect, EffectState, WIDTH, cycle_length, pause};
 use crate::frame::SquareFrame;
-
-const PULSE_FULL_CYCLE: usize = WIDTH * 2;
-const PULSE_CENTER_X: f64 = WIDTH as f64 / 2.0;
-
-const FILL_SPEED: isize = 3;
-const FILL_CYCLE: usize = (WIDTH as isize * FILL_SPEED + 8) as usize;
-
-const ARROW_TRAVEL: isize = WIDTH as isize + 2;
-const ARROW_CYCLE: usize = (ARROW_TRAVEL * 2 + pause::MEDIUM as isize) as usize;
-
 pub struct SquarePulse {
     state: EffectState,
 }
@@ -30,7 +20,7 @@ impl Effect for SquarePulse {
         "Expanding ring in square characters"
     }
     fn cycle_length() -> usize {
-        18
+        Self::PULSE_FULL_CYCLE
     }
 
     fn step(&mut self) -> String {
@@ -41,16 +31,19 @@ impl Effect for SquarePulse {
 }
 
 impl SquarePulse {
+    const PULSE_FULL_CYCLE: usize = WIDTH * 2;
+    const PULSE_CENTER_X: f64 = WIDTH as f64 / 2.0;
+
     fn render(&mut self) -> String {
         let mut f = SquareFrame::new(WIDTH);
-        let frame_mod = self.state.frame % PULSE_FULL_CYCLE;
-        let ring = if frame_mod < PULSE_FULL_CYCLE / 2 {
+        let frame_mod = self.state.frame % Self::PULSE_FULL_CYCLE;
+        let ring = if frame_mod < Self::PULSE_FULL_CYCLE / 2 {
             frame_mod
         } else {
-            PULSE_FULL_CYCLE - frame_mod - 1
+            Self::PULSE_FULL_CYCLE - frame_mod - 1
         };
         for i in 0..WIDTH {
-            let dist = (i as f64 - PULSE_CENTER_X + 0.5).abs();
+            let dist = (i as f64 - Self::PULSE_CENTER_X + 0.5).abs();
             let v = ((ring as f64 - dist + 1.0) / 2.0).clamp(0.0, 1.0);
             f.set(i, v);
         }
@@ -78,7 +71,7 @@ impl Effect for SquareFill {
         "Progressive fill using square characters"
     }
     fn cycle_length() -> usize {
-        35
+        Self::FILL_CYCLE
     }
 
     fn step(&mut self) -> String {
@@ -89,15 +82,18 @@ impl Effect for SquareFill {
 }
 
 impl SquareFill {
+    const FILL_SPEED: isize = 3;
+    const FILL_CYCLE: usize = (WIDTH as isize * Self::FILL_SPEED + 8) as usize;
+
     fn render(&mut self) -> String {
         let mut f = SquareFrame::new(WIDTH);
-        let pos = (self.state.frame % FILL_CYCLE) as isize;
+        let pos = (self.state.frame % Self::FILL_CYCLE) as isize;
         for i in 0..WIDTH {
-            let target = i as isize * FILL_SPEED;
+            let target = i as isize * Self::FILL_SPEED;
             let elapsed = pos - target;
             if elapsed < 0 {
                 f.set(i, 0.0);
-            } else if elapsed < FILL_SPEED {
+            } else if elapsed < Self::FILL_SPEED {
                 f.set(i, 0.5);
             } else {
                 f.set(i, 1.0);
@@ -170,7 +166,7 @@ impl Effect for SquareArrow {
         "Arrow bouncing in square characters"
     }
     fn cycle_length() -> usize {
-        34
+        Self::ARROW_CYCLE
     }
 
     fn step(&mut self) -> String {
@@ -181,13 +177,16 @@ impl Effect for SquareArrow {
 }
 
 impl SquareArrow {
+    const ARROW_TRAVEL: isize = WIDTH as isize + 2;
+    const ARROW_CYCLE: usize = (Self::ARROW_TRAVEL * 2 + pause::MEDIUM as isize) as usize;
+
     fn render(&mut self) -> String {
         let mut f = SquareFrame::new(WIDTH);
-        let frame = self.state.frame % ARROW_CYCLE;
-        let (head, direction): (isize, isize) = if frame < ARROW_TRAVEL as usize {
+        let frame = self.state.frame % Self::ARROW_CYCLE;
+        let (head, direction): (isize, isize) = if frame < Self::ARROW_TRAVEL as usize {
             (-2 + frame as isize, 1)
-        } else if frame < ARROW_TRAVEL as usize * 2 {
-            let f2 = frame as isize - ARROW_TRAVEL;
+        } else if frame < Self::ARROW_TRAVEL as usize * 2 {
+            let f2 = frame as isize - Self::ARROW_TRAVEL;
             (WIDTH as isize - 1 - f2, -1)
         } else {
             return f.render().join("\n");

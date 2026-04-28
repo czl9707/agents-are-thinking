@@ -4,8 +4,7 @@ use crate::effect::{Effect, EffectState, WIDTH, cycle_length, spatial_frequency,
 use crate::frame::ShadeFrame;
 use rand::Rng;
 
-const CENTER_X: f64 = (WIDTH - 1) as f64 / 2.0;
-const SCAN_RANGE: usize = WIDTH + 6;
+
 
 pub struct ShadeWave {
     state: EffectState,
@@ -68,7 +67,7 @@ impl Effect for ShadeScanner {
         "Scanning highlight in shade"
     }
     fn cycle_length() -> usize {
-        15
+        Self::SCAN_RANGE
     }
 
     fn step(&mut self) -> String {
@@ -79,9 +78,11 @@ impl Effect for ShadeScanner {
 }
 
 impl ShadeScanner {
+    const SCAN_RANGE: usize = WIDTH + 6;
+
     fn render(&mut self) -> String {
         let mut f = ShadeFrame::new(WIDTH);
-        let pos = self.state.frame % SCAN_RANGE;
+        let pos = self.state.frame % Self::SCAN_RANGE;
         for i in 0..WIDTH {
             let dist = (i as isize - pos as isize).unsigned_abs() as f64;
             let density = (1.0 - dist / 4.0).max(0.0);
@@ -169,10 +170,12 @@ impl Effect for ShadeRipple {
 }
 
 impl ShadeRipple {
+    const CENTER_X: f64 = (WIDTH - 1) as f64 / 2.0;
+
     fn render(&mut self) -> String {
         let mut f = ShadeFrame::new(WIDTH);
         for i in 0..WIDTH {
-            let dist = (i as f64 - CENTER_X) / CENTER_X;
+            let dist = (i as f64 - Self::CENTER_X) / Self::CENTER_X;
             let wave = ((dist * spatial_frequency::EXTRA_DENSE
                 - self.state.frame as f64 * temporal_speed::MODERATE)
                 .sin()
@@ -398,12 +401,14 @@ impl Effect for ShadePinch {
 }
 
 impl ShadePinch {
+    const CENTER_X: f64 = (WIDTH - 1) as f64 / 2.0;
+
     fn render(&mut self) -> String {
         let mut f = ShadeFrame::new(WIDTH);
         let phase = (self.state.frame as f64 * temporal_speed::GENTLE).sin() / 2.0 + 0.5;
         for i in 0..WIDTH {
-            let edge_dist = (i as f64 - CENTER_X).abs() / CENTER_X;
-            let side_phase = if i as f64 <= CENTER_X { phase } else { 1.0 - phase };
+            let edge_dist = (i as f64 - Self::CENTER_X).abs() / Self::CENTER_X;
+            let side_phase = if i as f64 <= Self::CENTER_X { phase } else { 1.0 - phase };
             let density = edge_dist * (0.3 + 0.7 * side_phase);
             f.set(i, density);
         }
