@@ -1,0 +1,52 @@
+name: Publish Rust crate
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_type:
+        description: "Release Type"
+        required: true
+        type: choice
+        default: "patch"
+        options: [major, minor, patch]
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.bump.outputs.version }}
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: astral-sh/setup-uv@v7
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+      - name: Bump version
+        id: bump
+        working-directory: crates/agents_are_thinking
+        run: |
+          uvx bump-my-version bump ${{ inputs.release_type }}
+          echo "version=$(uvx bump-my-version show current_version)" >> "$GITHUB_OUTPUT"
+      - name: Push commit
+        run: git push
+      - name: Publish to crates.io
+        run: cargo publish
+        working-directory: crates/agents_are_thinking
+        env:
+          CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
+      - name: GitHub Release v${{ steps.bump.outputs.version }}
+        uses: ncipollo/release-action@v1
+        with:
+          name: agents-are-thinking v${{ steps.bump.outputs.version }}
+          tag: v${{ steps.bump.outputs.version }}
+          token: ${{ secrets.GH_TOKEN }}
+          generateReleaseNotes: true
