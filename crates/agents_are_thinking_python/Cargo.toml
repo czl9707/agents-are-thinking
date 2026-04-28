@@ -1,0 +1,12 @@
+[package]
+name = "agents-are-thinking-python"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+name = "agents_are_thinking_impl"
+crate-type = ["cdylib"]
+
+[dependencies]
+agents-are-thinking = { path = "../agents_are_thinking" }
+pyo3 = "0.28.2"

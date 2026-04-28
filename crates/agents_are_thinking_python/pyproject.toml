@@ -1,0 +1,28 @@
+[build-system]
+requires = ["maturin>=1.13,<2.0"]
+build-backend = "maturin"
+
+[project]
+name = "agents-are-thinking"
+version = "0.2.0"
+description = "Terminal animation effects built with braille, block characters, and unicode glyphs"
+requires-python = ">=3.11"
+classifiers = [
+    "Programming Language :: Rust",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+]
+
+[project.optional-dependencies]
+cli = [
+    "click>=8.3.3",
+    "rich>=15.0.0",
+]
+
+[project.scripts]
+agents-are-thinking = "agents_are_thinking.cli:cli"
+
+[tool.maturin]
+python-source = "py_src"
+module-name = "agents_are_thinking._impl"
+features = ["pyo3/extension-module"]
