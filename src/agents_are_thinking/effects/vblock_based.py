@@ -12,6 +12,8 @@ class VBlockWave(Effect):
     name = "vblock-wave"
     description = "Smooth sine wave scrolls across as block heights"
 
+    cycle_length = 10
+
     def _render(self) -> list[str]:
         frame = VBlockFrame(WIDTH)
         for i in range(WIDTH):
@@ -25,6 +27,7 @@ class VBlockFill(Effect):
     description = "Fills progressively from left to right, then resets"
 
     _CYCLE = WIDTH + 4
+    cycle_length = 13
 
     def _render(self) -> list[str]:
         frame = VBlockFrame(WIDTH)
@@ -41,6 +44,8 @@ class VBlockTide(Effect):
     name = "vblock-tide"
     description = "Fills from one side while draining from the other"
 
+    cycle_length = 25
+
     def _render(self) -> list[str]:
         frame = VBlockFrame(WIDTH)
         phase = (math.sin(self._frame * TEMPORAL_SPEED.GENTLE) + 1) / 2
@@ -54,6 +59,8 @@ class VBlockTide(Effect):
 class VBlockBreathe(Effect):
     name = "vblock-breathe"
     description = "All columns breathe in and out in unison"
+
+    cycle_length = 18
 
     def _render(self) -> list[str]:
         phase = self._frame % CYCLE_LENGTH.MEDIUM
@@ -69,6 +76,7 @@ class VBlockBounce(Effect):
     description = "Bright block bounces left to right with a fading trail"
 
     _PERIOD = (WIDTH - 1) * 2
+    cycle_length = 16
 
     def _render(self) -> list[str]:
         frame = VBlockFrame(WIDTH)
@@ -86,6 +94,7 @@ class VBlockPulse(Effect):
     description = "Expanding ring radiates from center then contracts back"
 
     _CYCLE = WIDTH + 4
+    cycle_length = 13
 
     def _render(self) -> list[str]:
         frame = VBlockFrame(WIDTH)
@@ -103,6 +112,8 @@ class VBlockRipple(Effect):
     name = "vblock-ripple"
     description = "Concentric rings pulse outward from center"
 
+    cycle_length = 16
+
     def _render(self) -> list[str]:
         frame = VBlockFrame(WIDTH)
         cx = (WIDTH - 1) / 2
@@ -118,9 +129,11 @@ class VBlockRain(Effect):
     name = "vblock-rain"
     description = "Elements fall independently at their own pace"
 
-    def __init__(self) -> None:
-        super().__init__()
-        self._levels: list[float] = [0.0] * WIDTH
+    cycle_length = 25
+
+    def __init__(self, seed: int = 42):
+        super().__init__(seed)
+        self._levels = [0.0] * WIDTH
 
     def _render(self) -> list[str]:
         for i in range(WIDTH):
@@ -140,17 +153,18 @@ class VBlockCascade(Effect):
     description = "Full stream with empty gaps flowing rightward like water"
 
     _GAPS = 3
-    _SPEED = TEMPORAL_SPEED.MODERATE
     _SPACING = WIDTH / _GAPS
+    cycle_length = 26
 
     def _render(self) -> list[str]:
         frame = VBlockFrame(WIDTH)
-        t = self._frame * self._SPEED
+        phase = self._frame / self.cycle_length
+        t = phase * (WIDTH + 4)
         for i in range(WIDTH):
             v = 1.0
             for g in range(self._GAPS):
                 pos = (t + g * self._SPACING) % (WIDTH + 4) - 2
-                wobble = 0.3 * math.sin(self._frame * TEMPORAL_SPEED.SLOW + g * 2.1)
+                wobble = 0.3 * math.sin(math.tau * phase + g * 2.1)
                 half = 1.0 + wobble
                 dist = i - pos
                 if abs(dist) < half:

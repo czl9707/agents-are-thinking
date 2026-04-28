@@ -47,13 +47,18 @@ class Effect(ABC):
     name: str = ""
     description: str = ""
 
+    @property
+    @abstractmethod
+    def cycle_length(self) -> int:
+        ...
+
     def __init__(self, seed: int = 42):
         self._frame = 0
         self._rng = random.Random(seed)
 
     def step(self) -> str:
         result = "\n".join(self._render())
-        self._frame += 1
+        self._frame = (self._frame + 1) % self.cycle_length
         return result
 
     def __iter__(self):

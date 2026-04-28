@@ -11,6 +11,8 @@ class DotWave(Effect):
     name = "dot-wave"
     description = "Smooth sine wave scrolls across as dot sizes"
 
+    cycle_length = 10
+
     def _render(self) -> list[str]:
         frame = DotFrame(WIDTH)
         for i in range(WIDTH):
@@ -22,6 +24,8 @@ class DotWave(Effect):
 class DotHeartbeat(Effect):
     name = "dot-heartbeat"
     description = "Pulsing rhythm that mimics a heartbeat"
+
+    cycle_length = 18
 
     def _render(self) -> list[str]:
         frame = DotFrame(WIDTH)
@@ -44,6 +48,7 @@ class DotPulse(Effect):
     description = "Expanding ring radiates from center then contracts back"
 
     _FULL_CYCLE = WIDTH * 2
+    cycle_length = 18
 
     def _render(self) -> list[str]:
         frame = DotFrame(WIDTH)
@@ -57,7 +62,6 @@ class DotPulse(Effect):
             dist = abs(i - cx + 0.5)
             v = max(0.0, min(1.0, (ring - dist + 1) / 3))
             frame.set(i, v)
-        self._frame += 1
         return frame.render()
 
 
@@ -68,6 +72,7 @@ class DotArrow(Effect):
     _SPEED = 1
     _PAUSE = PAUSE.MEDIUM
     _LENGTH = 5
+    cycle_length = 46
 
     def __init__(self):
         super().__init__()
@@ -96,6 +101,8 @@ class DotArrow(Effect):
 class DotBounce(Effect):
     name = "dot-bounce"
     description = "Each dot bounces independently at its own speed"
+
+    cycle_length = 25
 
     def __init__(self):
         super().__init__()

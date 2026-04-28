@@ -8,6 +8,8 @@ class BarBounce(Effect):
     name = "bar-bounce"
     description = "Each bar bounces independently at its own speed"
 
+    cycle_length = 25
+
     def __init__(self):
         super().__init__()
         self._phases = [self._rng.uniform(0, math.tau) for _ in range(WIDTH)]
@@ -25,6 +27,8 @@ class BarWave(Effect):
     name = "bar-wave"
     description = "Smooth sine wave scrolls across as bar heights"
 
+    cycle_length = 25
+
     def _render(self) -> list[str]:
         frame = BarFrame(WIDTH)
         for i in range(WIDTH):
@@ -36,6 +40,8 @@ class BarWave(Effect):
 class BarSeeSaw(Effect):
     name = "bar-seesaw"
     description = "Left and right halves alternate like a seesaw"
+
+    cycle_length = 25
 
     def _render(self) -> list[str]:
         frame = BarFrame(WIDTH)
