@@ -4,14 +4,14 @@ version = 4
 
 [[package]]
 name = "agents-are-thinking"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "rand",
 ]
 
 [[package]]
 name = "agents-are-thinking-python"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "agents-are-thinking",
  "pyo3",
