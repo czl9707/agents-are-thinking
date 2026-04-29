@@ -2,6 +2,11 @@
 name = "agents-are-thinking"
 version = "0.1.0"
 edition = "2024"
+description = "Terminal animation effects built with braille, block characters, and unicode glyphs"
+license = "MIT"
+homepage = "https://github.com/czl9707/agents-are-thinking/tree/main"
+repository = "https://github.com/czl9707/agents-are-thinking"
+readme = "../../README.md"
 
 [dependencies]
 rand = "0.9"

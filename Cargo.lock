@@ -11,7 +11,7 @@ dependencies = [
 
 [[package]]
 name = "agents-are-thinking-python"
-version = "0.2.0"
+version = "0.1.0"
 dependencies = [
  "agents-are-thinking",
  "pyo3",
