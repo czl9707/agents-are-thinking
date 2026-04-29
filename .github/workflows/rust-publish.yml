@@ -63,11 +63,12 @@ jobs:
         run: cargo publish
         env:
           CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
-      - name: GitHub Release v${{ steps.bump.outputs.version }}
+      - name: GitHub Release rs-v${{ steps.bump.outputs.version }}
         uses: ncipollo/release-action@v1
         with:
-          name: agents-are-thinking v${{ steps.bump.outputs.version }}
-          tag: v${{ steps.bump.outputs.version }}
+          name: agents-are-thinking rs-v${{ steps.bump.outputs.version }}
+          tag: rs-v${{ steps.bump.outputs.version }}
           token: ${{ secrets.GH_TOKEN }}
+          allowUpdates: true
           generateReleaseNotes: true
 

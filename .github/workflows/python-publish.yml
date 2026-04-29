@@ -72,6 +72,7 @@ jobs:
       - name: Build wheels
         uses: PyO3/maturin-action@v1
         with:
+          working-directory: ./crates/agents_are_thinking_python
           target: ${{ matrix.platform.target }}
           args: --release --out dist --find-interpreter
           sccache: true
@@ -80,7 +81,7 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           name: wheels-linux-${{ matrix.platform.target }}
-          path: dist
+          path: crates/agents_are_thinking_python/dist
 
   # musllinux:
   #   needs: bump
@@ -131,6 +132,7 @@ jobs:
       - name: Build wheels
         uses: PyO3/maturin-action@v1
         with:
+          working-directory: ./crates/agents_are_thinking_python
           target: ${{ matrix.platform.target }}
           args: --release --out dist --find-interpreter
           sccache: true
@@ -138,7 +140,7 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           name: wheels-windows-${{ matrix.platform.target }}
-          path: dist
+          path: crates/agents_are_thinking_python/dist
 
   macos:
     needs: bump
@@ -161,6 +163,7 @@ jobs:
       - name: Build wheels
         uses: PyO3/maturin-action@v1
         with:
+          working-directory: ./crates/agents_are_thinking_python
           target: ${{ matrix.platform.target }}
           args: --release --out dist --find-interpreter
           sccache: true
@@ -168,7 +171,7 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           name: wheels-macos-${{ matrix.platform.target }}
-          path: dist
+          path: crates/agents_are_thinking_python/dist
 
   sdist:
     needs: bump
@@ -181,13 +184,14 @@ jobs:
       - name: Build sdist
         uses: PyO3/maturin-action@v1
         with:
+          working-directory: ./crates/agents_are_thinking_python
           command: sdist
-          args: --out dist 
+          args: --out dist
       - name: Upload sdist
         uses: actions/upload-artifact@v6
         with:
           name: wheels-sdist
-          path: dist
+          path: crates/agents_are_thinking_python/dist
 
   release:
     name: Release
