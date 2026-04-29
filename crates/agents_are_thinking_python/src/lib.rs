@@ -92,7 +92,7 @@ mod _impl {
     py_effect!(BarSeeSaw);
 
     py_effect!(VBlockWave);
-    py_effect!(VBlockFill);
+    py_effect!(VBlockScanner);
     py_effect!(VBlockTide);
     py_effect!(VBlockBreathe);
     py_effect!(VBlockBounce);
@@ -157,7 +157,7 @@ mod _impl {
         add_effects!(m, py, effects, BarWave);
         add_effects!(m, py, effects, BarSeeSaw);
         add_effects!(m, py, effects, VBlockWave);
-        add_effects!(m, py, effects, VBlockFill);
+        add_effects!(m, py, effects, VBlockScanner);
         add_effects!(m, py, effects, VBlockTide);
         add_effects!(m, py, effects, VBlockBreathe);
         add_effects!(m, py, effects, VBlockBounce);

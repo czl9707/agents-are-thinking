@@ -22,7 +22,7 @@ class VBlockWave(Effect):
         return frame.render()
 
 
-class VBlockFill(Effect):
+class VBlockScanner(Effect):
     name = "vblock-fill"
     description = "Fills progressively from left to right, then resets"
 

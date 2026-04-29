@@ -125,7 +125,7 @@ uv tool run agents-are-thinking                  # name-effect showcase
 | Effect | Description |
 |--------|-------------|
 | `VBlockWave` | Smooth sine wave |
-| `VBlockFill` | Fill and drain |
+| `VBlockScanner` | Scanner Sweep |
 | `VBlockTide` | Tide coming in and out |
 | `VBlockBreathe` | Gentle breathing pattern |
 | `VBlockBounce` | Bounce across |

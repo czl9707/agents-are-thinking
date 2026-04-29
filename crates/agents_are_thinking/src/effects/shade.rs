@@ -84,9 +84,11 @@ impl ShadeScanner {
         let mut f = ShadeFrame::new(WIDTH);
         let pos = self.state.frame % Self::SCAN_RANGE;
         for i in 0..WIDTH {
-            let dist = (i as isize - pos as isize).unsigned_abs() as f64;
-            let density = (1.0 - dist / 4.0).max(0.0);
-            f.set(i, density);
+            if i < pos {
+                let dist = pos - i;
+                let v = (1.0 - (dist - 1) as f64 / (WIDTH - 1) as f64).max(0.0);
+                f.set(i, v);
+            }
         }
         f.render().join("\n")
     }
@@ -282,7 +284,7 @@ pub struct ShadeBlink {
 
 impl ShadeBlink {
     pub fn new() -> Self {
-        let mut state = EffectState::new(38, Self::cycle_length());
+        let mut state = EffectState::new(37, Self::cycle_length());
         let offsets: Vec<f64> = (0..WIDTH)
             .map(|_| state.rng.random_range(0..=2usize) as f64 / 3.0)
             .collect();

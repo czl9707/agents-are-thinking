@@ -49,11 +49,11 @@ impl VBlockWave {
     }
 }
 
-pub struct VBlockFill {
+pub struct VBlockScanner {
     state: EffectState,
 }
 
-impl VBlockFill {
+impl VBlockScanner {
     pub fn new() -> Self {
         Self {
             state: EffectState::new(42, Self::cycle_length()),
@@ -61,12 +61,12 @@ impl VBlockFill {
     }
 }
 
-impl Effect for VBlockFill {
+impl Effect for VBlockScanner {
     fn name() -> &'static str {
-        "vblock-fill"
+        "vblock-scanner"
     }
     fn description() -> &'static str {
-        "Progressive fill using vertical blocks"
+        "Scanning beam across using vertical blocks"
     }
     fn cycle_length() -> usize {
         Self::FILL_CYCLE
@@ -79,8 +79,8 @@ impl Effect for VBlockFill {
     }
 }
 
-impl VBlockFill {
-    const FILL_CYCLE: usize = WIDTH + 4;
+impl VBlockScanner {
+    const FILL_CYCLE: usize = WIDTH * 2;
 
     fn render(&mut self) -> String {
         let mut f = VBlockFrame::new(WIDTH);

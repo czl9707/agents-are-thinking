@@ -44,7 +44,7 @@ pub fn all_effects() -> Vec<Box<dyn Effect>> {
         Box::new(ShadeLayers::new()),
         Box::new(ShadePinch::new()),
         Box::new(VBlockWave::new()),
-        Box::new(VBlockFill::new()),
+        Box::new(VBlockScanner::new()),
         Box::new(VBlockTide::new()),
         Box::new(VBlockBreathe::new()),
         Box::new(VBlockBounce::new()),

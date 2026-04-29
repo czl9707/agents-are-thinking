@@ -37,7 +37,7 @@ from agents_are_thinking.effects.bar_based import (
 )
 from agents_are_thinking.effects.vblock_based import (
     VBlockWave,
-    VBlockFill,
+    VBlockScanner,
     VBlockTide,
     VBlockBreathe,
     VBlockBounce,
@@ -89,7 +89,7 @@ EFFECTS: list[type[Effect]] = [
     ShadeLayers,
     ShadePinch,
     VBlockWave,
-    VBlockFill,
+    VBlockScanner,
     VBlockTide,
     VBlockBreathe,
     VBlockBounce,
