@@ -8,6 +8,14 @@ Braille, block characters, unicode glyphs, the works. No runtime dependencies.
 
 ## Install
 
+### Rust
+
+```bash
+cargo add agents-are-thinking
+```
+
+### Python
+
 ```bash
 uv add agents-are-thinking
 ```
@@ -17,6 +25,34 @@ uv add agents-are-thinking
 ```bash
 uv tool install agents-are-thinking[cli]  # with rich and click
 uv tool run agents-are-thinking preview
+```
+
+## Rust usage
+
+```rust
+use std::thread;
+use std::time::Duration;
+use agents_are_thinking::effects::ShadeFire;
+use agents_are_thinking::effect::Effect;
+
+fn main() {
+    let mut ef = ShadeFire::new();
+    for _ in 0..50 {
+        print!("\r{}", ef.step());
+        thread::sleep(Duration::from_millis(100));
+    }
+}
+```
+
+### List all effects
+
+```rust
+use agents_are_thinking::effects::all_effects;
+use agents_are_thinking::effect::Effect;
+
+for ef in all_effects() {
+    println!("{}", ef.step());
+}
 ```
 
 ## Python usage
