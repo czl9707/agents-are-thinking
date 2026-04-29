@@ -5,7 +5,9 @@ parse = """(?x)
   (?P<minor>0|[1-9]\\d*)\\.
   (?P<patch>0|[1-9]\\d*)
 """
-serialize = ["{major}.{minor}.{patch}"]
+serialize = [
+  "{major}.{minor}.{patch}",
+]
 search = "{current_version}"
 replace = "{new_version}"
 regex = false
@@ -18,6 +20,11 @@ message = "Bump version: {current_version} → {new_version}"
 commit_args = ""
 
 [[tool.bumpversion.files]]
+filename = "Cargo.toml"
+search = "version = \"{current_version}\""
+replace = "version = \"{new_version}\""
+
+[[tool.bumpversion.files]]
 filename = "pyproject.toml"
-search = 'version = "{current_version}"'
-replace = 'version = "{new_version}"'
+search = "version = \"{current_version}\""
+replace = "version = \"{new_version}\""

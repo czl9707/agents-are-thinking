@@ -10,38 +10,57 @@ on:
         default: "patch"
         options: [major, minor, patch]
 
+permissions:
+  id-token: write
+  pull-requests: read
+  contents: write
 
 jobs:
   publish:
     runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-      pull-requests: read
-      contents: write
+    defaults:
+      run:
+        working-directory: ./crates/agents_are_thinking
     outputs:
       version: ${{ steps.bump.outputs.version }}
     steps:
       - uses: actions/checkout@v6
         with:
-          fetch-depth: 0
+          persist-credentials: false
       - uses: astral-sh/setup-uv@v7
       - uses: dtolnay/rust-toolchain@stable
-      - name: Configure git
+      - name: Setting up git config
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.email "${GITHUB_ACTOR_ID}+${GITHUB_ACTOR}@users.noreply.github.com"
+          git config --global user.name "$(gh api /users/${GITHUB_ACTOR} | jq .name -r)"
+          git config -l
+      # - name: Bump version
+      #   id: bump
+      #   uses: callowayproject/bump-my-version@master
+      #   env:
+      #     BUMPVERSION_TAG: "false"
+      #   with:
+      #     args: ${{ inputs.release_type }}
+      #     github-token: ${{ secrets.GH_TOKEN }}
+      - name: Install bump-my-version
+        run: uv tool install bump-my-version
       - name: Bump version
         id: bump
-        working-directory: crates/agents_are_thinking
-        uses: callowayproject/bump-my-version@master
-        env:
-          BUMPVERSION_TAG: "false"
+        run: |
+          uv tool run bump-my-version bump ${{ inputs.release_type }}
+          CURRENT_V=$(bump-my-version show current_version)
+          echo "version=$CURRENT_V" >> $GITHUB_OUTPUT
+      - name: Push Bump
+        uses: ad-m/github-push-action@master
         with:
-          args: ${{ inputs.release_type }}
-          github-token: ${{ secrets.GH_TOKEN }}
+          github_token: ${{ secrets.GH_TOKEN }}
+          branch: main
+          force: true
       - name: Publish to crates.io
         run: cargo publish
-        working-directory: crates/agents_are_thinking
         env:
           CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
       - name: GitHub Release v${{ steps.bump.outputs.version }}
@@ -51,3 +70,4 @@ jobs:
           tag: v${{ steps.bump.outputs.version }}
           token: ${{ secrets.GH_TOKEN }}
           generateReleaseNotes: true
+

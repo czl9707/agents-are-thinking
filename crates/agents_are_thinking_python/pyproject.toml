@@ -26,3 +26,4 @@ agents-are-thinking = "agents_are_thinking.cli:cli"
 python-source = "py_src"
 module-name = "agents_are_thinking._impl"
 features = ["pyo3/extension-module"]
+
