@@ -10,16 +10,16 @@ on:
         default: "patch"
         options: [major, minor, patch]
 
-permissions:
-  contents: read
 
 jobs:
   publish:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      pull-requests: read
+      contents: write
     outputs:
       version: ${{ steps.bump.outputs.version }}
-    permissions:
-      contents: write
     steps:
       - uses: actions/checkout@v6
         with:
@@ -33,11 +33,12 @@ jobs:
       - name: Bump version
         id: bump
         working-directory: crates/agents_are_thinking
-        run: |
-          uvx bump-my-version bump ${{ inputs.release_type }}
-          echo "version=$(uvx bump-my-version show current_version)" >> "$GITHUB_OUTPUT"
-      - name: Push commit
-        run: git push
+        uses: callowayproject/bump-my-version@master
+        env:
+          BUMPVERSION_TAG: "false"
+        with:
+          args: ${{ inputs.release_type }}
+          github-token: ${{ secrets.GH_TOKEN }}
       - name: Publish to crates.io
         run: cargo publish
         working-directory: crates/agents_are_thinking
