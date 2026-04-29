@@ -175,7 +175,7 @@ impl ShadeRipple {
     fn render(&mut self) -> String {
         let mut f = ShadeFrame::new(WIDTH);
         for i in 0..WIDTH {
-            let dist = (i as f64 - Self::CENTER_X) / Self::CENTER_X;
+            let dist = (i as f64 - Self::CENTER_X).abs() / Self::CENTER_X;
             let wave = ((dist * spatial_frequency::EXTRA_DENSE
                 - self.state.frame as f64 * temporal_speed::MODERATE)
                 .sin()
@@ -282,7 +282,7 @@ pub struct ShadeBlink {
 
 impl ShadeBlink {
     pub fn new() -> Self {
-        let mut state = EffectState::new(42, Self::cycle_length());
+        let mut state = EffectState::new(38, Self::cycle_length());
         let offsets: Vec<f64> = (0..WIDTH)
             .map(|_| state.rng.random_range(0..=2usize) as f64 / 3.0)
             .collect();

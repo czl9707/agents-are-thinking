@@ -5,6 +5,8 @@ use crate::effect::{
 };
 use crate::frame::VBlockFrame;
 use rand::Rng;
+use rand::rngs::StdRng;
+use rand::SeedableRng;
 
 pub struct VBlockWave {
     state: EffectState,
@@ -356,9 +358,10 @@ impl Effect for VBlockRain {
 impl VBlockRain {
     fn render(&mut self) -> String {
         for i in 0..WIDTH {
-            if self.state.rng.random::<f64>() < 0.12 {
+            let mut col_rng = StdRng::seed_from_u64((self.state.frame * WIDTH + i) as u64);
+            if col_rng.random::<f64>() < 0.12 {
                 self.levels[i] =
-                    (self.levels[i] + self.state.rng.random_range(0.5..=1.0)).min(1.0);
+                    (self.levels[i] + col_rng.random_range(0.5..=1.0)).min(1.0);
             } else {
                 self.levels[i] *= 0.85;
             }

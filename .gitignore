@@ -5,7 +5,7 @@ build/
 dist/
 wheels/
 *.egg-info
-docs/
+**/docs/
 
 # Virtual environments
 .venv
@@ -13,6 +13,8 @@ docs/
 # Worktrees
 .worktrees/
 
+# opencode
+**/.opencode/
 
 # Added by cargo
 

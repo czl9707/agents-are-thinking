@@ -6,7 +6,9 @@ use crate::effect::{
 };
 use crate::frame::BrailleFrame;
 use rand::Rng;
+use rand::rngs::StdRng;
 use rand::seq::SliceRandom;
+use rand::SeedableRng;
 
 pub struct BrailleSpin {
     state: EffectState,
@@ -210,9 +212,10 @@ impl BrailleRandom {
     ];
 
     fn render(&mut self) -> String {
+        let mut rng = StdRng::seed_from_u64(self.state.frame as u64);
         let mut f = BrailleFrame::new(WIDTH, HEIGHT);
         for i in 0..WIDTH {
-            let val = self.state.rng.random::<u8>();
+            let val = rng.random::<u8>();
             for b in 0..8u8 {
                 if val & (1 << b) != 0 {
                     let (px, py) = Self::PIXEL_ORDER[b as usize];
@@ -365,6 +368,7 @@ impl Effect for BrailleBounce {
 
 impl BrailleBounce {
     fn render(&mut self) -> String {
+        let mut rng = StdRng::seed_from_u64(42);
         let mut f = BrailleFrame::new(WIDTH, HEIGHT);
         let t = self.state.frame % (WIDTH * 4);
         let center = if t < WIDTH * 2 { t } else { WIDTH * 4 - t };
@@ -372,7 +376,7 @@ impl BrailleBounce {
             let dist = (x as isize - center as isize).unsigned_abs() as f64;
             let p = (1.1 - dist / 8.0).max(0.0);
             for y in 0..4usize {
-                if self.state.rng.random::<f64>() < p {
+                if rng.random::<f64>() < p {
                     f.set(x, y);
                 }
             }
@@ -507,11 +511,12 @@ impl BrailleDissolve {
     const HALF_CYCLE: usize = cycle_length::LONG / 2;
 
     fn render(&mut self) -> String {
+        let mut rng = StdRng::seed_from_u64(42);
         let mut f = BrailleFrame::new(WIDTH, HEIGHT);
         let cycle = cycle_length::LONG;
         let phase = self.state.frame % cycle;
         let mut order: Vec<usize> = (0..Self::TOTAL_PIXELS).collect();
-        order.shuffle(&mut self.state.rng);
+        order.shuffle(&mut rng);
         let remaining = if phase < Self::HALF_CYCLE {
             Self::TOTAL_PIXELS.saturating_sub(phase * Self::TOTAL_PIXELS / Self::HALF_CYCLE)
         } else {
@@ -559,6 +564,7 @@ impl Effect for BrailleFire {
 
 impl BrailleFire {
     fn render(&mut self) -> String {
+        let mut rng = StdRng::seed_from_u64(self.state.frame as u64);
         let mut f = BrailleFrame::new(WIDTH, HEIGHT);
         for x in 0..(2 * WIDTH) {
             for y in 0..4usize {
@@ -569,7 +575,7 @@ impl BrailleFire {
                     .sin()
                     * 0.2;
                 let heat = (1.0 - decay + fast).max(0.0);
-                if self.state.rng.random::<f64>() < heat {
+                if rng.random::<f64>() < heat {
                     f.set(x, y);
                 }
             }
@@ -716,6 +722,7 @@ impl Effect for BrailleScanner {
 
 impl BrailleScanner {
     fn render(&mut self) -> String {
+        let mut rng = StdRng::seed_from_u64(self.state.frame as u64);
         let t = trail::EXTENDED;
         let pos = (self.state.frame % Self::cycle_length()) as isize;
         let mut f = BrailleFrame::new(WIDTH, HEIGHT);
@@ -725,7 +732,7 @@ impl BrailleScanner {
                 if x >= 0 && (x as usize) < 2 * WIDTH {
                     if dx == 0 {
                         f.set(x as usize, y);
-                    } else if self.state.rng.random::<f64>() < 1.0 - dx as f64 / t as f64 {
+                    } else if rng.random::<f64>() < 1.0 - dx as f64 / t as f64 {
                         f.set(x as usize, y);
                     }
                 }
@@ -767,11 +774,12 @@ impl Effect for BrailleMatrix {
 
 impl BrailleMatrix {
     fn render(&mut self) -> String {
+        let mut rng = StdRng::seed_from_u64(42);
         let tail = trail::SHORT;
         let mut f = BrailleFrame::new(WIDTH, HEIGHT);
         for i in 0..(2 * WIDTH) {
-            let speed: i64 = [1i64, 1, 2][self.state.rng.random_range(0..3usize)];
-            let init_offset: i64 = self.state.rng.random_range(-8..=0i64);
+            let speed: i64 = [1i64, 1, 2][rng.random_range(0..3usize)];
+            let init_offset: i64 = rng.random_range(-8..=0i64);
             let span: i64 = 4 + tail as i64 + init_offset.abs();
             let steps: i64 = self.state.frame as i64 * speed;
             let head: i64 = init_offset + steps % span;
@@ -938,7 +946,7 @@ impl BrailleArrow {
         }
         else {
             (
-                2 * (Self::ARROW_WIDTH as isize) - (self.state.frame as isize - Self::TRAVEL as isize) * Self::SPEED as isize,
+                (2 * WIDTH) as isize - (self.state.frame as isize - Self::TRAVEL as isize) * Self::SPEED as isize,
                 Self::LEFT_ARROW,
             )
         };
