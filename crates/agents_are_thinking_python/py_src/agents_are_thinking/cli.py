@@ -1,4 +1,3 @@
-import random
 import sys
 import time
 
@@ -8,8 +7,7 @@ from rich.panel import Panel
 from rich.text import Text
 from rich.console import Console
 
-from agents_are_thinking.effects import EFFECTS
-from agents_are_thinking.effects.base import WIDTH
+from agents_are_thinking import EFFECTS, WIDTH
 
 
 def _run_live(render_fn, console, screen=False):
@@ -129,16 +127,10 @@ def cli():
     @click.group(invoke_without_command=True)
     @click.pass_context
     @click.option("--effect", "-e", default=None, help="Effect name to run")
-    @click.option("--list", "list_effects", is_flag=True, help="List available effects")
-    def root(ctx, effect: str, list_effects: bool):
+    def root(ctx, effect: str):
         if ctx.invoked_subcommand is not None:
             return
         console = Console()
-
-        if list_effects:
-            for ef in EFFECTS:
-                click.echo(f"  {ef.name:20s} {ef.description}")
-            return
 
         if effect:
             cls = next((e for e in EFFECTS if e.name == effect), None)

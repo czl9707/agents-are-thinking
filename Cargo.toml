@@ -1,0 +1,3 @@
+[workspace]
+members = ["crates/agents_are_thinking", "crates/agents_are_thinking_python"]
+resolver = "3"

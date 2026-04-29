@@ -1,27 +1,25 @@
 # agents-are-thinking
 
-A Weekend project exporing agents' "thinking" animation.
+Terminal animation effects for agents' "thinking" state. Built in Rust with bindings for Python (and JS coming soon).
 
-Terminal animation effects built with braille, block characters, and unicode glyphs. Pure Python, no dependencies.
+Braille, block characters, unicode glyphs, the works. No runtime dependencies.
 
 <img src="./agents-are-thinking-demo.gif" width="100%" height="100%">
 
-## Get Started 
+## Install
 
-``` bash
+```bash
 uv add agents-are-thinking
 ```
 
-### I just want to watch agents thinking in terminals
+### Just want to see the animations?
 
-``` bash
+```bash
 uv tool install agents-are-thinking[cli]  # with rich and click
 uv tool run agents-are-thinking preview
 ```
 
-And Enjoy :)
-
-## Usage
+## Python usage
 
 ```python
 import time
@@ -125,7 +123,7 @@ uv tool run agents-are-thinking                  # name-effect showcase
 | Effect | Description |
 |--------|-------------|
 | `VBlockWave` | Smooth sine wave |
-| `VBlockFill` | Fill and drain |
+| `VBlockScanner` | Scanner Sweep |
 | `VBlockTide` | Tide coming in and out |
 | `VBlockBreathe` | Gentle breathing pattern |
 | `VBlockBounce` | Bounce across |
