@@ -1,17 +1,22 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { EFFECTS } from '@zane-chen/agents-are-thinking';
+import { InfiniteCanvas } from './InfiniteCanvas';
+import { Modal } from './Modal';
 
 function App() {
-  const [loaded, setLoaded] = useState(false);
-
-  useEffect(() => {
-    if (EFFECTS.length > 0) setLoaded(true);
-  }, []);
+  const [selected, setSelected] = useState<number | null>(null);
 
   return (
-    <div>
-      {loaded ? `Loaded ${EFFECTS.length} effects` : 'Loading...'}
-    </div>
+    <>
+      <InfiniteCanvas onSelect={setSelected} />
+      {selected !== null && (
+        <Modal
+          effectIndex={selected}
+          effectName={EFFECTS[selected].name()}
+          onClose={() => setSelected(null)}
+        />
+      )}
+    </>
   );
 }
 
