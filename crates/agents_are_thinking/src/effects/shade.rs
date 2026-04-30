@@ -5,7 +5,6 @@ use crate::frame::ShadeFrame;
 use rand::{RngExt};
 
 
-
 pub struct ShadeWave {
     state: EffectState,
 }

@@ -20,5 +20,8 @@
     "build": "wasm-pack build --target bundler --out-dir pkg",
     "prepublishOnly": "npm run build"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "sideEffects": false
 }
