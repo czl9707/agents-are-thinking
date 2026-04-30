@@ -5,7 +5,7 @@ use crate::effect::{
     toggle_rate, trail
 };
 use crate::frame::BrailleFrame;
-use rand::Rng;
+use rand::{RngExt};
 use rand::rngs::StdRng;
 use rand::seq::SliceRandom;
 use rand::SeedableRng;

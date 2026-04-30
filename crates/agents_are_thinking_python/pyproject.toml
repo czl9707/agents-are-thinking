@@ -4,7 +4,7 @@ build-backend = "maturin"
 
 [project]
 name = "agents-are-thinking"
-version = "0.2.2"
+version = "0.2.1"
 description = "Terminal animation effects built with braille, block characters, and unicode glyphs"
 requires-python = ">=3.11"
 classifiers = [

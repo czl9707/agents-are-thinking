@@ -2,7 +2,7 @@ use std::f64::consts::TAU;
 
 use crate::effect::{Effect, EffectState, WIDTH, cycle_length, pause, spatial_frequency, temporal_speed};
 use crate::frame::DotFrame;
-use rand::Rng;
+use rand::{RngExt};
 
 pub struct DotWave {
     state: EffectState,
