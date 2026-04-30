@@ -10,10 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@radix-ui/react-dialog": "^1.1.15",
+    "@use-gesture/react": "^10.3.1",
     "@zane-chen/agents-are-thinking": "file:../crates/agents_are_thinking_js",
     "react": "^19.2.5",
-    "react-dom": "^19.2.5",
-    "react-zoom-pan-pinch": "^4.0.3"
+    "react-dom": "^19.2.5"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react';
+import * as Dialog from '@radix-ui/react-dialog';
 
 interface ModalProps {
   effectIndex: number;
@@ -7,31 +7,24 @@ interface ModalProps {
 }
 
 export function Modal({ effectIndex, effectName, onClose }: ModalProps) {
-  const handleKeyDown = useCallback(
-    (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    },
-    [onClose]
-  );
-
-  useEffect(() => {
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [handleKeyDown]);
-
   return (
-    <div className="modal-backdrop" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <div className="modal-header">
-          <h2>
-            <span className="modal-number">{String(effectIndex + 1).padStart(2, '0')}</span>
-            {' '}{effectName}
-          </h2>
-          <button className="modal-close" onClick={onClose}>✕</button>
-        </div>
-        <div className="modal-body">
-        </div>
-      </div>
-    </div>
+    <Dialog.Root open onOpenChange={(open) => { if (!open) onClose(); }}>
+      <Dialog.Portal>
+        <Dialog.Overlay className="modal-backdrop" />
+        <Dialog.Content className="modal-content">
+          <div className="modal-header">
+            <Dialog.Title className="modal-title">
+              <span className="modal-number">{String(effectIndex + 1).padStart(2, '0')}</span>
+              {' '}{effectName}
+            </Dialog.Title>
+            <Dialog.Close asChild>
+              <button className="modal-close">✕</button>
+            </Dialog.Close>
+          </div>
+          <div className="modal-body">
+          </div>
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog.Root>
   );
 }

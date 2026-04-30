@@ -11,26 +11,21 @@ body {
   overflow: hidden;
 }
 
-.effect-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 2px;
-  padding: 16px;
-  width: fit-content;
-}
-
 .effect-cell {
   background: #1a1a1a;
   border: 1px solid #2a2a2a;
   border-radius: 4px;
-  padding: 12px;
+  padding: 8px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   cursor: pointer;
   transition: border-color 0.15s, background 0.15s;
   user-select: none;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 }
 
 .effect-cell:hover {
@@ -46,17 +41,21 @@ body {
 
 .effect-frame {
   font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'SF Mono', monospace;
-  font-size: 16px;
+  font-size: 14px;
   line-height: 1;
   margin: 0;
   color: #8f8;
 }
 
 .effect-name {
-  font-size: 10px;
+  font-size: 9px;
   color: #888;
   text-align: center;
   word-break: break-all;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
 }
 
 .modal-backdrop {
@@ -67,6 +66,7 @@ body {
   align-items: center;
   justify-content: center;
   z-index: 100;
+  animation: overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .modal-content {
@@ -76,6 +76,11 @@ body {
   padding: 24px;
   min-width: 400px;
   max-width: 600px;
+  animation: contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-content:focus {
+  outline: none;
 }
 
 .modal-header {
@@ -85,7 +90,7 @@ body {
   margin-bottom: 16px;
 }
 
-.modal-header h2 {
+.modal-title {
   font-size: 16px;
   font-weight: 500;
 }
@@ -111,4 +116,14 @@ body {
 
 .modal-body {
   min-height: 200px;
+}
+
+@keyframes overlayShow {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes contentShow {
+  from { opacity: 0; transform: translate(-50%, -48%) scale(0.96); }
+  to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
 }
