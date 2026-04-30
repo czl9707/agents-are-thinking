@@ -196,7 +196,7 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
-    needs: [linux, windows, macos, sdist]
+    needs: [bump, linux, windows, macos, sdist]
     permissions:
       id-token: write
       contents: write
