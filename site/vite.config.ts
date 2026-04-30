@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   optimizeDeps: {
-    exclude: ['agents-are-thinking-js'],
+    exclude: ['@zane-chen/agents-are-thinking'],
   },
   assetsInclude: ['**/*.wasm'],
 })

@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "agents-are-thinking-js": "file:../crates/agents_are_thinking_js/pkg",
+    "@zane-chen/agents-are-thinking": "file:../crates/agents_are_thinking_js",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
     "react-zoom-pan-pinch": "^4.0.3"
