@@ -1,10 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import wasm from 'vite-plugin-wasm'
 
 export default defineConfig({
-  plugins: [react()],
-  optimizeDeps: {
-    exclude: ['@zane-chen/agents-are-thinking'],
-  },
-  assetsInclude: ['**/*.wasm'],
+  plugins: [react(), wasm()],
 })
