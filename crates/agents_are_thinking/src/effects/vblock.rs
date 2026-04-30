@@ -4,7 +4,7 @@ use crate::effect::{
     Effect, EffectState, WIDTH, cycle_length, spatial_frequency, temporal_speed,
 };
 use crate::frame::VBlockFrame;
-use rand::Rng;
+use rand::{RngExt};
 use rand::rngs::StdRng;
 use rand::SeedableRng;
 

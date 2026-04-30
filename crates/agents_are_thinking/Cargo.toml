@@ -9,4 +9,4 @@ repository = "https://github.com/czl9707/agents-are-thinking"
 readme = "../../README.md"
 
 [dependencies]
-rand = "0.9"
+rand = "0.10"

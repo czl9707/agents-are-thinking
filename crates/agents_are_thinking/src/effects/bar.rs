@@ -2,7 +2,7 @@ use std::f64::consts::TAU;
 
 use crate::effect::{Effect, EffectState, WIDTH, spatial_frequency, temporal_speed};
 use crate::frame::BarFrame;
-use rand::Rng;
+use rand::{RngExt};
 
 pub struct BarBounce {
     state: EffectState,

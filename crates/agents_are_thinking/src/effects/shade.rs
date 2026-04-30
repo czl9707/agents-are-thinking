@@ -2,7 +2,7 @@ use std::f64::consts::{PI, TAU};
 
 use crate::effect::{Effect, EffectState, WIDTH, cycle_length, spatial_frequency, temporal_speed};
 use crate::frame::ShadeFrame;
-use rand::Rng;
+use rand::{RngExt};
 
 
 
