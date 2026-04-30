@@ -1,3 +1,3 @@
 [workspace]
-members = ["crates/agents_are_thinking", "crates/agents_are_thinking_python"]
+members = ["crates/agents_are_thinking", "crates/agents_are_thinking_python", "crates/agents_are_thinking_js"]
 resolver = "3"

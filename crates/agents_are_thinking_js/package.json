@@ -1,0 +1,24 @@
+{
+  "name": "@zane-chen/agents-are-thinking",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Terminal animation effects for agents' thinking state — WASM/JS bindings",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/czl9707/agents-are-thinking"
+  },
+  "homepage": "https://github.com/czl9707/agents-are-thinking/tree/main",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "pkg/"
+  ],
+  "scripts": {
+    "build": "wasm-pack build --target bundler --out-dir pkg",
+    "prepublishOnly": "npm run build"
+  },
+  "sideEffects": false
+}

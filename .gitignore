@@ -19,3 +19,5 @@ wheels/
 # Added by cargo
 
 /target
+**/pkg/
+**/.staging/
