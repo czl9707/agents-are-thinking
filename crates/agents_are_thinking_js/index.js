@@ -1,4 +1,4 @@
-import {
+import init, {
   BarBounce, BarSeeSaw, BarWave,
   BrailleArrow, BrailleBounce, BrailleBreathe, BrailleCheckerboard,
   BrailleCheckerboard2x2, BrailleDissolve, BrailleFire, BrailleHeartbeat,
@@ -12,6 +12,8 @@ import {
   VBlockRipple, VBlockScanner, VBlockTide, VBlockWave,
   WIDTH,
 } from "./pkg/agents_are_thinking_js.js";
+
+await init();
 
 export const EFFECTS = [
   BrailleSpin, BrailleSpin2, BrailleWave, BrailleRandom,
