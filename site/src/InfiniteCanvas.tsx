@@ -20,10 +20,12 @@ function getVisibleCells(
   const cw = CELL_W * scale;
   const ch = CELL_H * scale;
 
-  const startCol = Math.floor(-ox / cw) - 1;
-  const endCol = Math.ceil((-ox + vw) / cw) + 1;
-  const startRow = Math.floor(-oy / ch) - 1;
-  const endRow = Math.ceil((-oy + vh) / ch) + 1;
+  const BUFFER = 3;
+
+  const startCol = Math.floor(-ox / cw) - BUFFER;
+  const endCol = Math.ceil((-ox + vw) / cw) + BUFFER;
+  const startRow = Math.floor(-oy / ch) - BUFFER;
+  const endRow = Math.ceil((-oy + vh) / ch) + BUFFER;
 
   const cells: { col: number; row: number; effectIdx: number }[] = [];
   for (let r = startRow; r <= endRow; r++) {
@@ -91,9 +93,12 @@ export function InfiniteCanvas({ onSelect }: InfiniteCanvasProps) {
     <TransformWrapper
       minScale={MIN_SCALE}
       maxScale={MAX_SCALE}
+      zoomAnimation={{disabled: false, animationType: "easeOut"}}
       initialScale={1}
+      wheel={{ step: 0.001 }}
+      limitToBounds={false}
       centerOnInit
-      wheel={{ step: 0.05 }}
+      smooth
     >
       <TransformComponent
         wrapperStyle={{ width: '100vw', height: '100vh', background: '#0a0a0a', cursor: 'grab' }}
