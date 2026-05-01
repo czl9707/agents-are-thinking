@@ -1,0 +1,26 @@
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4.5rem;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  padding: 0 1.5rem;
+  gap: 1rem;
+  background-image: linear-gradient(to bottom, rgb(var(--color-primary-background)) 40%, transparent);
+  pointer-events: none;
+}
+
+.header > * {
+  pointer-events: auto;
+}
+
+.title {
+  font-family: var(--typography-body1-fontFamily);
+  font-weight: 800;
+  font-size: 1.25rem;
+  cursor: pointer;
+  letter-spacing: -0.02em;
+}
