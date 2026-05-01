@@ -16,10 +16,9 @@ interface EffectCellProps {
   index: number;
   EffectCls: EffectClass;
   onClick: () => void;
-  scale: number;
 }
 
-export function EffectCell({ index, EffectCls, onClick, scale }: EffectCellProps) {
+export function EffectCell({ index, EffectCls, onClick }: EffectCellProps) {
   const frame = useEffectAnimation(EffectCls);
   const name = EffectCls.name();
   const startRef = useRef<{ x: number; y: number } | null>(null);
@@ -46,7 +45,7 @@ export function EffectCell({ index, EffectCls, onClick, scale }: EffectCellProps
       style={{ transform: `scale(${1})` }}
     >
       <span className="effect-number">{String(index + 1).padStart(2, '0')}</span>
-      <pre className="effect-frame" style={{ fontSize: `${14 * Math.max(scale, 0.6)}px` }}>{frame}</pre>
+      <pre className="effect-frame">{frame}</pre>
       <span className="effect-name">{name}</span>
     </div>
   );

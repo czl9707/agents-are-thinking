@@ -76,7 +76,6 @@ function VirtualGrid({ onSelect }: VirtualGridProps) {
             index={effectIdx}
             EffectCls={EFFECTS[effectIdx]}
             onClick={() => onSelect(effectIdx)}
-            scale={scale}
           />
         </div>
       ))}
