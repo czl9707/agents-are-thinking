@@ -3,12 +3,12 @@ import { TransformWrapper, TransformComponent, useTransformEffect } from 'react-
 import { EFFECTS } from '@zane-chen/agents-are-thinking';
 import { EffectCell } from './EffectCell';
 
-const CELL_W = 200;
-const CELL_H = 100;
+const CELL_W = 300;
+const CELL_H = 125;
 const COLS = 7;
 const TOTAL = EFFECTS.length;
 const MAX_SCALE = 2;
-const MIN_SCALE = 1.25;
+const MIN_SCALE = 1;
 
 function getVisibleCells(
   ox: number,
@@ -95,9 +95,9 @@ function VirtualGrid({ onSelect }: VirtualGridProps) {
 
 const GRID_SVG = `url("data:image/svg+xml,${encodeURIComponent(
   `<svg xmlns='http://www.w3.org/2000/svg' width='${CELL_W}' height='${CELL_H}'>` +
-  `<rect x='0' y='0' width='${CELL_W}' height='${CELL_H}' fill='none' stroke='rgba(128,128,128,0.25)' stroke-width='1'/>` +
+  `<rect x='0' y='0' width='${CELL_W}' height='${CELL_H}' fill='none' stroke='rgba(128,128,128,0.4)' stroke-width='1'/>` +
   `<path d='M0 0v6M0 0h6M${CELL_W} 0v6M${CELL_W} 0h-6M0 ${CELL_H}v-6M0 ${CELL_H}h6M${CELL_W} ${CELL_H}v-6M${CELL_W} ${CELL_H}h-6'` +
-  ` stroke='rgba(128,128,128,1)' stroke-width='1' fill='none'/>` +
+  ` stroke='rgb(128,128,128)' stroke-width='1' fill='none'/>` +
   `</svg>`
 )}")`;
 

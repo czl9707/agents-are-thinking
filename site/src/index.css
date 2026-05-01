@@ -1,5 +1,6 @@
 @import "@fontsource-variable/geist";
-@import "@fontsource-variable/red-hat-mono/wght.css";
+@import '@fontsource-variable/fira-code/wght.css';
+
 
 * {
   margin: 0;
@@ -25,17 +26,17 @@ body {
 
   --transition-short: .3s;
 
-  --typography-body1-fontFamily: "Red Hat Mono Variable";
+  --typography-body1-fontFamily: 'Fira Code Variable';
   --typography-body1-fontWeight: 400;
-  --typography-body1-fontSize: 1rem;
+  --typography-body1-fontSize: 0.875rem;
   --typography-body1-lineHeight: 1.5;
   --typography-button-fontFamily: "Geist Variable";
   --typography-button-fontWeight: 600;
   --typography-button-fontSize: 0.875rem;
   --typography-button-lineHeight: 1.6;
-  --typography-code-fontFamily: "Red Hat Mono Variable", "Courier New", monospace;
+  --typography-code-fontFamily: 'Fira Code Variable', "Courier New", monospace;
   --typography-code-fontWeight: 400;
-  --typography-code-fontSize: 0.875rem;
+  --typography-code-fontSize: 0.625rem;
   --typography-code-lineHeight: 1.5;
 
   background-color: rgb(var(--color-primary-background));
@@ -62,15 +63,12 @@ body[data-theme="dark"] {
 
 .effect-cell {
   background: rgb(var(--color-primary-foreground) / 0);
-  /* border: var(--border); */
-
-  padding: 8px;
+  padding: 8px 10px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   gap: 4px;
   box-sizing: border-box;
-
   cursor: pointer;
   transition: all var(--transition-short);
   user-select: none;
@@ -79,7 +77,6 @@ body[data-theme="dark"] {
   overflow: hidden;
   animation: CellShow var(--transition-short) ease-in;
 }
-
 
 @keyframes CellShow {
   from { opacity: 0; }
@@ -90,20 +87,43 @@ body[data-theme="dark"] {
   background: rgb(var(--color-primary-foreground) / 0.1);
 }
 
+.effect-header {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: baseline;
+}
+
 .effect-number {
   font-family: var(--typography-code-fontFamily);
-  font-size: 10px;
+  font-size: var(--typography-code-fontSize);
+  font-weight: var(--typography-code-fontWeight);
   color: rgb(var(--color-secondary-foreground));
-  align-self: flex-start;
+}
+
+.effect-name {
+  font-family: var(--typography-code-fontFamily);
+  font-size: var(--typography-code-fontSize);
+  font-weight: var(--typography-code-fontWeight);
+  color: rgb(var(--color-secondary-foreground));
+  text-align: right;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .effect-frame {
-  font-family: var(--typography-code-fontFamily);
-  font-size: 12px;
   margin: 0;
+  font-family: var(--typography-body1-fontFamily);
+  font-size: var(--typography-body1-fontSize);
+  font-weight: var(--typography-body1-fontWeight);
   color: rgb(var(--color-accent-foreground));
-  overflow: hidden;
-  letter-spacing: 0;
+
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding-left: 1rem;
 }
 
 .effect-char {
@@ -112,20 +132,11 @@ body[data-theme="dark"] {
   height: 1em;
   line-height: 1;
   letter-spacing: 0;
-  text-align: center;
-  overflow: hidden;
 }
 
-.effect-name {
-  font-family: var(--typography-body1-fontFamily);
-  font-size: 9px;
-  color: rgb(var(--color-secondary-foreground));
-  text-align: center;
-  word-break: break-all;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.effect-verb {
   white-space: nowrap;
-  max-width: 100%;
+  padding-left: 1rem;
 }
 
 /* ---- Modal ---- */
@@ -230,7 +241,6 @@ body[data-theme="dark"] {
   padding: 0 1.5rem;
   gap: 1rem;
   background-image: linear-gradient(to bottom, rgb(var(--color-primary-background)) 40%, transparent);
-  pointer-events: none;
 }
 
 .header > * {

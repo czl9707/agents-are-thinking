@@ -12,8 +12,9 @@ interface EffectClass {
   new (): WasmEffect;
 }
 
-export function useEffectAnimation(EffectCls: EffectClass) {
+export function useEffectAnimation(EffectCls: EffectClass): [string, number] {
   const [frame, setFrame] = useState('');
+  const [count, setCount] = useState(0);
   const instanceRef = useRef<WasmEffect | null>(null);
 
   useEffect(() => {
@@ -21,11 +22,14 @@ export function useEffectAnimation(EffectCls: EffectClass) {
     instanceRef.current = instance;
 
     let lastTime = 0;
+    let n = 0;
     let rafId: number;
 
     const tick = (time: number) => {
       if (time - lastTime >= INTERVAL) {
         setFrame(instance.step());
+        n++;
+        setCount(n);
         lastTime = time;
       }
       rafId = requestAnimationFrame(tick);
@@ -39,5 +43,5 @@ export function useEffectAnimation(EffectCls: EffectClass) {
     };
   }, [EffectCls]);
 
-  return frame;
+  return [frame, count];
 }

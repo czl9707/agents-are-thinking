@@ -1,6 +1,59 @@
 import { useRef, useCallback } from 'react';
 import { useEffectAnimation } from './hooks/useEffectAnimation';
 
+const VERBS = [
+  "thinking",
+  "analyzing",
+  "cooking",
+  "brewing",
+  "computing",
+  "pondering",
+  "dreaming",
+  "processing",
+  "vibing",
+  "wondering",
+  "imagining",
+  "calculating",
+  "marinating",
+  "reflecting",
+  "absorbing",
+  "channeling",
+  "meditating",
+  "manifesting",
+  "deciphering",
+  "daydreaming",
+  "ideating",
+  "brainstorming",
+  "philosophizing",
+  "percolating",
+  "simmering",
+  "distilling",
+  "unraveling",
+  "connecting",
+  "orchestrating",
+  "choreographing",
+  "architecting",
+  "composing",
+  "sculpting",
+  "weaving",
+  "stewing",
+  "fermenting",
+  "incubating",
+  "crystallizing",
+  "galvanizing",
+  "reassembling",
+  "reconfiguring",
+  "calibrating",
+  "harmonizing",
+  "fractalizing",
+  "quantizing",
+  "transmuting",
+  "metamorphosing",
+  "osmosing",
+  "photosynthesizing",
+  "communing",
+];
+
 interface WasmEffect {
   step(): string;
   free(): void;
@@ -19,9 +72,13 @@ interface EffectCellProps {
 }
 
 export function EffectCell({ index, EffectCls, onClick }: EffectCellProps) {
-  const frame = useEffectAnimation(EffectCls);
+  const [frame, frameCount] = useEffectAnimation(EffectCls);
   const name = EffectCls.name();
   const startRef = useRef<{ x: number; y: number } | null>(null);
+
+  const verb = VERBS[index % VERBS.length];
+  const dotCount = Math.floor(frameCount / 10) % 4;
+  const dots = ".".repeat(dotCount);
 
   const handlePointerDown = useCallback((e: React.PointerEvent) => {
     startRef.current = { x: e.clientX, y: e.clientY };
@@ -43,13 +100,20 @@ export function EffectCell({ index, EffectCls, onClick }: EffectCellProps) {
       onPointerDown={handlePointerDown}
       onPointerUp={handlePointerUp}
     >
-      <span className="effect-number">{String(index + 1).padStart(2, '0')}</span>
-      <div className="effect-frame">
-        {Array.from(frame).map((char, ci) => (
-          <span key={ci} className="effect-char">{char}</span>
+      <div className="effect-header">
+        <span className="effect-number">{String(index + 1).padStart(2, '0')}</span>
+        <span className="effect-name">{name}</span>
+      </div>
+      <div className="effect-frame" >
+        {frame.split('\n').map((line, li) => (
+          <div key={li} className="effect-line">
+            {Array.from(line).map((char, ci) => (
+              <span key={ci} className="effect-char">{char}</span>
+            ))}
+            <span className="effect-verb">{verb}{dots}</span>
+          </div>
         ))}
       </div>
-      <span className="effect-name">{name}</span>
     </div>
   );
 }
