@@ -20,7 +20,6 @@ function getVisibleCells(
   const cw = CELL_W * scale;
   const ch = CELL_H * scale;
 
-
   const startCol = Math.floor(-ox / cw);
   const endCol = Math.ceil((-ox + vw) / cw);
   const startRow = Math.floor(-oy / ch);
@@ -98,7 +97,7 @@ export function InfiniteCanvas({ onSelect }: InfiniteCanvasProps) {
       smooth
     >
       <TransformComponent
-        wrapperStyle={{ width: '100vw', height: '100vh', background: '#0a0a0a', cursor: 'grab' }}
+        wrapperStyle={{ width: '100vw', height: '100vh', cursor: 'grab' }}
       >
         <VirtualGrid onSelect={onSelect} />
       </TransformComponent>

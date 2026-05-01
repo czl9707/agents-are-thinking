@@ -42,10 +42,17 @@ export function EffectCell({ index, EffectCls, onClick }: EffectCellProps) {
       className="effect-cell"
       onPointerDown={handlePointerDown}
       onPointerUp={handlePointerUp}
-      style={{ transform: `scale(${1})` }}
     >
       <span className="effect-number">{String(index + 1).padStart(2, '0')}</span>
-      <pre className="effect-frame">{frame}</pre>
+      <pre className="effect-frame">
+        {frame.split('\n').map((line, li) => (
+          <div key={li} className="effect-line">
+            {Array.from(line).map((char, ci) => (
+              <span key={ci} className="effect-char">{char}</span>
+            ))}
+          </div>
+        ))}
+      </pre>
       <span className="effect-name">{name}</span>
     </div>
   );
