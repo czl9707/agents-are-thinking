@@ -34,7 +34,7 @@ function getVisibleCells(
       cells.push({ col: c, row: r, effectIdx });
     }
   }
-  return cells;
+  return { cells, startCol, endCol, startRow, endRow };
 }
 
 interface VirtualGridProps {
@@ -56,10 +56,21 @@ function VirtualGrid({ onSelect }: VirtualGridProps) {
   }, []);
 
   const { x, y, scale } = transform;
-  const cells = getVisibleCells(x, y, scale, viewport.w, viewport.h);
+  const { cells, startCol, endCol, startRow, endRow } = getVisibleCells(x, y, scale, viewport.w, viewport.h);
 
   return (
     <div style={{ position: 'relative', width: 0, height: 0 }}>
+      <div style={{
+        position: 'absolute',
+        left: startCol * CELL_W,
+        top: startRow * CELL_H,
+        width: (endCol - startCol + 1) * CELL_W,
+        height: (endRow - startRow + 1) * CELL_H,
+        backgroundImage: GRID_SVG,
+        backgroundRepeat: 'repeat',
+        backgroundSize: `${CELL_W}px ${CELL_H}px`,
+        pointerEvents: 'none',
+      }} />
       {cells.map(({ col, row, effectIdx }) => (
         <div
           key={`${col},${row}`}
@@ -82,6 +93,14 @@ function VirtualGrid({ onSelect }: VirtualGridProps) {
   );
 }
 
+const GRID_SVG = `url("data:image/svg+xml,${encodeURIComponent(
+  `<svg xmlns='http://www.w3.org/2000/svg' width='${CELL_W}' height='${CELL_H}'>` +
+  `<rect x='0' y='0' width='${CELL_W}' height='${CELL_H}' fill='none' stroke='rgba(128,128,128,0.25)' stroke-width='1'/>` +
+  `<path d='M0 0v6M0 0h6M${CELL_W} 0v6M${CELL_W} 0h-6M0 ${CELL_H}v-6M0 ${CELL_H}h6M${CELL_W} ${CELL_H}v-6M${CELL_W} ${CELL_H}h-6'` +
+  ` stroke='rgba(128,128,128,1)' stroke-width='1' fill='none'/>` +
+  `</svg>`
+)}")`;
+
 interface InfiniteCanvasProps {
   onSelect: (index: number) => void;
 }
@@ -98,7 +117,11 @@ export function InfiniteCanvas({ onSelect }: InfiniteCanvasProps) {
       smooth
     >
       <TransformComponent
-        wrapperStyle={{ width: '100vw', height: '100vh', cursor: 'grab' }}
+        wrapperStyle={{
+          width: '100vw',
+          height: '100vh',
+          cursor: 'grab',
+        }}
       >
         <VirtualGrid onSelect={onSelect} />
       </TransformComponent>

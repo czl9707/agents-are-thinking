@@ -62,14 +62,15 @@ body[data-theme="dark"] {
 
 .effect-cell {
   background: rgb(var(--color-primary-foreground) / 0);
-  border: var(--border);
-  border-right: var(--border);
+  /* border: var(--border); */
 
   padding: 8px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 4px;
+  box-sizing: border-box;
+
   cursor: pointer;
   transition: all var(--transition-short);
   user-select: none;
