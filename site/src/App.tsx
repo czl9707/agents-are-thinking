@@ -3,14 +3,15 @@ import { EFFECTS } from '@zane-chen/agents-are-thinking';
 import { InfiniteCanvas } from './InfiniteCanvas';
 import { Drawer } from './Drawer';
 import { ThemeToggle } from './ThemeToggle';
+import s from './Header.module.css';
 
 function App() {
   const [selected, setSelected] = useState<number | null>(null);
 
   return (
     <>
-      <header className="header">
-        <span className="header-title">AGENTS.ARE.THINKING</span>
+      <header className={s.header}>
+        <span className={s.title}>AGENTS.ARE.THINKING</span>
         <div style={{ flex: '1 1' }} />
         <ThemeToggle />
       </header>

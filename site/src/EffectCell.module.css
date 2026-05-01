@@ -1,0 +1,76 @@
+.cell {
+  background: rgb(var(--color-primary-foreground) / 0);
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: all var(--transition-short);
+  user-select: none;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  animation: show var(--transition-short) ease-in;
+}
+
+@keyframes show {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.cell:hover {
+  background: rgb(var(--color-primary-foreground) / 0.1);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: baseline;
+}
+
+.number {
+  font-family: var(--typography-code-fontFamily);
+  font-size: var(--typography-code-fontSize);
+  font-weight: var(--typography-code-fontWeight);
+  color: rgb(var(--color-secondary-foreground));
+}
+
+.name {
+  font-family: var(--typography-code-fontFamily);
+  font-size: var(--typography-code-fontSize);
+  font-weight: var(--typography-code-fontWeight);
+  color: rgb(var(--color-secondary-foreground));
+  text-align: right;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.frame {
+  margin: 0;
+  font-family: var(--typography-body1-fontFamily);
+  font-size: var(--typography-body1-fontSize);
+  font-weight: var(--typography-body1-fontWeight);
+  color: rgb(var(--color-accent-foreground));
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding-left: 1rem;
+}
+
+.char {
+  display: inline-block;
+  width: 1ch;
+  height: 1em;
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+.verb {
+  white-space: nowrap;
+  padding-left: 1rem;
+}

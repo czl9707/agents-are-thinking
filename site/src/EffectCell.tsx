@@ -1,5 +1,6 @@
 import { useRef, useCallback } from 'react';
 import { useEffectAnimation } from './hooks/useEffectAnimation';
+import s from './EffectCell.module.css';
 
 const VERBS = [
   "thinking",
@@ -96,23 +97,23 @@ export function EffectCell({ index, EffectCls, onClick }: EffectCellProps) {
 
   return (
     <div
-      className="effect-cell"
+      className={s.cell}
       onPointerDown={handlePointerDown}
       onPointerUp={handlePointerUp}
     >
-      <div className="effect-header">
-        <span className="effect-number">{String(index + 1).padStart(2, '0')}</span>
-        <span className="effect-name">{name}</span>
+      <div className={s.header}>
+        <span className={s.number}>{String(index + 1).padStart(2, '0')}</span>
+        <span className={s.name}>{name}</span>
       </div>
-      <div className="effect-frame" >
+      <div className={s.frame}>
         {frame.split('\n').map((line, li) => (
-          <div key={li} className="effect-line">
+          <div key={li}>
             {Array.from(line).map((char, ci) => (
-              <span key={ci} className="effect-char">{char}</span>
+              <span key={ci} className={s.char}>{char}</span>
             ))}
-            <span className="effect-verb">{verb}{dots}</span>
           </div>
         ))}
+        <span className={s.verb}>{verb}{dots}</span>
       </div>
     </div>
   );

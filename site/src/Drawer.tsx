@@ -1,3 +1,5 @@
+import s from './Drawer.module.css';
+
 interface DrawerProps {
   effectIndex: number;
   effectName: string;
@@ -8,24 +10,24 @@ interface DrawerProps {
 export function Drawer({ effectIndex, effectName, open, onClose }: DrawerProps) {
   return (
     <div
-      className="drawer-backdrop"
+      className={s.backdrop}
       data-open={open ? '' : undefined}
       onClick={onClose}
     >
       <aside
-        className="drawer-panel"
+        className={s.panel}
         data-open={open ? '' : undefined}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="drawer-header">
-          <span className="drawer-title">
-            <span className="drawer-number">{String(effectIndex + 1).padStart(2, '0')}</span>
+        <div className={s.header}>
+          <span className={s.title}>
+            <span className={s.number}>{String(effectIndex + 1).padStart(2, '0')}</span>
             {' '}{effectName}
           </span>
-          <button className="drawer-close" onClick={onClose}>✕</button>
+          <button className={s.close} onClick={onClose}>✕</button>
         </div>
-        <div className="drawer-body">
-          <p className="drawer-soon">coming soon</p>
+        <div className={s.body}>
+          <p className={s.soon}>coming soon</p>
         </div>
       </aside>
     </div>
