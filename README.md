@@ -1,113 +1,39 @@
 # agents-are-thinking
 
-Terminal animation effects for agents' "thinking" state. Built in Rust with bindings for Python (and JS coming soon).
-
-Braille, block characters, unicode glyphs, the works. No runtime dependencies.
+Terminal animation effects for agents' "thinking" state. Braille, block characters, unicode glyphs. No runtime dependencies.
 
 <img src="./agents-are-thinking-demo.gif" width="100%" height="100%">
 
-## Install
+## Get Started 
 
-### Rust
+~The package is implemented in python.~ The package is written in rust. And provides python binding using [PY03](https://github.com/PyO3/pyo3), and wasm binding using [wasm-bindgen](https://github.com/wasm-bindgen/wasm-bindgen).
 
-```bash
-cargo add agents-are-thinking
-```
-
-### Python
+### "Too complicated, just want to watch them thinking!"
 
 ```bash
-uv add agents-are-thinking
-```
-
-### Just want to see the animations?
-
-```bash
-uv tool install agents-are-thinking[cli]  # with rich and click
+uv tool install agents-are-thinking[cli]
 uv tool run agents-are-thinking preview
 ```
 
-## Rust usage
+Or visit [agents-are-thinking.kiyo-n-zane.com](agents-are-thinking.kiyo-n-zane.com).
 
-```rust
-use std::thread;
-use std::time::Duration;
-use agents_are_thinking::effects::ShadeFire;
-use agents_are_thinking::effect::Effect;
+### Install
 
-fn main() {
-    let mut ef = ShadeFire::new();
-    for _ in 0..50 {
-        print!("\r{}", ef.step());
-        thread::sleep(Duration::from_millis(100));
-    }
-}
-```
+| Ecosystem | Package | Install |
+|-----------|---------|---------|
+| Rust | `agents-are-thinking` | `cargo add agents-are-thinking` |
+| Python | `agents-are-thinking` | `uv add agents-are-thinking` |
+| JS/TS | `@zane-chen/agents-are-thinking` | `npm install @zane-chen/agents-are-thinking` |
 
-### List all effects
+### Ecosystem guides
 
-```rust
-use agents_are_thinking::effects::all_effects;
-use agents_are_thinking::effect::Effect;
+- [Rust](./RUST-GUIDE.md)
+- [Python](./PYTHON-GUIDE.md)
+- [JS/TS (WASM)](./JS-GUIDE.md)
 
-for ef in all_effects() {
-    println!("{}", ef.step());
-}
-```
+## Effects
 
-## Python usage
-
-```python
-import time
-from agents_are_thinking import ShadeFire
-
-ef = ShadeFire()
-t0 = time.time()
-for frame in ef:
-    print(f"\r{frame}", end="", flush=True)
-    if time.time() - t0 > 5:
-        break
-```
-
-### With Rich
-
-```python
-import time
-from rich.live import Live
-from agents_are_thinking import BrailleFire
-
-ef = BrailleFire()
-t0 = time.time()
-
-with Live(refresh_per_second=16) as live:
-    for frame in ef:
-        time.sleep(0.1)
-        live.update(frame)
-        if time.time() - t0 > 5:
-            break
-```
-
-### Effect list
-
-```python
-from agents_are_thinking import EFFECTS
-
-for cls in EFFECTS:
-    print(cls.name, "-", cls.description)
-```
-
-## CLI
-
-`agents-are-thinking` ships with a CLI for previewing effects in your terminal. Requires the `[cli]` extra.
-
-```
-uv tool run agents-are-thinking preview          # gallery showcase
-uv tool run agents-are-thinking list             # list all effects
-uv tool run agents-are-thinking run braille-spin # run a single effect
-uv tool run agents-are-thinking                  # name-effect showcase
-```
-
-## All effects
+48 effects across 6 families: braille, shade, bar, vblock, square, dot.
 
 ### Braille
 
@@ -159,7 +85,7 @@ uv tool run agents-are-thinking                  # name-effect showcase
 | Effect | Description |
 |--------|-------------|
 | `VBlockWave` | Smooth sine wave |
-| `VBlockScanner` | Scanner Sweep |
+| `VBlockScanner` | Scanner sweep |
 | `VBlockTide` | Tide coming in and out |
 | `VBlockBreathe` | Gentle breathing pattern |
 | `VBlockBounce` | Bounce across |
@@ -186,3 +112,4 @@ uv tool run agents-are-thinking                  # name-effect showcase
 | `DotHeartbeat` | Heartbeat pulse |
 | `DotArrow` | Arrow pattern |
 | `DotBounce` | Bounce across |
+
