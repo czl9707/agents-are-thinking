@@ -20,12 +20,11 @@ function getVisibleCells(
   const cw = CELL_W * scale;
   const ch = CELL_H * scale;
 
-  const BUFFER = 3;
 
-  const startCol = Math.floor(-ox / cw) - BUFFER;
-  const endCol = Math.ceil((-ox + vw) / cw) + BUFFER;
-  const startRow = Math.floor(-oy / ch) - BUFFER;
-  const endRow = Math.ceil((-oy + vh) / ch) + BUFFER;
+  const startCol = Math.floor(-ox / cw);
+  const endCol = Math.ceil((-ox + vw) / cw);
+  const startRow = Math.floor(-oy / ch);
+  const endRow = Math.ceil((-oy + vh) / ch);
 
   const cells: { col: number; row: number; effectIdx: number }[] = [];
   for (let r = startRow; r <= endRow; r++) {

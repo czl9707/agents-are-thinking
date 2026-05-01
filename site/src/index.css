@@ -26,6 +26,13 @@ body {
   width: 100%;
   height: 100%;
   overflow: hidden;
+
+  animation: showUp 300ms ease-in;
+}
+
+@keyframes showUp {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .effect-cell:hover {
