@@ -44,15 +44,11 @@ export function EffectCell({ index, EffectCls, onClick }: EffectCellProps) {
       onPointerUp={handlePointerUp}
     >
       <span className="effect-number">{String(index + 1).padStart(2, '0')}</span>
-      <pre className="effect-frame">
-        {frame.split('\n').map((line, li) => (
-          <div key={li} className="effect-line">
-            {Array.from(line).map((char, ci) => (
-              <span key={ci} className="effect-char">{char}</span>
-            ))}
-          </div>
+      <div className="effect-frame">
+        {Array.from(frame).map((char, ci) => (
+          <span key={ci} className="effect-char">{char}</span>
         ))}
-      </pre>
+      </div>
       <span className="effect-name">{name}</span>
     </div>
   );

@@ -70,7 +70,6 @@ body[data-theme="dark"] {
   flex-direction: column;
   align-items: center;
   gap: 4px;
-
   cursor: pointer;
   transition: all var(--transition-short);
   user-select: none;
@@ -79,6 +78,7 @@ body[data-theme="dark"] {
   overflow: hidden;
   animation: CellShow var(--transition-short) ease-in;
 }
+
 
 @keyframes CellShow {
   from { opacity: 0; }
@@ -101,12 +101,8 @@ body[data-theme="dark"] {
   font-size: 12px;
   margin: 0;
   color: rgb(var(--color-accent-foreground));
-}
-
-.effect-line {
-  height: 1em;
-  line-height: 1;
   overflow: hidden;
+  letter-spacing: 0;
 }
 
 .effect-char {
@@ -114,6 +110,7 @@ body[data-theme="dark"] {
   width: 1ch;
   height: 1em;
   line-height: 1;
+  letter-spacing: 0;
   text-align: center;
   overflow: hidden;
 }
