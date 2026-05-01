@@ -27,10 +27,10 @@ body {
   height: 100%;
   overflow: hidden;
 
-  animation: showUp 300ms ease-in;
+  animation: CellShow 300ms ease-in;
 }
 
-@keyframes showUp {
+@keyframes CellShow {
   from { opacity: 0; }
   to { opacity: 1; }
 }

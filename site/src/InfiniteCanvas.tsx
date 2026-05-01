@@ -3,12 +3,12 @@ import { TransformWrapper, TransformComponent, useTransformEffect } from 'react-
 import { EFFECTS } from '@zane-chen/agents-are-thinking';
 import { EffectCell } from './EffectCell';
 
-const CELL_W = 160;
-const CELL_H = 120;
+const CELL_W = 200;
+const CELL_H = 100;
 const COLS = 7;
 const TOTAL = EFFECTS.length;
 const MAX_SCALE = 2;
-const MIN_SCALE = 0.8;
+const MIN_SCALE = 1.25;
 
 function getVisibleCells(
   ox: number,
@@ -92,7 +92,6 @@ export function InfiniteCanvas({ onSelect }: InfiniteCanvasProps) {
       minScale={MIN_SCALE}
       maxScale={MAX_SCALE}
       zoomAnimation={{disabled: false, animationType: "easeOut"}}
-      initialScale={1}
       wheel={{ step: 0.001 }}
       limitToBounds={false}
       centerOnInit
