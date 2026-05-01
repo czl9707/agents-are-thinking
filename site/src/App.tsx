@@ -9,13 +9,12 @@ function App() {
   return (
     <>
       <InfiniteCanvas onSelect={setSelected} />
-      {selected !== null && (
-        <Modal
-          effectIndex={selected}
-          effectName={EFFECTS[selected].name()}
-          onClose={() => setSelected(null)}
-        />
-      )}
+      <Modal
+        effectIndex={selected ?? 0}
+        effectName={selected !== null ? EFFECTS[selected].name() : ''}
+        open={selected !== null}
+        onClose={() => setSelected(null)}
+      />
     </>
   );
 }

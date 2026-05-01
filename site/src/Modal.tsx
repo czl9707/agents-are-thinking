@@ -3,12 +3,13 @@ import * as Dialog from '@radix-ui/react-dialog';
 interface ModalProps {
   effectIndex: number;
   effectName: string;
+  open: boolean;
   onClose: () => void;
 }
 
-export function Modal({ effectIndex, effectName, onClose }: ModalProps) {
+export function Modal({ effectIndex, effectName, open, onClose }: ModalProps) {
   return (
-    <Dialog.Root open onOpenChange={(open) => { if (!open) onClose(); }}>
+    <Dialog.Root open={open} onOpenChange={(o) => { if (!o) onClose(); }}>
       <Dialog.Portal>
         <Dialog.Overlay className="modal-backdrop" />
         <Dialog.Content className="modal-content">

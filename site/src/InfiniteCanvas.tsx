@@ -3,21 +3,12 @@ import { TransformWrapper, TransformComponent, useTransformEffect } from 'react-
 import { EFFECTS } from '@zane-chen/agents-are-thinking';
 import { EffectCell } from './EffectCell';
 
-const CELL_W = 130;
-const CELL_H = 90;
-const GAP = 2;
-const COLS = 8;
-const ROWS = Math.ceil(EFFECTS.length / COLS);
+const CELL_W = 160;
+const CELL_H = 120;
+const COLS = 7;
 const TOTAL = EFFECTS.length;
-const MAX_SCALE = 3;
-
-function getMinScale(vw: number, vh: number) {
-  const cw = CELL_W + GAP;
-  const ch = CELL_H + GAP;
-  const minByW = vw / (COLS * cw * 2);
-  const minByH = vh / (ROWS * ch * 2);
-  return Math.max(minByW, minByH);
-}
+const MAX_SCALE = 1.25;
+const MIN_SCALE = 0.15;
 
 function getVisibleCells(
   ox: number,
@@ -26,8 +17,8 @@ function getVisibleCells(
   vw: number,
   vh: number,
 ) {
-  const cw = (CELL_W + GAP) * scale;
-  const ch = (CELL_H + GAP) * scale;
+  const cw = CELL_W * scale;
+  const ch = CELL_H * scale;
 
   const startCol = Math.floor(-ox / cw) - 1;
   const endCol = Math.ceil((-ox + vw) / cw) + 1;
@@ -73,8 +64,8 @@ function VirtualGrid({ onSelect }: VirtualGridProps) {
           key={`${col},${row}`}
           style={{
             position: 'absolute',
-            left: col * (CELL_W + GAP) * scale,
-            top: row * (CELL_H + GAP) * scale,
+            left: col * CELL_W * scale,
+            top: row * CELL_H * scale,
             width: CELL_W * scale,
             height: CELL_H * scale,
           }}
@@ -96,19 +87,9 @@ interface InfiniteCanvasProps {
 }
 
 export function InfiniteCanvas({ onSelect }: InfiniteCanvasProps) {
-  const [viewport, setViewport] = useState({ w: window.innerWidth, h: window.innerHeight });
-
-  useEffect(() => {
-    const onResize = () => setViewport({ w: window.innerWidth, h: window.innerHeight });
-    window.addEventListener('resize', onResize);
-    return () => window.removeEventListener('resize', onResize);
-  }, []);
-
-  const minScale = getMinScale(viewport.w, viewport.h);
-
   return (
     <TransformWrapper
-      minScale={minScale}
+      minScale={MIN_SCALE}
       maxScale={MAX_SCALE}
       initialScale={1}
       centerOnInit
