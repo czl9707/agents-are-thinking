@@ -1,5 +1,5 @@
 @import "@fontsource-variable/geist";
-@import "@fontsource-variable/jetbrains-mono/wght.css";
+@import "@fontsource-variable/red-hat-mono/wght.css";
 
 * {
   margin: 0;
@@ -15,7 +15,7 @@ p, h1, h2, h3, h4, h5, h6, span { margin: 0; padding: 0; }
 
 body {
   --font-ui: "Geist Variable";
-  --font-mono: "JetBrains Mono Variable", "Courier New", monospace;
+  --font-mono: "Red Hat Mono Variable", "Courier New", monospace;
 
   --color-bg: 229 222 214;
   --color-bg-secondary: 180 180 180;
