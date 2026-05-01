@@ -66,10 +66,10 @@ function VirtualGrid({ onSelect }: VirtualGridProps) {
           key={`${col},${row}`}
           style={{
             position: 'absolute',
-            left: col * CELL_W * scale,
-            top: row * CELL_H * scale,
-            width: CELL_W * scale,
-            height: CELL_H * scale,
+            left: col * CELL_W,
+            top: row * CELL_H,
+            width: CELL_W,
+            height: CELL_H,
           }}
         >
           <EffectCell
