@@ -139,48 +139,72 @@ body[data-theme="dark"] {
   padding-left: 1rem;
 }
 
-/* ---- Modal ---- */
+/* ---- Drawer ---- */
 
-.modal-backdrop {
+.drawer-backdrop {
   position: fixed;
   inset: 0;
-  background: rgb(var(--color-primary-foreground) / 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
   z-index: 100;
-  animation: overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--transition-short);
+  background: rgb(var(--color-primary-background) / 0.5);
 }
 
-.modal-content {
+.drawer-backdrop[data-open] {
+  pointer-events: auto;
+  opacity: 1;
+}
+
+.drawer-panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 480px;
   background: rgb(var(--color-primary-background));
-  border: var(--border);
-  padding: 24px;
-  min-width: 400px;
-  max-width: 600px;
-  animation: contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  padding: 1.5rem;
+  padding-left: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  pointer-events: auto;
+  transform: translateX(100%);
+  transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.modal-content:focus { outline: none; }
+.drawer-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -2rem;
+  bottom: 0;
+  width: 2rem;
+  background: linear-gradient(to left, rgb(var(--color-primary-background)), transparent);
+  pointer-events: none;
+}
 
-.modal-header {
+.drawer-panel[data-open] {
+  transform: translateX(0);
+}
+
+.drawer-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: 1.5rem;
 }
 
-.modal-title {
+.drawer-title {
   font-family: var(--typography-body1-fontFamily);
   font-size: 16px;
   font-weight: 500;
 }
 
-.modal-number {
+.drawer-number {
   color: rgb(var(--color-secondary-foreground));
 }
 
-.modal-close {
+.drawer-close {
   background: none;
   border: var(--border);
   color: rgb(var(--color-secondary-foreground));
@@ -190,23 +214,18 @@ body[data-theme="dark"] {
   transition: all var(--transition-short);
 }
 
-.modal-close:hover {
-  border: var(--border);
+.drawer-close:hover {
   color: rgb(var(--color-primary-foreground));
 }
 
-.modal-body {
-  min-height: 200px;
+.drawer-body {
+  flex: 1;
 }
 
-@keyframes overlayShow {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes contentShow {
-  from { opacity: 0; transform: translate(-50%, -48%) scale(0.96); }
-  to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+.drawer-soon {
+  font-family: var(--typography-body1-fontFamily);
+  font-size: 14px;
+  color: rgb(var(--color-secondary-foreground));
 }
 
 /* ---- Theme Toggle ---- */

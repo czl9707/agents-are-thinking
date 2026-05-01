@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { EFFECTS } from '@zane-chen/agents-are-thinking';
 import { InfiniteCanvas } from './InfiniteCanvas';
-import { Modal } from './Modal';
+import { Drawer } from './Drawer';
 import { ThemeToggle } from './ThemeToggle';
 
 function App() {
@@ -15,7 +15,7 @@ function App() {
         <ThemeToggle />
       </header>
       <InfiniteCanvas onSelect={setSelected} />
-      <Modal
+      <Drawer
         effectIndex={selected ?? 0}
         effectName={selected !== null ? EFFECTS[selected].name() : ''}
         open={selected !== null}
