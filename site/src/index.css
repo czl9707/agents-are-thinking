@@ -14,76 +14,93 @@ code { font-family: unset; }
 p, h1, h2, h3, h4, h5, h6, span { margin: 0; padding: 0; }
 
 body {
-  --font-ui: "Geist Variable";
-  --font-mono: "Red Hat Mono Variable", "Courier New", monospace;
+  --color-primary-background: 229 222 214;
+  --color-secondary-background: 180 180 180;
+  --color-primary-foreground: 33 37 41;
+  --color-secondary-foreground: 75 75 75;
+  --color-accent-foreground: 255 140 66;
+  --color-accent-background: 229 222 214;
 
-  --color-bg: 229 222 214;
-  --color-bg-secondary: 180 180 180;
-  --color-fg: 33 37 41;
-  --color-fg-secondary: 75 75 75;
-  --color-accent: 255 140 66;
+  --border: 1px solid rgb(var(--color-primary-foreground) / 0.1);
 
-  --border: 1px solid rgb(var(--color-fg) / 0.25);
-  --radius: .25rem;
-  --transition: .3s;
+  --transition-short: .3s;
 
-  background-color: rgb(var(--color-bg));
-  color: rgb(var(--color-fg));
-  font-family: var(--font-ui);
+  --typography-body1-fontFamily: "Red Hat Mono Variable";
+  --typography-body1-fontWeight: 400;
+  --typography-body1-fontSize: 1rem;
+  --typography-body1-lineHeight: 1.5;
+  --typography-button-fontFamily: "Geist Variable";
+  --typography-button-fontWeight: 600;
+  --typography-button-fontSize: 0.875rem;
+  --typography-button-lineHeight: 1.6;
+  --typography-code-fontFamily: "Red Hat Mono Variable", "Courier New", monospace;
+  --typography-code-fontWeight: 400;
+  --typography-code-fontSize: 0.875rem;
+  --typography-code-lineHeight: 1.5;
+
+  background-color: rgb(var(--color-primary-background));
+  color: rgb(var(--color-primary-foreground));
+  font-family: var(--typography-body1-fontFamily);
+  font-weight: var(--typography-body1-fontWeight);
+  font-size: var(--typography-body1-fontSize);
+  line-height: var(--typography-body1-lineHeight);
   overflow: hidden;
 }
 
 body[data-theme="dark"] {
-  --color-bg: 0 0 0;
-  --color-bg-secondary: 75 75 75;
-  --color-fg: 255 255 255;
-  --color-fg-secondary: 180 180 180;
-  --color-accent: 255 140 66;
+  --color-primary-background: 0 0 0;
+  --color-secondary-background: 75 75 75;
+  --color-primary-foreground: 255 255 255;
+  --color-secondary-foreground: 180 180 180;
+  --color-accent-foreground: 255 140 66;
+  --color-accent-background: 0 0 0;
 
-  --border: 1px solid rgb(var(--color-fg) / 0.1);
+  --border: 1px solid rgb(var(--color-primary-foreground) / 0.1);
 }
 
 /* ---- Effect Cell ---- */
 
 .effect-cell {
-  background: transparent;
+  background: rgb(var(--color-primary-foreground) / 0);
   border: var(--border);
   border-right: var(--border);
+
   padding: 8px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 4px;
+
   cursor: pointer;
-  transition: background var(--transition);
+  transition: all var(--transition-short);
   user-select: none;
   width: 100%;
   height: 100%;
   overflow: hidden;
-  animation: fadeIn var(--transition) ease-in;
+  animation: CellShow var(--transition-short) ease-in;
 }
 
-@keyframes fadeIn {
+@keyframes CellShow {
   from { opacity: 0; }
   to { opacity: 1; }
 }
 
 .effect-cell:hover {
-  background: rgb(var(--color-fg) / 0.1);
+  background: rgb(var(--color-primary-foreground) / 0.1);
 }
 
 .effect-number {
-  font-family: var(--font-mono);
+  font-family: var(--typography-code-fontFamily);
   font-size: 10px;
-  color: rgb(var(--color-fg-secondary));
+  color: rgb(var(--color-secondary-foreground));
   align-self: flex-start;
 }
 
 .effect-frame {
-  font-family: var(--font-mono);
+  font-family: var(--typography-code-fontFamily);
   font-size: 12px;
   margin: 0;
-  color: rgb(var(--color-accent));
+  color: rgb(var(--color-accent-foreground));
 }
 
 .effect-line {
@@ -102,13 +119,14 @@ body[data-theme="dark"] {
 }
 
 .effect-name {
-  font-family: var(--font-ui);
+  font-family: var(--typography-body1-fontFamily);
   font-size: 9px;
-  color: rgb(var(--color-fg-secondary));
+  color: rgb(var(--color-secondary-foreground));
   text-align: center;
-  white-space: nowrap;
+  word-break: break-all;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
   max-width: 100%;
 }
 
@@ -117,18 +135,17 @@ body[data-theme="dark"] {
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgb(var(--color-fg) / 0.5);
+  background: rgb(var(--color-primary-foreground) / 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 100;
-  animation: fadeIn 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  animation: overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .modal-content {
-  background: rgb(var(--color-bg));
+  background: rgb(var(--color-primary-background));
   border: var(--border);
-  border-radius: var(--radius);
   padding: 24px;
   min-width: 400px;
   max-width: 600px;
@@ -145,31 +162,37 @@ body[data-theme="dark"] {
 }
 
 .modal-title {
+  font-family: var(--typography-body1-fontFamily);
   font-size: 16px;
   font-weight: 500;
 }
 
 .modal-number {
-  color: rgb(var(--color-fg-secondary));
+  color: rgb(var(--color-secondary-foreground));
 }
 
 .modal-close {
   background: none;
   border: var(--border);
-  border-radius: var(--radius);
-  color: rgb(var(--color-fg-secondary));
+  color: rgb(var(--color-secondary-foreground));
   font-size: 14px;
   cursor: pointer;
   padding: 4px 8px;
-  transition: all var(--transition);
+  transition: all var(--transition-short);
 }
 
 .modal-close:hover {
-  color: rgb(var(--color-fg));
+  border: var(--border);
+  color: rgb(var(--color-primary-foreground));
 }
 
 .modal-body {
   min-height: 200px;
+}
+
+@keyframes overlayShow {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @keyframes contentShow {
@@ -184,15 +207,15 @@ body[data-theme="dark"] {
   border: none;
   cursor: pointer;
   padding: 6px;
-  color: rgb(var(--color-fg));
-  transition: background var(--transition);
+  color: rgb(var(--color-primary-foreground));
+  transition: background var(--transition-short);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .theme-toggle:hover {
-  background: rgb(var(--color-fg) / 0.1);
+  background: rgb(var(--color-primary-foreground) / 0.1);
 }
 
 /* ---- Header ---- */
@@ -208,7 +231,7 @@ body[data-theme="dark"] {
   align-items: center;
   padding: 0 1.5rem;
   gap: 1rem;
-  background-image: linear-gradient(to bottom, rgb(var(--color-bg)) 40%, transparent);
+  background-image: linear-gradient(to bottom, rgb(var(--color-primary-background)) 40%, transparent);
   pointer-events: none;
 }
 
@@ -217,6 +240,7 @@ body[data-theme="dark"] {
 }
 
 .header-title {
+  font-family: var(--typography-body1-fontFamily);
   font-weight: 800;
   font-size: 1.25rem;
   cursor: pointer;

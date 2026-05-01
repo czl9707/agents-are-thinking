@@ -20,6 +20,7 @@ function getVisibleCells(
   const cw = CELL_W * scale;
   const ch = CELL_H * scale;
 
+
   const startCol = Math.floor(-ox / cw);
   const endCol = Math.ceil((-ox + vw) / cw);
   const startRow = Math.floor(-oy / ch);
