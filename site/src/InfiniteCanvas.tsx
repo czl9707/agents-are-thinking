@@ -7,8 +7,8 @@ const CELL_W = 160;
 const CELL_H = 120;
 const COLS = 7;
 const TOTAL = EFFECTS.length;
-const MAX_SCALE = 1.25;
-const MIN_SCALE = 0.15;
+const MAX_SCALE = 3;
+const MIN_SCALE = 0.8;
 
 function getVisibleCells(
   ox: number,
