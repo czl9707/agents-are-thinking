@@ -7,7 +7,7 @@ const CELL_W = 160;
 const CELL_H = 120;
 const COLS = 7;
 const TOTAL = EFFECTS.length;
-const MAX_SCALE = 3;
+const MAX_SCALE = 2;
 const MIN_SCALE = 0.8;
 
 function getVisibleCells(
@@ -93,7 +93,7 @@ export function InfiniteCanvas({ onSelect }: InfiniteCanvasProps) {
       maxScale={MAX_SCALE}
       initialScale={1}
       centerOnInit
-      smooth
+      wheel={{ step: 0.05 }}
     >
       <TransformComponent
         wrapperStyle={{ width: '100vw', height: '100vh', background: '#0a0a0a', cursor: 'grab' }}
