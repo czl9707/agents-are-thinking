@@ -14,12 +14,12 @@ code { font-family: unset; }
 p, h1, h2, h3, h4, h5, h6, span { margin: 0; padding: 0; }
 
 body {
-  --color-primary-background: 229 222 214;
-  --color-secondary-background: 180 180 180;
-  --color-primary-foreground: 33 37 41;
-  --color-secondary-foreground: 75 75 75;
-  --color-accent-foreground: 255 140 66;
-  --color-accent-background: 229 222 214;
+  --color-primary-background: 248 244 240;
+  --color-secondary-background: 235 230 224;
+  --color-primary-foreground: 25 25 25;
+  --color-secondary-foreground: 120 110 100;
+  --color-accent-foreground: 245 120 40;
+  --color-accent-background: 248 244 240;
 
   --border: 1px solid rgb(var(--color-primary-foreground) / 0.1);
 

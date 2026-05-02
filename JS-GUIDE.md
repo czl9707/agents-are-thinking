@@ -54,6 +54,8 @@ function EffectDisplay() {
 
 Use a monospace font. Each character in the frame string must be the same width — wrap each char in a fixed-width `<span>` for unicode block characters.
 
+> The unicode glyphs used in this library (especially the VBlock family — ▏▎▍▌▋▊▉█) are notoriously inconsistent across fonts. Many monospace fonts render these at different heights, causing visible gaps or misaligned rows. Even popular ones can fail. The showcase site for this project uses `Fira Code Variable`, which renders them correctly. If you see uneven line heights, test your chosen font before committing to it.
+
 ## API
 
 Each effect class:

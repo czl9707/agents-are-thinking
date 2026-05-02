@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { EFFECTS } from '@zane-chen/agents-are-thinking';
 import { GitHubLogoIcon } from '@radix-ui/react-icons';
 import { InfiniteCanvas } from './InfiniteCanvas';
@@ -9,6 +9,17 @@ import t from './ThemeToggle.module.css';
 
 function App() {
   const [selected, setSelected] = useState<number | null>(null);
+
+  useEffect(() => {
+    const base = `${EFFECTS.length} agents are thinking`;
+    let dots = 1;
+    document.title = `${base}.`;
+    const id = setInterval(() => {
+      dots = dots % 3 + 1;
+      document.title = `${base}${".".repeat(dots)}`;
+    }, 500);
+    return () => clearInterval(id);
+  }, []);
 
   return (
     <>
