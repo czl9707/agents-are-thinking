@@ -17,11 +17,14 @@
     "pkg/"
   ],
   "scripts": {
-    "build": "wasm-pack build --target web --out-dir pkg && rm -f pkg/.gitignore",
+    "build": "wasm-pack build --target bundler --out-dir pkg && rm -f pkg/.gitignore",
     "prepublishOnly": "npm run build"
   },
   "publishConfig": {
     "access": "public"
   },
-  "sideEffects": false
+  "sideEffects": [
+    "./pkg/agents_are_thinking_js.js",
+    "./pkg/snippets/*"
+  ]
 }

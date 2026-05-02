@@ -1,4 +1,4 @@
-import init, {
+export {
   BarBounce, BarSeeSaw, BarWave,
   BrailleArrow, BrailleBounce, BrailleBreathe, BrailleCheckerboard,
   BrailleCheckerboard2x2, BrailleDissolve, BrailleFire, BrailleHeartbeat,
@@ -13,7 +13,19 @@ import init, {
   WIDTH,
 } from "./pkg/agents_are_thinking_js.js";
 
-await init();
+import {
+  BarBounce, BarSeeSaw, BarWave,
+  BrailleArrow, BrailleBounce, BrailleBreathe, BrailleCheckerboard,
+  BrailleCheckerboard2x2, BrailleDissolve, BrailleFire, BrailleHeartbeat,
+  BrailleMatrix, BrailleNoise, BrailleRain, BrailleRandom, BrailleRipple,
+  BrailleScanner, BrailleSpin, BrailleSpin2, BrailleWave, BrailleZigzag,
+  DotArrow, DotBounce, DotHeartbeat, DotPulse, DotWave,
+  ShadeBlink, ShadeBreathe, ShadeFire, ShadeLayers, ShadePinch,
+  ShadeRipple, ShadeScanner, ShadeSeeSaw, ShadeWave,
+  SquareArrow, SquareBlink, SquareFill, SquarePulse,
+  VBlockBounce, VBlockBreathe, VBlockCascade, VBlockPulse, VBlockRain,
+  VBlockRipple, VBlockScanner, VBlockTide, VBlockWave,
+} from "./pkg/agents_are_thinking_js.js";
 
 export const EFFECTS = [
   BrailleSpin, BrailleSpin2, BrailleWave, BrailleRandom,
@@ -29,18 +41,3 @@ export const EFFECTS = [
   SquarePulse, SquareFill, SquareBlink, SquareArrow,
   DotWave, DotPulse, DotHeartbeat, DotArrow, DotBounce,
 ];
-
-export {
-  BarBounce, BarSeeSaw, BarWave,
-  BrailleArrow, BrailleBounce, BrailleBreathe, BrailleCheckerboard,
-  BrailleCheckerboard2x2, BrailleDissolve, BrailleFire, BrailleHeartbeat,
-  BrailleMatrix, BrailleNoise, BrailleRain, BrailleRandom, BrailleRipple,
-  BrailleScanner, BrailleSpin, BrailleSpin2, BrailleWave, BrailleZigzag,
-  DotArrow, DotBounce, DotHeartbeat, DotPulse, DotWave,
-  ShadeBlink, ShadeBreathe, ShadeFire, ShadeLayers, ShadePinch,
-  ShadeRipple, ShadeScanner, ShadeSeeSaw, ShadeWave,
-  SquareArrow, SquareBlink, SquareFill, SquarePulse,
-  VBlockBounce, VBlockBreathe, VBlockCascade, VBlockPulse, VBlockRain,
-  VBlockRipple, VBlockScanner, VBlockTide, VBlockWave,
-  WIDTH,
-};

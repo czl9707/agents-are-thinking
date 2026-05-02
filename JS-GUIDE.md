@@ -4,19 +4,7 @@
 npm install @zane-chen/agents-are-thinking
 ```
 
-Requires a bundler that handles WASM (Vite with `vite-plugin-wasm`, Webpack 5, etc.).
-
-## Vite setup
-
-```ts
-// vite.config.ts
-import { defineConfig } from 'vite'
-import wasm from 'vite-plugin-wasm'
-
-export default defineConfig({
-  plugins: [wasm()],
-})
-```
+Requires a bundler (Vite, Webpack 5, Rollup, etc.) or Node.js with WASM support.
 
 ## Basic usage
 
