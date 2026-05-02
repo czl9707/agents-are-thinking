@@ -1,4 +1,4 @@
-.toggle {
+.iconButton {
   background: none;
   border: none;
   cursor: pointer;
@@ -8,8 +8,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  text-decoration: none;
 }
 
-.toggle:hover {
+.iconButton:hover {
   background: rgb(var(--color-primary-foreground) / 0.1);
 }

@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { EFFECTS } from '@zane-chen/agents-are-thinking';
+import { GitHubLogoIcon } from '@radix-ui/react-icons';
 import { InfiniteCanvas } from './InfiniteCanvas';
 import { Drawer } from './Drawer';
 import { ThemeToggle } from './ThemeToggle';
 import s from './Header.module.css';
+import t from './ThemeToggle.module.css';
 
 function App() {
   const [selected, setSelected] = useState<number | null>(null);
@@ -14,12 +16,13 @@ function App() {
         <span className={s.title}>AGENTS.ARE.THINKING</span>
         <div style={{ flex: '1 1' }} />
         <a
+           className={t.iconButton}
           href="https://github.com/czl9707/agents-are-thinking"
           target="_blank"
           rel="noopener noreferrer"
-          style={{ color: 'rgb(var(--color-primary-foreground))', fontSize: '1.25rem', lineHeight: 1, textDecoration: 'none' }}
+          aria-label="GitHub"
         >
-          GitHub
+          <GitHubLogoIcon />
         </a>
         <ThemeToggle />
       </header>

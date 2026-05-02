@@ -21,7 +21,7 @@ export function ThemeToggle() {
   }, []);
 
   return (
-    <button className={s.toggle} onClick={toggle} aria-label="Toggle theme">
+    <button className={s.iconButton} onClick={toggle} aria-label="Toggle theme">
       {theme === 'dark' ? <MoonIcon /> : <SunIcon />}
     </button>
   );
