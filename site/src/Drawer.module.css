@@ -19,6 +19,7 @@
   right: 0;
   bottom: 0;
   width: 480px;
+  max-width: 85vw;
   background: rgb(var(--color-primary-background));
   padding: 1.5rem;
   padding-left: 2.5rem;

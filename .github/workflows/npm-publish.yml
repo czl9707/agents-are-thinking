@@ -41,10 +41,14 @@ jobs:
       - name: Verify package contents
         run: npm pack --dry-run
 
-      - name: Configure git
+      - name: Setting up git config
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.email "${GITHUB_ACTOR_ID}+${GITHUB_ACTOR}@users.noreply.github.com"
+          git config --global user.name "$(gh api /users/${GITHUB_ACTOR} | jq .name -r)"
+          git config -l
 
       - name: Version bump
         id: bump
@@ -65,5 +69,8 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Push version commit and tag
-        working-directory: .
-        run: git push --follow-tags origin HEAD:${{ github.ref_name }}
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GH_TOKEN }}
+          branch: main
+          force: true

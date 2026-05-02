@@ -1,4 +1,3 @@
-import { useRef, useCallback } from 'react';
 import { useEffectAnimation } from './hooks/useEffectAnimation';
 import s from './EffectCell.module.css';
 
@@ -75,31 +74,14 @@ interface EffectCellProps {
 export function EffectCell({ index, EffectCls, onClick }: EffectCellProps) {
   const [frame, frameCount] = useEffectAnimation(EffectCls);
   const name = EffectCls.name();
-  const startRef = useRef<{ x: number; y: number } | null>(null);
-
   const verb = VERBS[index % VERBS.length];
   const dotCount = Math.floor(frameCount / 10) % 4;
   const dots = ".".repeat(dotCount);
 
-  const handlePointerDown = useCallback((e: React.PointerEvent) => {
-    startRef.current = { x: e.clientX, y: e.clientY };
-  }, []);
-
-  const handlePointerUp = useCallback((e: React.PointerEvent) => {
-    if (!startRef.current) return;
-    const dx = e.clientX - startRef.current.x;
-    const dy = e.clientY - startRef.current.y;
-    startRef.current = null;
-    if (Math.abs(dx) < 5 && Math.abs(dy) < 5) {
-      onClick();
-    }
-  }, [onClick]);
-
   return (
     <div
       className={s.cell}
-      onPointerDown={handlePointerDown}
-      onPointerUp={handlePointerUp}
+      onClick={onClick}
     >
       <div className={s.header}>
         <span className={s.number}>{String(index + 1).padStart(2, '0')}</span>

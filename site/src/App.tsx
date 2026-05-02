@@ -13,6 +13,14 @@ function App() {
       <header className={s.header}>
         <span className={s.title}>AGENTS.ARE.THINKING</span>
         <div style={{ flex: '1 1' }} />
+        <a
+          href="https://github.com/czl9707/agents-are-thinking"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ color: 'rgb(var(--color-primary-foreground))', fontSize: '1.25rem', lineHeight: 1, textDecoration: 'none' }}
+        >
+          GitHub
+        </a>
         <ThemeToggle />
       </header>
       <InfiniteCanvas onSelect={setSelected} />

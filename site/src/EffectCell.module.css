@@ -9,6 +9,7 @@
   cursor: pointer;
   transition: all var(--transition-short);
   user-select: none;
+  touch-action: manipulation;
   width: 100%;
   height: 100%;
   overflow: hidden;
