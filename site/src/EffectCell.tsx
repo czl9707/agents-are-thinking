@@ -95,13 +95,10 @@ export function EffectCell({ index, EffectCls, onClick }: EffectCellProps) {
         <span className={s.name}>{name}</span>
       </div>
       <div className={s.frame}>
-        {frame.split('\n').map((line, li) => (
-          <div key={li}>
-            {Array.from(line).map((char, ci) => (
-              <span key={ci} className={s.char}>{char}</span>
-            ))}
-          </div>
-        ))}
+        {/* {Array.from(frame).map((char, ci) => (
+          <span key={ci} className={s.char}>{char}</span>
+        ))} */}
+        <span className={s.effect}>{frame}</span>
         <span className={s.verb}>{verb}{dots}</span>
       </div>
     </div>

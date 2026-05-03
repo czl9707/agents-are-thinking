@@ -39,6 +39,7 @@ function App() {
       </header>
       <InfiniteCanvas onSelect={setSelected} />
       <Drawer
+        EffectCls={selected !== null ? EFFECTS[selected] : null}
         effectIndex={selected ?? 0}
         effectName={selected !== null ? EFFECTS[selected].name() : ''}
         open={selected !== null}

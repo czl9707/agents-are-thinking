@@ -1,0 +1,15 @@
+.button {
+  font-family: var(--typography-code-fontFamily);
+  font-size: 11px;
+  font-weight: 500;
+  background: none;
+  border: var(--border);
+  color: rgb(var(--color-secondary-foreground));
+  cursor: pointer;
+  padding: 2px 8px;
+  transition: all var(--transition-short);
+}
+
+.button:hover {
+  color: rgb(var(--color-primary-foreground));
+}

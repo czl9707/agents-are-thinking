@@ -1,5 +1,5 @@
 @import "@fontsource-variable/geist";
-@import '@fontsource-variable/fira-code/wght.css';
+@import '@fontsource-variable/cascadia-code/wght.css';
 
 * {
   margin: 0;
@@ -25,7 +25,7 @@ body {
 
   --transition-short: .3s;
 
-  --typography-body1-fontFamily: 'Fira Code Variable';
+  --typography-body1-fontFamily: 'Cascadia Code Variable';
   --typography-body1-fontWeight: 400;
   --typography-body1-fontSize: 0.875rem;
   --typography-body1-lineHeight: 1.5;
@@ -33,7 +33,7 @@ body {
   --typography-button-fontWeight: 600;
   --typography-button-fontSize: 0.875rem;
   --typography-button-lineHeight: 1.6;
-  --typography-code-fontFamily: 'Fira Code Variable', "Courier New", monospace;
+  --typography-code-fontFamily: 'Cascadia Code Variable', "Courier New", monospace;
   --typography-code-fontWeight: 400;
   --typography-code-fontSize: 0.625rem;
   --typography-code-lineHeight: 1.5;

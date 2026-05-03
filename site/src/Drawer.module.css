@@ -76,12 +76,35 @@
   color: rgb(var(--color-primary-foreground));
 }
 
-.body {
-  flex: 1;
+.preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem 0;
+  margin-bottom: 1rem;
+  border-bottom: var(--border);
 }
 
-.soon {
-  font-family: var(--typography-body1-fontFamily);
-  font-size: 14px;
-  color: rgb(var(--color-secondary-foreground));
+.previewFrame {
+  display: flex;
+  align-items: center;
+}
+
+.char {
+  display: inline-block;
+  width: 1.2ch;
+  height: 1.2em;
+  line-height: 1;
+  letter-spacing: 0;
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: rgb(var(--color-accent-foreground));
+}
+
+.body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
 }
