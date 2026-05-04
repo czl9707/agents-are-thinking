@@ -8,7 +8,7 @@ const CELL_H = 125;
 const COLS = 7;
 const TOTAL = EFFECTS.length;
 const MAX_SCALE = 2;
-const MIN_SCALE = 1;
+const MIN_SCALE = .75;
 
 function getVisibleCells(
   ox: number,

@@ -1,0 +1,97 @@
+.container {
+  --shiki-background: transparent;
+  --shiki-foreground: rgb(var(--color-primary-foreground));
+  --shiki-token-keyword: rgb(var(--color-accent-foreground));
+  --shiki-token-string: #7c9a3e;
+  --shiki-token-comment: rgb(var(--color-secondary-foreground));
+  --shiki-token-constant: #b07040;
+  --shiki-token-punctuation: rgb(var(--color-secondary-foreground));
+  --shiki-token-function: #5a7fbf;
+
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  flex: 1;
+  min-height: 0;
+}
+
+body[data-theme="dark"] .container {
+  --shiki-foreground: rgb(var(--color-primary-foreground));
+  --shiki-token-keyword: rgb(var(--color-accent-foreground));
+  --shiki-token-string: #a3d65c;
+  --shiki-token-comment: rgb(var(--color-secondary-foreground));
+  --shiki-token-constant: #e0a070;
+  --shiki-token-function: #7db4ef;
+}
+
+.tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: var(--border);
+}
+
+.tab {
+  font-family: var(--typography-code-fontFamily);
+  font-size: 11px;
+  font-weight: 500;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: rgb(var(--color-secondary-foreground));
+  cursor: pointer;
+  padding: 6px 12px;
+  transition: all var(--transition-short);
+}
+
+.tab:hover {
+  color: rgb(var(--color-primary-foreground));
+}
+
+.tab[data-state="active"] {
+  color: rgb(var(--color-primary-foreground));
+  border-bottom-color: rgb(var(--color-accent-foreground));
+}
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+  outline: none;
+}
+
+.block {
+  display: flex;
+  flex-direction: column;
+}
+
+.blockHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0 4px;
+}
+
+.label {
+  font-family: var(--typography-code-fontFamily);
+  font-size: 10px;
+  color: rgb(var(--color-secondary-foreground));
+}
+
+.code {
+  font-family: var(--typography-code-fontFamily);
+  font-size: 11px;
+  line-height: 1.6;
+  color: rgb(var(--color-primary-foreground));
+  background: rgb(var(--color-secondary-background) / 0.3);
+  border-radius: 4px;
+  padding: 8px 10px;
+  overflow-x: auto;
+  white-space: pre;
+  margin: 0;
+}
+
+.code :global(.shiki) {
+  background: transparent !important;
+  padding: 0;
+  margin: 0;
+}

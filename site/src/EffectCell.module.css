@@ -30,9 +30,6 @@
   justify-content: space-between;
   width: 100%;
   align-items: baseline;
-}
-
-.number {
   font-family: var(--typography-code-fontFamily);
   font-size: var(--typography-code-fontSize);
   font-weight: var(--typography-code-fontWeight);
@@ -40,10 +37,6 @@
 }
 
 .name {
-  font-family: var(--typography-code-fontFamily);
-  font-size: var(--typography-code-fontSize);
-  font-weight: var(--typography-code-fontWeight);
-  color: rgb(var(--color-secondary-foreground));
   text-align: right;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -61,14 +54,6 @@
   display: flex;
   align-items: center;
   padding-left: 1rem;
-}
-
-.char {
-  display: inline-block;
-  width: 1ch;
-  height: 1em;
-  line-height: 1;
-  letter-spacing: 0;
 }
 
 .verb {

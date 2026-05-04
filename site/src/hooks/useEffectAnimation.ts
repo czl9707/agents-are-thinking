@@ -1,16 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
+import type { WasmEffect, EffectClass } from '../types';
 
 const FPS = 10;
 const INTERVAL = 1000 / FPS;
-
-interface WasmEffect {
-  step(): string;
-  free(): void;
-}
-
-interface EffectClass {
-  new (): WasmEffect;
-}
 
 export function useEffectAnimation(EffectCls: EffectClass): [string, number] {
   const [frame, setFrame] = useState('');

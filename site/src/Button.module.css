@@ -1,0 +1,33 @@
+.btn {
+  background: none;
+  border: var(--border);
+  border-radius: 4px;
+  color: rgb(var(--color-secondary-foreground));
+  cursor: pointer;
+  padding: 4px 8px;
+  font-size: 11px;
+  font-weight: 500;
+  font-family: var(--typography-code-fontFamily);
+  transition: all var(--transition-short);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.btn:hover {
+  background: rgb(var(--color-primary-foreground) / 0.08);
+  color: rgb(var(--color-primary-foreground));
+}
+
+.icon {
+  padding: 6px;
+}
+
+.square {
+  font-size: 14px;
+  padding: 6px;
+  width: 28px;
+  height: 28px;
+}

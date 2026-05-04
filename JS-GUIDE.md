@@ -6,29 +6,8 @@ npm install @zane-chen/agents-are-thinking
 
 Requires a bundler (Vite, Webpack 5, Rollup, etc.) or Node.js with WASM support.
 
-## Basic usage
 
-```ts
-import { BrailleFire } from '@zane-chen/agents-are-thinking'
 
-const ef = new BrailleFire()
-
-setInterval(() => {
-  console.log(ef.step())
-}, 100)
-
-// call ef.free() when done to release WASM memory
-```
-
-## List all effects
-
-```ts
-import { EFFECTS } from '@zane-chen/agents-are-thinking'
-
-for (const Cls of EFFECTS) {
-  console.log(Cls.name, '-', Cls.description)
-}
-```
 
 ## With React
 
@@ -41,20 +20,55 @@ function EffectDisplay() {
 
   useEffect(() => {
     const ef = new ShadeFire()
-    const id = setInterval(() => setFrame(ef.step()), 100)
+    let last = 0
+    let raf
+    const tick = (t) => {
+      if (t - last >= 100) { setFrame(ef.step()); last = t }
+      raf = requestAnimationFrame(tick)
+    }
+    raf = requestAnimationFrame(tick)
     return () => {
-      clearInterval(id)
+      cancelAnimationFrame(raf)
       ef.free()
     }
   }, [])
 
-  return <pre style={{ fontFamily: 'monospace' }}>{frame}</pre>
+  return (
+    <span style={{
+      fontFamily: 'monospace',
+      display: 'inline-block',
+      minWidth: '9ch',
+    }}>
+      {frame}
+    </span>
+  )
 }
 ```
 
-Use a monospace font. Each character in the frame string must be the same width — wrap each char in a fixed-width `<span>` for unicode block characters.
+## Font selection
 
-> The unicode glyphs used in this library (especially the VBlock family — ▏▎▍▌▋▊▉█) are notoriously inconsistent across fonts. Many monospace fonts render these at different heights, causing visible gaps or misaligned rows. Even popular ones can fail. The showcase site for this project uses `Fira Code Variable`, which renders them correctly. If you see uneven line heights, test your chosen font before committing to it.
+Effects render fixed-width text (9 characters). Use a monospace font — but not all monospace fonts handle every glyph set equally:
+
+| Family | Characters | Recommended font |
+|--------|-----------|-----------------|
+| **dot** | `· ∘ • ○ ●` | Fira Code (most others misalign these) |
+| **vblock** | `▏ ▎ ▍ ▌ ▋ ▊ ▉ █` | Cascadia Code (Fira Code does not render these correctly) |
+| **bar** | `▁ ▂ ▃ ▄ ▅ ▆ ▇ █` | Either works |
+| **shade** | `░ ▒ ▓ █` | Either works |
+| **square** | `· □ ■` | Either works |
+| **braille** | `⠁ ⠃ ⠇ …` | Either works |
+
+No single font covers all families perfectly (per my research). For mixed usage, Cascadia Code is the best default — only the dot family needs Fira Code instead.
+
+## List all effects
+
+```ts
+import { EFFECTS } from '@zane-chen/agents-are-thinking'
+
+for (const Cls of EFFECTS) {
+  console.log(Cls.name, '-', Cls.description)
+}
+```
 
 ## API
 

@@ -1,5 +1,7 @@
 import { useRef } from 'react';
 import { useEffectAnimation } from './hooks/useEffectAnimation';
+import { getEffectFamily } from './utils/effectFont';
+import type { EffectClass } from './types';
 import s from './EffectCell.module.css';
 
 const VERBS = [
@@ -55,17 +57,6 @@ const VERBS = [
   "communing",
 ];
 
-interface WasmEffect {
-  step(): string;
-  free(): void;
-}
-
-interface EffectClass {
-  new (): WasmEffect;
-  name(): string;
-  description(): string;
-}
-
 interface EffectCellProps {
   index: number;
   EffectCls: EffectClass;
@@ -75,6 +66,7 @@ interface EffectCellProps {
 export function EffectCell({ index, EffectCls, onClick }: EffectCellProps) {
   const [frame, frameCount] = useEffectAnimation(EffectCls);
   const name = EffectCls.name();
+  const family = getEffectFamily(name);
   const verb = VERBS[index % VERBS.length];
   const dotCount = Math.floor(frameCount / 10) % 4;
   const dots = ".".repeat(dotCount);
@@ -91,17 +83,11 @@ export function EffectCell({ index, EffectCls, onClick }: EffectCellProps) {
       }}
     >
       <div className={s.header}>
-        <span className={s.number}>{String(index + 1).padStart(2, '0')}</span>
+        <span>{String(index + 1).padStart(2, '0')}</span>
         <span className={s.name}>{name}</span>
       </div>
       <div className={s.frame}>
-        {frame.split('\n').map((line, li) => (
-          <div key={li}>
-            {Array.from(line).map((char, ci) => (
-              <span key={ci} className={s.char}>{char}</span>
-            ))}
-          </div>
-        ))}
+        <span className={`effect-frame ${s.effect}`} data-family={family ?? undefined}>{frame}</span>
         <span className={s.verb}>{verb}{dots}</span>
       </div>
     </div>

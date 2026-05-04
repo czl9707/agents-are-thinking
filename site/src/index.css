@@ -1,4 +1,5 @@
 @import "@fontsource-variable/geist";
+@import '@fontsource-variable/cascadia-code/wght.css';
 @import '@fontsource-variable/fira-code/wght.css';
 
 * {
@@ -18,14 +19,14 @@ body {
   --color-secondary-background: 235 230 224;
   --color-primary-foreground: 25 25 25;
   --color-secondary-foreground: 120 110 100;
-  --color-accent-foreground: 245 120 40;
+  --color-accent-foreground: 232 147 12;
   --color-accent-background: 248 244 240;
 
   --border: 1px solid rgb(var(--color-primary-foreground) / 0.1);
 
   --transition-short: .3s;
 
-  --typography-body1-fontFamily: 'Fira Code Variable';
+  --typography-body1-fontFamily: 'Cascadia Code Variable';
   --typography-body1-fontWeight: 400;
   --typography-body1-fontSize: 0.875rem;
   --typography-body1-lineHeight: 1.5;
@@ -33,10 +34,12 @@ body {
   --typography-button-fontWeight: 600;
   --typography-button-fontSize: 0.875rem;
   --typography-button-lineHeight: 1.6;
-  --typography-code-fontFamily: 'Fira Code Variable', "Courier New", monospace;
+  --typography-code-fontFamily: 'Cascadia Code Variable', "Courier New", monospace;
   --typography-code-fontWeight: 400;
   --typography-code-fontSize: 0.625rem;
   --typography-code-lineHeight: 1.5;
+  --typography-effect-fontFamily: 'Cascadia Code Variable', monospace;
+  --typography-effect-fontFamily-dot: 'Fira Code Variable', 'Cascadia Code Variable', monospace;
 
   background-color: rgb(var(--color-primary-background));
   color: rgb(var(--color-primary-foreground));
@@ -52,8 +55,23 @@ body[data-theme="dark"] {
   --color-secondary-background: 75 75 75;
   --color-primary-foreground: 255 255 255;
   --color-secondary-foreground: 180 180 180;
-  --color-accent-foreground: 255 140 66;
+  --color-accent-foreground: 255 237 118;
   --color-accent-background: 0 0 0;
 
   --border: 1px solid rgb(var(--color-primary-foreground) / 0.1);
+}
+
+.effect-frame {
+  display: inline-block;
+  min-width: 9ch;
+  max-width: 9ch;
+  height: 1em;
+  white-space: pre-wrap;
+  line-height: 1;
+  letter-spacing: 0px;
+  font-family: var(--typography-effect-fontFamily);
+}
+
+.effect-frame[data-family="dot"] {
+  font-family: var(--typography-effect-fontFamily-dot);
 }
