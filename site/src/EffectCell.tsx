@@ -83,13 +83,10 @@ export function EffectCell({ index, EffectCls, onClick }: EffectCellProps) {
       }}
     >
       <div className={s.header}>
-        <span className={s.number}>{String(index + 1).padStart(2, '0')}</span>
+        <span>{String(index + 1).padStart(2, '0')}</span>
         <span className={s.name}>{name}</span>
       </div>
       <div className={s.frame}>
-        {/* {Array.from(frame).map((char, ci) => (
-          <span key={ci} className={s.char}>{char}</span>
-        ))} */}
         <span className={`effect-frame ${s.effect}`} data-family={family ?? undefined}>{frame}</span>
         <span className={s.verb}>{verb}{dots}</span>
       </div>

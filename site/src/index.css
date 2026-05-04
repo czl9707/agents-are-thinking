@@ -19,7 +19,7 @@ body {
   --color-secondary-background: 235 230 224;
   --color-primary-foreground: 25 25 25;
   --color-secondary-foreground: 120 110 100;
-  --color-accent-foreground: 245 120 40;
+  --color-accent-foreground: 232 147 12;
   --color-accent-background: 248 244 240;
 
   --border: 1px solid rgb(var(--color-primary-foreground) / 0.1);
@@ -55,7 +55,7 @@ body[data-theme="dark"] {
   --color-secondary-background: 75 75 75;
   --color-primary-foreground: 255 255 255;
   --color-secondary-foreground: 180 180 180;
-  --color-accent-foreground: 80 255 142;
+  --color-accent-foreground: 255 237 118;
   --color-accent-background: 0 0 0;
 
   --border: 1px solid rgb(var(--color-primary-foreground) / 0.1);

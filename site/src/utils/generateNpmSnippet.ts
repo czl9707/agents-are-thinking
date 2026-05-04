@@ -34,6 +34,9 @@ export function ThinkingIndicator() {
     <span style={{
       fontFamily: ${fontFamily},
       display: 'inline-block',
+      whiteSpace: 'pre-wrap',
+      lineHeight: '1',
+      letterSpacing: '0px',
       minWidth: '9ch',
     }}>
       {frame}
