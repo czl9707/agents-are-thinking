@@ -15,7 +15,7 @@ uv tool install agents-are-thinking[cli]
 uv tool run agents-are-thinking preview
 ```
 
-Or visit [agents-are-thinking.kiyo-n-zane.com](agents-are-thinking.kiyo-n-zane.com).
+Or visit [agents-are-thinking.kiyo-n-zane.com](https://agents-are-thinking.kiyo-n-zane.com).
 
 ### Install
 
