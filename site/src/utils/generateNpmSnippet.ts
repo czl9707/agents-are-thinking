@@ -1,11 +1,44 @@
-export function generateNpmSnippet(effectName: string): { install: string; usage: string } {
+import { getEffectFontCSS } from './effectFont';
+
+export function generateNpmSnippet(effectName: string, pascalName: string): { install: string; usage: string } {
+  const fontFamily = getEffectFontCSS(effectName);
   return {
     install: `npm install @zane-chen/agents-are-thinking`,
-    usage: `import { ${effectName} } from '@zane-chen/agents-are-thinking';
+    usage: `import { useEffect, useRef, useState } from 'react';
+import { ${pascalName} } from '@zane-chen/agents-are-thinking';
 
-const effect = new ${effectName}();
-setInterval(() => {
-  process.stdout.write('\\r' + effect.step());
-}, 100);`,
+export function ThinkingIndicator() {
+  const [frame, setFrame] = useState('');
+  const effectRef = useRef<${pascalName} | null>(null);
+
+  useEffect(() => {
+    const effect = new ${pascalName}();
+    effectRef.current = effect;
+    let last = 0;
+    let raf: number;
+    const tick = (t: number) => {
+      if (t - last >= 100) {
+        setFrame(effect.step());
+        last = t;
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => {
+      cancelAnimationFrame(raf);
+      effect.free();
+    };
+  }, []);
+
+  return (
+    <span style={{
+      fontFamily: ${fontFamily},
+      display: 'inline-block',
+      minWidth: '9ch',
+    }}>
+      {frame}
+    </span>
+  );
+}`,
   };
 }

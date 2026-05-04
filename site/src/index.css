@@ -1,5 +1,6 @@
 @import "@fontsource-variable/geist";
 @import '@fontsource-variable/cascadia-code/wght.css';
+@import '@fontsource-variable/fira-code/wght.css';
 
 * {
   margin: 0;
@@ -37,6 +38,17 @@ body {
   --typography-code-fontWeight: 400;
   --typography-code-fontSize: 0.625rem;
   --typography-code-lineHeight: 1.5;
+  --typography-effect-fontFamily: 'Cascadia Code Variable', monospace;
+  --typography-effect-fontFamily-dot: 'Fira Code Variable', 'Cascadia Code Variable', monospace;
+
+  --shiki-background: transparent;
+  --shiki-foreground: rgb(var(--color-primary-foreground));
+  --shiki-token-keyword: rgb(var(--color-accent-foreground));
+  --shiki-token-string: #7c9a3e;
+  --shiki-token-comment: rgb(var(--color-secondary-foreground));
+  --shiki-token-constant: #b07040;
+  --shiki-token-punctuation: rgb(var(--color-secondary-foreground));
+  --shiki-token-function: #5a7fbf;
 
   background-color: rgb(var(--color-primary-background));
   color: rgb(var(--color-primary-foreground));
@@ -52,8 +64,30 @@ body[data-theme="dark"] {
   --color-secondary-background: 75 75 75;
   --color-primary-foreground: 255 255 255;
   --color-secondary-foreground: 180 180 180;
-  --color-accent-foreground: 255 140 66;
+  --color-accent-foreground: 80 255 142;
   --color-accent-background: 0 0 0;
 
   --border: 1px solid rgb(var(--color-primary-foreground) / 0.1);
+
+  --shiki-foreground: rgb(var(--color-primary-foreground));
+  --shiki-token-keyword: rgb(var(--color-accent-foreground));
+  --shiki-token-string: #a3d65c;
+  --shiki-token-comment: rgb(var(--color-secondary-foreground));
+  --shiki-token-constant: #e0a070;
+  --shiki-token-function: #7db4ef;
+}
+
+.effect-frame {
+  display: inline-block;
+  min-width: 9ch;
+  max-width: 9ch;
+  height: 1em;
+  white-space: pre-wrap;
+  line-height: 1;
+  letter-spacing: 0px;
+  font-family: var(--typography-effect-fontFamily);
+}
+
+.effect-frame[data-family="dot"] {
+  font-family: var(--typography-effect-fontFamily-dot);
 }

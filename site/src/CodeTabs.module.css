@@ -29,7 +29,7 @@
   color: rgb(var(--color-primary-foreground));
 }
 
-.active {
+.tab[data-state="active"] {
   color: rgb(var(--color-primary-foreground));
   border-bottom-color: rgb(var(--color-accent-foreground));
 }
@@ -38,6 +38,7 @@
   flex: 1;
   overflow-y: auto;
   min-height: 0;
+  outline: none;
 }
 
 .block {
@@ -68,4 +69,11 @@
   padding: 8px 10px;
   overflow-x: auto;
   white-space: pre;
+  margin: 0;
+}
+
+.code :global(.shiki) {
+  background: transparent !important;
+  padding: 0;
+  margin: 0;
 }

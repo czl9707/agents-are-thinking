@@ -63,16 +63,6 @@
   padding-left: 1rem;
 }
 
-.effect {
-  display: inline-block;
-  min-width: 9ch;
-  max-width: 9ch;
-  height: 1em;
-  white-space: pre-wrap;
-  line-height: 1;
-  letter-spacing: 0px;
-}
-
 .verb {
   white-space: nowrap;
   padding-left: 1rem;

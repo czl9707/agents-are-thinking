@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import s from './CopyButton.module.css';
+import s from './Button.module.css';
 
 interface CopyButtonProps {
   text: string;
@@ -15,7 +15,7 @@ export function CopyButton({ text }: CopyButtonProps) {
   };
 
   return (
-    <button className={s.button} onClick={handleCopy}>
+    <button className={s.btn} onClick={handleCopy}>
       {copied ? 'Copied' : 'Copy'}
     </button>
   );

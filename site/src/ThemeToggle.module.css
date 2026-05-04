@@ -1,16 +1,4 @@
 .iconButton {
-  background: none;
-  border: none;
-  cursor: pointer;
+  composes: btn from './Button.module.css';
   padding: 6px;
-  color: rgb(var(--color-primary-foreground));
-  transition: background var(--transition-short);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-}
-
-.iconButton:hover {
-  background: rgb(var(--color-primary-foreground) / 0.1);
 }

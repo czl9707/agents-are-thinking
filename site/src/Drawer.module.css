@@ -18,7 +18,7 @@
   top: 0;
   right: 0;
   bottom: 0;
-  width: 480px;
+  width: 580px;
   max-width: 85vw;
   background: rgb(var(--color-primary-background));
   padding: 1.5rem;
@@ -49,7 +49,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
+  flex-shrink: 0;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: var(--border);
 }
 
 .title {
@@ -62,49 +65,62 @@
   color: rgb(var(--color-secondary-foreground));
 }
 
-.close {
-  background: none;
-  border: var(--border);
-  color: rgb(var(--color-secondary-foreground));
-  font-size: 14px;
-  cursor: pointer;
-  padding: 4px 8px;
-  transition: all var(--transition-short);
+.actions {
+  display: flex;
+  gap: 4px;
 }
 
-.close:hover {
-  color: rgb(var(--color-primary-foreground));
+.action {
+  composes: btn from './Button.module.css';
+  font-size: 14px;
+  padding: 6px;
+  width: 28px;
+  height: 28px;
+}
+
+.scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.scroll::-webkit-scrollbar {
+  width: 0.25rem;
+}
+
+.scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scroll::-webkit-scrollbar-thumb {
+  background: rgb(var(--color-primary-foreground) / 20%);
+  border-radius: 0.25rem;
+}
+
+.scroll::-webkit-scrollbar-button {
+  background: transparent;
+  width: 0;
+  height: 0;
 }
 
 .preview {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1.5rem 0;
+  padding: 2rem;
   margin-bottom: 1rem;
-  border-bottom: var(--border);
+  border: var(--border);
+  border-radius: 4px;
 }
 
-.previewFrame {
-  display: flex;
-  align-items: center;
-}
-
-.char {
-  display: inline-block;
-  width: 1.2ch;
-  height: 1.2em;
-  line-height: 1;
-  letter-spacing: 0;
+.effect {
   font-size: 1.25rem;
   font-weight: 400;
   color: rgb(var(--color-accent-foreground));
 }
 
 .body {
-  flex: 1;
   display: flex;
   flex-direction: column;
-  min-height: 0;
-  overflow: hidden;
 }

@@ -1,14 +1,5 @@
 import { useMemo } from 'react';
-
-interface WasmEffect {
-  step(): string;
-  free(): void;
-}
-
-interface EffectClass {
-  new (): WasmEffect;
-  cycleLength(): number;
-}
+import type { EffectClass } from '../types';
 
 interface BakedEffect {
   frames: string[];

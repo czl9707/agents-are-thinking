@@ -44,6 +44,8 @@ function App() {
         effectName={selected !== null ? EFFECTS[selected].name() : ''}
         open={selected !== null}
         onClose={() => setSelected(null)}
+        onPrev={() => setSelected(((selected ?? 0) - 1 + EFFECTS.length) % EFFECTS.length)}
+        onNext={() => setSelected(((selected ?? 0) + 1) % EFFECTS.length)}
       />
     </>
   );
