@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { SunIcon, MoonIcon } from '@radix-ui/react-icons';
-import s from './ThemeToggle.module.css';
+import b from './Button.module.css';
 
 function getInitialTheme(): 'light' | 'dark' {
   const stored = localStorage.getItem('theme');
@@ -21,7 +21,7 @@ export function ThemeToggle() {
   }, []);
 
   return (
-    <button className={s.iconButton} onClick={toggle} aria-label="Toggle theme">
+    <button className={`${b.btn} ${b.icon}`} onClick={toggle} aria-label="Toggle theme">
       {theme === 'dark' ? <MoonIcon /> : <SunIcon />}
     </button>
   );

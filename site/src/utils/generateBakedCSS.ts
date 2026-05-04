@@ -1,12 +1,13 @@
 import { getEffectFontCSS } from './effectFont';
 
-const EFFECT_FRAME_CSS = (name: string) => `  display: inline-block;
-  min-width: 9ch;
-  max-width: 9ch;
-  white-space: pre-wrap;
-  line-height: 1;
-  letter-spacing: 0px;
-  font-family: ${getEffectFontCSS(name)};`;
+const EFFECT_FRAME_CSS = (name: string) => `\
+    display: inline-block;
+    min-width: 9ch;
+    max-width: 9ch;
+    white-space: pre-wrap;
+    line-height: 1;
+    letter-spacing: 0px;
+    font-family: ${getEffectFontCSS(name)};`;
 
 export function generateBakedCSS(
   name: string,
@@ -34,9 +35,9 @@ ${keyframeSteps}
 
 .${name} {
   &::before {
-    ${EFFECT_FRAME_CSS(name)}
-    content: "";
+${EFFECT_FRAME_CSS(name)}
     animation: ${keyframeName} ${duration}ms steps(1) infinite;
+  }
 }
 
 </style>

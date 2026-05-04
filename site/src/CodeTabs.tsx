@@ -1,12 +1,22 @@
 import * as Tabs from '@radix-ui/react-tabs';
 import { CopyButton } from './CopyButton';
 import { useShikiHighlight } from './hooks/useShikiHighlight';
+import { generateBakedCSS } from './utils/generateBakedCSS';
+import { generateNpmSnippet } from './utils/generateNpmSnippet';
+import { useBakeEffect } from './hooks/useBakeEffect';
+import type { EffectClass } from './types';
 import s from './CodeTabs.module.css';
 
 interface CodeTabsProps {
-  cssSnippet: string;
-  npmInstall: string;
-  npmUsage: string;
+  effectName: string;
+  EffectCls: EffectClass | null;
+}
+
+function toPascalCase(kebab: string): string {
+  return kebab
+    .split('-')
+    .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+    .join('');
 }
 
 function CodeBlock({ code, lang, label, copyText }: { code: string; lang: string; label: string; copyText?: string }) {
@@ -22,7 +32,12 @@ function CodeBlock({ code, lang, label, copyText }: { code: string; lang: string
   );
 }
 
-export function CodeTabs({ cssSnippet, npmInstall, npmUsage }: CodeTabsProps) {
+export function CodeTabs({ effectName, EffectCls }: CodeTabsProps) {
+  const baked = useBakeEffect(EffectCls);
+  const cssSnippet = baked ? generateBakedCSS(effectName, baked.frames, baked.cycleLength) : '';
+  const pascalName = effectName ? toPascalCase(effectName) : '';
+  const npm = pascalName ? generateNpmSnippet(effectName, pascalName) : { install: '', usage: '' };
+
   return (
     <Tabs.Root defaultValue="css" className={s.container}>
       <Tabs.List className={s.tabs}>
@@ -33,8 +48,8 @@ export function CodeTabs({ cssSnippet, npmInstall, npmUsage }: CodeTabsProps) {
         <CodeBlock code={cssSnippet} lang="html" label="Baked CSS — zero dependencies" />
       </Tabs.Content>
       <Tabs.Content value="npm" className={s.content}>
-        <CodeBlock code={npmInstall} lang="bash" label="Install" />
-        <CodeBlock code={npmUsage} lang="javascript" label="Usage" />
+        <CodeBlock code={npm.install} lang="bash" label="Install" />
+        <CodeBlock code={npm.usage} lang="javascript" label="Usage" />
       </Tabs.Content>
     </Tabs.Root>
   );

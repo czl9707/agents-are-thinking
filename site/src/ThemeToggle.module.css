@@ -1,4 +1,0 @@
-.iconButton {
-  composes: btn from './Button.module.css';
-  padding: 6px;
-}

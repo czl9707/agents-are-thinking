@@ -20,3 +20,14 @@
   background: rgb(var(--color-primary-foreground) / 0.08);
   color: rgb(var(--color-primary-foreground));
 }
+
+.icon {
+  padding: 6px;
+}
+
+.square {
+  font-size: 14px;
+  padding: 6px;
+  width: 28px;
+  height: 28px;
+}

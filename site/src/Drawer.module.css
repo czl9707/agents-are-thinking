@@ -21,8 +21,8 @@
   width: 580px;
   max-width: 85vw;
   background: rgb(var(--color-primary-background));
-  padding: 1.5rem;
   padding-left: 2.5rem;
+  padding-top: 1.5rem;
   display: flex;
   flex-direction: column;
   pointer-events: auto;
@@ -70,19 +70,12 @@
   gap: 4px;
 }
 
-.action {
-  composes: btn from './Button.module.css';
-  font-size: 14px;
-  padding: 6px;
-  width: 28px;
-  height: 28px;
-}
-
 .scroll {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-  padding-right: 4px;
+  padding-bottom: 1.5rem;
+  padding-right: 1rem;
 }
 
 .scroll::-webkit-scrollbar {
@@ -112,6 +105,13 @@
   margin-bottom: 1rem;
   border: var(--border);
   border-radius: 4px;
+}
+
+.note {
+  font-size: 11px;
+  color: rgb(var(--color-secondary-foreground));
+  margin-bottom: 1rem;
+  line-height: 1.5;
 }
 
 .effect {
