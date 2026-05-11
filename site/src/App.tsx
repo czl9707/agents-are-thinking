@@ -23,9 +23,7 @@ function App() {
       <Header />
       <InfiniteCanvas onSelect={setSelected} />
       <Drawer
-        EffectCls={selected !== null ? EFFECTS[selected] : null}
         effectIndex={selected ?? 0}
-        effectName={selected !== null ? EFFECTS[selected].name() : ''}
         open={selected !== null}
         onClose={() => setSelected(null)}
         onPrev={() => setSelected(((selected ?? 0) - 1 + EFFECTS.length) % EFFECTS.length)}

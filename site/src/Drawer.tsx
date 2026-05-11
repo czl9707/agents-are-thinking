@@ -3,35 +3,34 @@ import { useEffectAnimation } from './hooks/useEffectAnimation';
 import { getEffectFamily, getEffectFontNote } from './utils/effectFont';
 import { CodeTabs } from './CodeTabs';
 import { EFFECTS } from '@zane-chen/agents-are-thinking';
-import type { EffectClass } from './types';
 import { useMemo } from 'react';
 import b from './Button.module.css';
 import s from './Drawer.module.css';
 
 interface DrawerProps {
-  EffectCls: EffectClass | null;
   effectIndex: number;
-  effectName: string;
   open: boolean;
   onClose: () => void;
   onPrev: () => void;
   onNext: () => void;
 }
 
-export function Drawer({ EffectCls, effectIndex, effectName, open, onClose, onPrev, onNext }: DrawerProps) {
-  const activeEffect = EffectCls ?? EFFECTS[0];
-  const [frame] = useEffectAnimation(activeEffect);
-  const family = getEffectFamily(effectName);
+export function Drawer({ effectIndex, open, onClose, onPrev, onNext }: DrawerProps) {
+  const activeEffect = EFFECTS[effectIndex];
+  const effectName = activeEffect.name();
   const fontNote = getEffectFontNote(effectName);
 
   const tabs = useMemo(() => (
     <div className={s.body}>
       <CodeTabs
         effectName={effectName}
-        EffectCls={EffectCls}
+        EffectCls={EFFECTS[effectIndex]}
       />
     </div>
   ), [effectIndex])
+
+  console.log(effectName);
+
 
   return (
     <div
@@ -57,7 +56,7 @@ export function Drawer({ EffectCls, effectIndex, effectName, open, onClose, onPr
         </div>
         <div className={s.content}>
           <div className={s.preview}>
-            <span className={`effect-frame ${s.effect}`} data-family={family ?? undefined}>{frame}</span>
+            <Effect effectIndex={effectIndex}/>
           </div>
           <p className={s.note}>{fontNote}</p>
           {tabs}
@@ -65,4 +64,15 @@ export function Drawer({ EffectCls, effectIndex, effectName, open, onClose, onPr
       </aside>
     </div>
   );
+}
+
+function Effect({effectIndex}: {effectIndex: number}){
+  const activeEffect = EFFECTS[effectIndex];
+  const effectName = activeEffect.name();
+  const [frame] = useEffectAnimation(activeEffect);
+  const family = getEffectFamily(effectName);
+
+  return (
+    <span className={`effect-frame ${s.effect}`} data-family={family ?? undefined}>{frame}</span>
+  )
 }
