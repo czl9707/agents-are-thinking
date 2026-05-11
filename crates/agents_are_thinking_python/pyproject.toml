@@ -27,3 +27,8 @@ python-source = "py_src"
 module-name = "agents_are_thinking._impl"
 features = ["pyo3/extension-module"]
 
+[dependency-groups]
+dev = [
+    "maturin>=1.13.3",
+]
+
