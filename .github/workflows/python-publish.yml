@@ -49,6 +49,7 @@ jobs:
         with:
           github_token: ${{ secrets.GH_TOKEN }}
           branch: main
+          force: true
 
   linux:
     needs: bump

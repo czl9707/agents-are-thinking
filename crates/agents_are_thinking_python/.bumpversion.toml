@@ -16,7 +16,7 @@ ignore_missing_files = false
 tag = false
 allow_dirty = false
 commit = true
-message = "Bump version: {current_version} → {new_version}"
+message = "Bump py version: {current_version} → {new_version}"
 commit_args = ""
 
 [[tool.bumpversion.files]]
