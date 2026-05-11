@@ -744,12 +744,20 @@ impl BrailleScanner {
 
 pub struct BrailleMatrix {
     state: EffectState,
+    dot_init: Vec<(i64, i64)>,
 }
 
 impl BrailleMatrix {
+    const TRAVEL: usize = 12;
     pub fn new() -> Self {
+        let mut state = EffectState::new(42, Self::cycle_length());
+        let dot_init = (0..=WIDTH*2).map(|_| 
+            ([1i64, 1, 2][state.rng.random_range(0..3usize)], state.rng.random_range((4 - BrailleMatrix::TRAVEL as i64)..4))
+        ).collect();
+
         Self {
-            state: EffectState::new(42, Self::cycle_length()),
+            state: state,
+            dot_init: dot_init,
         }
     }
 }
@@ -762,7 +770,7 @@ impl Effect for BrailleMatrix {
         "Matrix-style falling columns"
     }
     fn cycle_length() -> usize {
-        36
+        BrailleMatrix::TRAVEL * 2
     }
 
     fn step(&mut self) -> String {
@@ -774,12 +782,9 @@ impl Effect for BrailleMatrix {
 
 impl BrailleMatrix {
     fn render(&mut self) -> String {
-        let mut rng = StdRng::seed_from_u64(42);
         let tail = trail::SHORT;
         let mut f = BrailleFrame::new(WIDTH, HEIGHT);
-        for i in 0..(2 * WIDTH) {
-            let speed: i64 = [1i64, 1, 2][rng.random_range(0..3usize)];
-            let init_offset: i64 = rng.random_range(-8..=0i64);
+        for (i, (speed, init_offset)) in self.dot_init.iter().enumerate() {
             let span: i64 = 4 + tail as i64 + init_offset.abs();
             let steps: i64 = self.state.frame as i64 * speed;
             let head: i64 = init_offset + steps % span;
