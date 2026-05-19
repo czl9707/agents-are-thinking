@@ -34,7 +34,7 @@
     "globals": "^17.5.0",
     "rollup": "^4.60.2",
     "typescript": "~6.0.2",
-    "typescript-eslint": "^8.58.2",
+    "typescript-eslint": "^8.59.2",
     "vite": "^8.0.10",
     "vite-plugin-top-level-await": "^1.6.0",
     "vite-plugin-wasm": "^3.6.0"
