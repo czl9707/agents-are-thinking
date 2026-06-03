@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "npm run build && wrangler dev",
+    "deploy": "npm run build && wrangler deploy"
   },
   "dependencies": {
     "@fontsource-variable/cascadia-code": "^5.2.2",
@@ -22,6 +23,7 @@
     "shiki": "^4.0.2"
   },
   "devDependencies": {
+    "@cloudflare/vite-plugin": "^1.39.2",
     "@eslint/js": "^10.0.1",
     "@types/node": "^24.12.2",
     "@types/react": "^19.2.14",
@@ -37,6 +39,7 @@
     "typescript-eslint": "^8.59.2",
     "vite": "^8.0.10",
     "vite-plugin-top-level-await": "^1.6.0",
-    "vite-plugin-wasm": "^3.6.0"
+    "vite-plugin-wasm": "^3.6.0",
+    "wrangler": "^4.97.0"
   }
 }
