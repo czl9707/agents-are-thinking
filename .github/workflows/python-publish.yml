@@ -24,7 +24,7 @@ jobs:
     outputs:
       version: ${{ steps.bump.outputs.version }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
       - uses: astral-sh/setup-uv@v7
@@ -65,7 +65,7 @@ jobs:
           # - runner: ubuntu-22.04
           #   target: aarch64
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: actions/setup-python@v6
         with:
           python-version: 3.13
@@ -94,7 +94,7 @@ jobs:
   #         - runner: ubuntu-22.04
   #           target: aarch64
   #   steps:
-  #     - uses: actions/checkout@v6
+  #     - uses: actions/checkout@v7
   #     - uses: actions/setup-python@v6
   #       with:
   #         python-version: 3.x
@@ -124,7 +124,7 @@ jobs:
             target: x64
             python_arch: x64
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: actions/setup-python@v6
         with:
           python-version: 3.13
@@ -156,7 +156,7 @@ jobs:
           - runner: macos-latest
             target: aarch64
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: actions/setup-python@v6
         with:
           python-version: 3.13
@@ -180,7 +180,7 @@ jobs:
       run:
         working-directory: ./crates/agents_are_thinking_python
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Build sdist
         uses: PyO3/maturin-action@v1
         with:
