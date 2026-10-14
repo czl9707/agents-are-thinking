@@ -9,4 +9,4 @@ crate-type = ["cdylib"]
 
 [dependencies]
 agents-are-thinking = { path = "../agents_are_thinking" }
-pyo3 = "0.28.2"
+pyo3 = "0.29.0"
