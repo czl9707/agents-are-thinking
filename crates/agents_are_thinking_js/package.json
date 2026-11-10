@@ -1,6 +1,6 @@
 {
   "name": "@zane-chen/agents-are-thinking",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "type": "module",
   "description": "Terminal animation effects for agents' thinking state — WASM/JS bindings",
   "license": "MIT",

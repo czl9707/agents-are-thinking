@@ -63,14 +63,15 @@ jobs:
           git commit -m "chore(release): js-${{ steps.bump.outputs.version }}"
           git tag js-${{ steps.bump.outputs.version }}
 
-      - name: Publish
-        run: npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
       - name: Push version commit and tag
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GH_TOKEN }}
           branch: main
           force: true
+          tags: true
+
+      - name: Publish
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
