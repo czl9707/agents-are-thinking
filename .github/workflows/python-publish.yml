@@ -23,6 +23,7 @@ jobs:
         working-directory: ./crates/agents_are_thinking_python
     outputs:
       version: ${{ steps.bump.outputs.version }}
+      sha: ${{ steps.bump.outputs.sha }}
     steps:
       - uses: actions/checkout@v7
         with:
@@ -44,6 +45,7 @@ jobs:
           uv tool run bump-my-version bump ${{ inputs.release_type }}
           CURRENT_V=$(bump-my-version show current_version)
           echo "version=$CURRENT_V" >> $GITHUB_OUTPUT
+          echo "sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
       - name: Push Bump
         uses: ad-m/github-push-action@master
         with:
@@ -66,6 +68,10 @@ jobs:
           #   target: aarch64
     steps:
       - uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.bump.outputs.sha }}
+      - name: Verify bumped version
+        run: grep -q "version = \"${{ needs.bump.outputs.version }}\"" pyproject.toml
       - uses: actions/setup-python@v7
         with:
           python-version: 3.13
@@ -125,6 +131,12 @@ jobs:
             python_arch: x64
     steps:
       - uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.bump.outputs.sha }}
+      - name: Verify bumped version
+        shell: pwsh
+        run: |
+          if (-not (Select-String -Path pyproject.toml -Pattern 'version = "${{ needs.bump.outputs.version }}"' -Quiet)) { throw "pyproject version does not match bumped version" }
       - uses: actions/setup-python@v7
         with:
           python-version: 3.13
@@ -157,6 +169,10 @@ jobs:
             target: aarch64
     steps:
       - uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.bump.outputs.sha }}
+      - name: Verify bumped version
+        run: grep -q "version = \"${{ needs.bump.outputs.version }}\"" pyproject.toml
       - uses: actions/setup-python@v7
         with:
           python-version: 3.13
@@ -181,6 +197,10 @@ jobs:
         working-directory: ./crates/agents_are_thinking_python
     steps:
       - uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.bump.outputs.sha }}
+      - name: Verify bumped version
+        run: grep -q "version = \"${{ needs.bump.outputs.version }}\"" pyproject.toml
       - name: Build sdist
         uses: PyO3/maturin-action@v1
         with:
